@@ -4,9 +4,9 @@ We should write here our ideas for twists on game Plants vs. Zombies
 
 Mihajo
 
-Turn based Plants vs. Zombies.
+Turn based Plants vs. Zombies, endless.
 
-They already did make one, for mobile, called "Plants Vs. Zombies Heroes".
+They already did make a turn based one, for mobile, called "Plants Vs. Zombies Heroes".
 Game:       https://play.google.com/store/apps/details?id=com.ea.gp.pvzheroes
 Gameplay:   https://www.youtube.com/watch?v=1JQLJlEhcJk
 
