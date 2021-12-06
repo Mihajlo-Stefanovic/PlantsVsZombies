@@ -19,6 +19,30 @@ Visuals should go along with audio, however you see fit.
 
 Marko Orescanin
 
+-------------I Zombie
+
+Ideja je da je igrac napadac koji treba da probije predefinisane
+odbrambene linije
+
+Ovo vec ima u pvz kao mini game: https://www.youtube.com/watch?v=n0rfFvT5TDE
+
+Tako da bi trebali da smislimo neke izmene sto je lako jer je mini game
+i ima mnogo mana
+
+-------------Center House
+
+Ideja je da se brani centar mape, da neprijatelji dolaze sa
+svih strana
+
+
+-------------Wave Based TD
+
+Ideja je da je igra podeljena u wave-ove gde ti za svaki wave
+smisljas odbranu i posle gledas bez interakcije
+
+Nesto slicno ako Legion TD: https://www.youtube.com/watch?v=IAtT4upkRGg
+
+
 
 
 
