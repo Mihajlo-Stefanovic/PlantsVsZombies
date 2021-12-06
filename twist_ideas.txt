@@ -1,1 +1,17 @@
 We should write here our ideas for twists on game Plants vs. Zombies
+
+///////////////
+
+Mihajo
+
+Turn based Plants vs. Zombies.
+
+They already did make one, for mobile, called "Plants Vs. Zombies Heroes".
+Game:       https://play.google.com/store/apps/details?id=com.ea.gp.pvzheroes
+Gameplay:   https://www.youtube.com/watch?v=1JQLJlEhcJk
+
+For audio I would like to make something like this:
+https://www.youtube.com/watch?v=ql8K3KJyWgY&list=PL53mjgVKFq7x63ke-WLKrowba3mdSEJMf
+Visuals should go along with audio, however you see fit.
+
+//////////////
