@@ -9,6 +9,13 @@ public class AspectRatioManager : MonoBehaviour
     private int lastW = 0;
     private int lastH = 0;
     
+    // NOTE(sftl): before anything dependent on aspect ratio initializes
+    void Awake()
+    {
+        SetAspectRatio();
+    }
+    
+    // NOTE(sftl): handle any change in aspect ratio, if monitor changes or window is recaled somehow
     void Update()
     {
         int currW = Screen.width;
@@ -30,7 +37,7 @@ public class AspectRatioManager : MonoBehaviour
         // NOTE(sftl): reference http://gamedesigntheory.blogspot.com/2010/09/controlling-aspect-ratio-in-unity.html
         float windowAspect = (float)Screen.width / (float)Screen.height;
         float scaleHeight = windowAspect / targetAspect;
-        Camera camera = Camera.main;
+        Camera camera = GetComponent<Camera>();
         
         // if scaled height is less than current height, add letterbox
         if (scaleHeight < 1.0f)
