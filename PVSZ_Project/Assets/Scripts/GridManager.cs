@@ -9,7 +9,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Transform _camera;
 
 
-
+    
 
 
 
@@ -23,17 +23,20 @@ public class GridManager : MonoBehaviour
     
     void GenerateGrid()
     {
+        int width = (int)_tilePrefab.GetComponent<Transform>().localScale.x;
+        int height = (int)_tilePrefab.GetComponent<Transform>().localScale.y;
 
-        for (int i = 0; i < _width; i++)
+        for (int i = 0; i < _width; )
         {
-            for (int j = 0; j < _height; j++)
+            for (int j = 0; j < _height; )
             {
                 var spawnedTile = Instantiate(_tilePrefab, new Vector3(i, j), Quaternion.identity);
                 spawnedTile.name = $"Tile {i} {j}";
-
-                var isOffset = (i + j) % 2 == 1;
+                var isOffset = (i + j)/(width+height) % 2 == 1;
                 spawnedTile.Init(isOffset);
+                j += height;
             }
+            i += width;
         }
 
 

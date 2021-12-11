@@ -16,9 +16,10 @@ public class Tile : MonoBehaviour
         _baseColor.a = 255;
         _offsetColor.a = 255;
         _renderer.color = isOffset ? _offsetColor : _baseColor;
-
-
         
+
+
+
     }
 
 
