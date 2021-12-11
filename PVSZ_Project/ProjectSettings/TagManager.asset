@@ -41,6 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Units
+    uniqueID: 1864837273
+    locked: 0
+  - name: Cards
+    uniqueID: 1380048699
+    locked: 0
+  - name: UnitsPreview
+    uniqueID: 1334496281
+    locked: 0
   - name: UI
     uniqueID: 463518451
     locked: 0
