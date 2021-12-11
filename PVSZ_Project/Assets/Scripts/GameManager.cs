@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     
     void Start()
     {
-        SetAspectRatio();
+        // SetAspectRatio();
         
         var rEdge   = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height / 2, 0));      // NOTE(sftl): middle position on the right edge of the screen
         var pos     = new Vector3(rEdge.x, rEdge.y, 0);
