@@ -4,19 +4,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+enum TurnType
+{
+    Tech,
+    Alien
+}
+
 public class GameManager : MonoBehaviour
 {
     // NOTE(sftl): singleton
     public static GameManager Instance;
     
-    public GridManager  gridManager;
+    public GridManager gridManager;
+    public EndTurn endTurn;
     
-    public Preview      shooterPrevPrefab;
-    public TechUnit     shooterPrefab;
+    public Preview shooterPrevPrefab;
+    public TechUnit shooterPrefab;
     
-    public Preview    removePrevPrefab;
+    public Preview removePrevPrefab;
+    
+    public Zombie alienPrefab; // TODO(sftl): change Class name
     
     Preview currPreview;
+    TurnType currTurn = TurnType.Tech;
     
     void Awake()
     {
@@ -35,7 +45,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(1)) // NOTE(sftl): right click
         {
-            if (currPreview != null) 
+            if (currPreview != null)
             {
 #if DEBUG_GAMEMANAGER
                 Debug.Log("Preview destroyed on right click.");
@@ -46,9 +56,9 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            if (currPreview != null) 
+            if (currPreview != null)
             {
-                if(currPreview.type == PreviewType.Tech)
+                if (currPreview.type == PreviewType.Tech)
                 {
                     Tile tile = gridManager.GetSelectedTileIfAvailable();
                     
@@ -87,10 +97,10 @@ public class GameManager : MonoBehaviour
     {
         var prevPreview = currPreview;
         
-        var pos         = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        currPreview     = Instantiate(shooterPrevPrefab, pos, Quaternion.identity); // TODO(sftl): use card type
+        var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        currPreview = Instantiate(shooterPrevPrefab, pos, Quaternion.identity); // TODO(sftl): use card type
         
-        if (prevPreview != null) 
+        if (prevPreview != null)
         {
 #if DEBUG_GAMEMANAGER
             Debug.Log("Preview destroyed since new one is initialized.");
@@ -103,15 +113,57 @@ public class GameManager : MonoBehaviour
     {
         var prevPreview = currPreview;
         
-        var pos         = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        currPreview     = Instantiate(removePrevPrefab, pos, Quaternion.identity);
+        var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        currPreview = Instantiate(removePrevPrefab, pos, Quaternion.identity);
         
-        if (prevPreview != null) 
+        if (prevPreview != null)
         {
 #if DEBUG_GAMEMANAGER
             Debug.Log("Preview destroyed since new one is initialized.");
 #endif
             Destroy(prevPreview.gameObject);
+        }
+    }
+    
+    public void EndTechTurn()
+    {
+        currTurn = TurnType.Alien;
+        endTurn.Dissable();
+        SpawnAliens();
+        
+        // NOTE(sftl): temp
+        StartCoroutine(EndAlienTurnDelayed());
+    }
+    
+    // NOTE(sftl): temp
+    List<Zombie> aliens = new();
+    
+    IEnumerator EndAlienTurnDelayed()
+    {
+        yield return new WaitForSeconds(5f);
+        
+        foreach (var alien in aliens) Destroy(alien.gameObject);
+        aliens.Clear();
+        
+        EndAlienTurn();
+    }
+    
+    void EndAlienTurn()
+    {
+        currTurn = TurnType.Tech;
+        endTurn.Enable();
+    }
+    
+    void SpawnAliens()
+    {
+        var numOfAliens     = 5;
+        var availablePos    = gridManager.GetAvailableSpawnPos();
+        
+        for (int i = 0; i < numOfAliens; i++)
+        {
+            var pos     = availablePos[Random.Range(0, availablePos.Count)]; // NOTE(sftl): +1 to include maxYPos in range
+            var alien   = Instantiate(alienPrefab, pos, Quaternion.identity);
+            aliens.Add(alien);
         }
     }
 }

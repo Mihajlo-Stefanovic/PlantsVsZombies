@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -7,11 +8,10 @@ public class GridManager : MonoBehaviour
     [SerializeField] private int _width, _height;
     [SerializeField] private Tile _tilePrefab;
     [SerializeField] private Transform _camera;
-
+    
     [SerializeField] private GameObject _parent;
     
-    // TODO(sftl): probably should have them accessible quickly by row/column
-    List<Tile> tiles = new();
+    List<List<Tile>> tiles = new();
     
     
     
@@ -29,6 +29,8 @@ public class GridManager : MonoBehaviour
         
         for (int i = 0; i < _width; )
         {
+            tiles.Add(new List<Tile>());
+            
             for (int j = 0; j < _height; )
             {
                 var spawnedTile = Instantiate(_tilePrefab, new Vector3(i, j), Quaternion.identity);
@@ -36,7 +38,7 @@ public class GridManager : MonoBehaviour
                 spawnedTile.transform.parent = _parent.transform;
                 var isOffset = (i + j)/(width) % 2 == 1;
                 spawnedTile.Init(isOffset);
-                tiles.Add(spawnedTile);
+                tiles[i].Add(spawnedTile);
                 j += height;
             }
             i += width;
@@ -60,12 +62,15 @@ public class GridManager : MonoBehaviour
     public Tile GetSelectedTileIfAvailable()
     {
         // TODO(sftl): optimise
-        foreach(var tile in tiles)
+        foreach(var row in tiles)
         {
-            if (tile.IsSelected) 
+            foreach(var tile in row)
             {
-                if (tile.Unit == null)  return tile;
-                else                    return null;
+                if (tile.IsSelected) 
+                {
+                    if (tile.Unit == null)  return tile;
+                    else                    return null;
+                }
             }
         }
         return null;
@@ -74,14 +79,31 @@ public class GridManager : MonoBehaviour
     public Tile GetSelectedTileIfOccupied()
     {
         // TODO(sftl): optimise
-        foreach(var tile in tiles)
+        foreach(var row in tiles)
         {
-            if (tile.IsSelected) 
+            foreach(var tile in row)
             {
-                if (tile.Unit is TechUnit)  return tile;
-                else                        return null;
+                if (tile.IsSelected) 
+                {
+                    if (tile.Unit is TechUnit)  return tile;
+                    else                        return null;
+                }
             }
         }
         return null;
+    }
+    
+    public List<Vector3> GetAvailableSpawnPos()
+    {
+        var r = new List<Vector3>();
+        
+        // NOTE(sftl): get first row y positions
+        var lastRow = tiles.Last();
+        foreach (var tile in lastRow)
+        {
+            r.Add(tile.transform.position);
+        }
+        
+        return r;
     }
 }
