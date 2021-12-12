@@ -60,8 +60,8 @@ public class GameManager : MonoBehaviour
                         tile.Unit = techUnit;
                         
                         //-remove TechPreview
-                        Destroy(currPreview.gameObject);
-                        currPreview = null;
+                        //Destroy(currPreview.gameObject);
+                        //currPreview = null;
                     }
                 }
                 else // NOTE(sftl): remove preview
@@ -75,8 +75,8 @@ public class GameManager : MonoBehaviour
                         tile.Unit = null;
                         
                         //-remove RemovePreview
-                        Destroy(currPreview.gameObject);
-                        currPreview = null;
+                        //Destroy(currPreview.gameObject);
+                        //currPreview = null;
                     }
                 }
             }
