@@ -9,12 +9,14 @@ public class GameManager : MonoBehaviour
     // NOTE(sftl): singleton
     public static GameManager Instance;
     
-    public GridManager gridManager;
+    public GridManager  gridManager;
     
-    public TechPreview  shooterPrevPrefab;
+    public Preview      shooterPrevPrefab;
     public TechUnit     shooterPrefab;
     
-    TechPreview currPreview;
+    public Preview    removePrevPrefab;
+    
+    Preview currPreview;
     
     void Awake()
     {
@@ -36,7 +38,7 @@ public class GameManager : MonoBehaviour
             if (currPreview != null) 
             {
 #if DEBUG_GAMEMANAGER
-                Debug.Log("Tech Preview destroyed on right click.");
+                Debug.Log("Preview destroyed on right click.");
 #endif
                 Destroy(currPreview.gameObject);
                 currPreview = null;
@@ -46,18 +48,36 @@ public class GameManager : MonoBehaviour
         {
             if (currPreview != null) 
             {
-                Tile tile = gridManager.GetSelectedTileIfAvailable();
-                
-                if (tile != null)
+                if(currPreview.type == PreviewType.Tech)
                 {
-                    //-instantiate TechUnit
-                    var pos = tile.transform.position;
-                    var techUnit = Instantiate(shooterPrefab, pos, Quaternion.identity);
-                    tile.Unit = techUnit;
+                    Tile tile = gridManager.GetSelectedTileIfAvailable();
                     
-                    //-remove TechPreview
-                    Destroy(currPreview.gameObject);
-                    currPreview = null;
+                    if (tile != null)
+                    {
+                        //-instantiate TechUnit
+                        var pos = tile.transform.position;
+                        var techUnit = Instantiate(shooterPrefab, pos, Quaternion.identity);
+                        tile.Unit = techUnit;
+                        
+                        //-remove TechPreview
+                        Destroy(currPreview.gameObject);
+                        currPreview = null;
+                    }
+                }
+                else // NOTE(sftl): remove preview
+                {
+                    Tile tile = gridManager.GetSelectedTileIfOccupied();
+                    
+                    if (tile != null)
+                    {
+                        //-remove TechUnit
+                        Destroy(tile.Unit.gameObject);
+                        tile.Unit = null;
+                        
+                        //-remove RemovePreview
+                        Destroy(currPreview.gameObject);
+                        currPreview = null;
+                    }
                 }
             }
         }
@@ -68,12 +88,28 @@ public class GameManager : MonoBehaviour
         var prevPreview = currPreview;
         
         var pos         = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        currPreview     = Instantiate(shooterPrevPrefab, pos, Quaternion.identity);
+        currPreview     = Instantiate(shooterPrevPrefab, pos, Quaternion.identity); // TODO(sftl): use card type
         
         if (prevPreview != null) 
         {
 #if DEBUG_GAMEMANAGER
-            Debug.Log("Tech Preview destroyed since new one is initialized.");
+            Debug.Log("Preview destroyed since new one is initialized.");
+#endif
+            Destroy(prevPreview.gameObject);
+        }
+    }
+    
+    public void RemoveCardClicked()
+    {
+        var prevPreview = currPreview;
+        
+        var pos         = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        currPreview     = Instantiate(removePrevPrefab, pos, Quaternion.identity);
+        
+        if (prevPreview != null) 
+        {
+#if DEBUG_GAMEMANAGER
+            Debug.Log("Preview destroyed since new one is initialized.");
 #endif
             Destroy(prevPreview.gameObject);
         }

@@ -1,3 +1,5 @@
-public interface FieldUnit
+using UnityEngine;
+
+public class FieldUnit : MonoBehaviour
 {
 }

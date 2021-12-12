@@ -67,4 +67,18 @@ public class GridManager : MonoBehaviour
         }
         return null;
     }
+    
+    public Tile GetSelectedTileIfOccupied()
+    {
+        // TODO(sftl): optimise
+        foreach(var tile in tiles)
+        {
+            if (tile.IsSelected) 
+            {
+                if (tile.Unit is TechUnit)  return tile;
+                else                        return null;
+            }
+        }
+        return null;
+    }
 }

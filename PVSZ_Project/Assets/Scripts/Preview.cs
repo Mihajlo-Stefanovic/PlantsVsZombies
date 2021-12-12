@@ -2,9 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TechPreview : MonoBehaviour
+public enum PreviewType
 {
-    public float moveSpeed;
+    Tech,
+    Remove
+}
+
+public class Preview : MonoBehaviour
+{
+    public float        moveSpeed;
+    public PreviewType  type;
     
     Vector3 mousePosition;
     
