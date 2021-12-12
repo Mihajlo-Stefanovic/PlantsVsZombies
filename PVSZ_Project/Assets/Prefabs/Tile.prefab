@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4239998211570848286}
   - component: {fileID: 4101567033614528602}
   - component: {fileID: 4042690223201834237}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,6 +103,8 @@ MonoBehaviour:
   _offsetColor: {r: 0.08663224, g: 0.2924528, b: 0.08663224, a: 0}
   _renderer: {fileID: 4239998211570848286}
   _highlight: {fileID: 6659510278756246419}
+  Unit: {fileID: 0}
+  IsSelected: 0
 --- !u!61 &4042690223201834237
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -139,7 +141,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1890478355707799735}
   - component: {fileID: 6467230375154737106}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Highlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
