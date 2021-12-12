@@ -5,8 +5,8 @@ using UnityEngine;
 public class TechUnit : FieldUnit
 {
 
-    float distanceToDetect;
-    float attackSpeed = 0.5f;
+    [SerializeField] private float distanceToDetect;
+    [SerializeField] private float attackSpeed = 1.5f;
     float nextAttack = 0.5f;
     [SerializeField] private Transform reyPos;
     [SerializeField] private GameObject shotPrefab;
@@ -14,7 +14,7 @@ public class TechUnit : FieldUnit
     
 
 private void Start() {
-    distanceToDetect = 8;
+    distanceToDetect= distanceToDetect==0 ? 8: distanceToDetect;
     
 }
 

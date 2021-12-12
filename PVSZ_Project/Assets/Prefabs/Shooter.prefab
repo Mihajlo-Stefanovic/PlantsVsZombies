@@ -131,6 +131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3944a0fc382b8d4691edb8a066ab2e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distanceToDetect: 8
+  attackSpeed: 1.5
   reyPos: {fileID: 1542630477790904345}
   shotPrefab: {fileID: 1761053074145525064, guid: 03e3e97925416d44dab37badeb67f693, type: 3}
 --- !u!50 &-7077561886830576135
