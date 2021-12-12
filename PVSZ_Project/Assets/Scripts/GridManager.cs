@@ -7,6 +7,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] private int _width, _height;
     [SerializeField] private Tile _tilePrefab;
     [SerializeField] private Transform _camera;
+
+    [SerializeField] private GameObject _parent;
     
     // TODO(sftl): probably should have them accessible quickly by row/column
     List<Tile> tiles = new();
@@ -31,6 +33,7 @@ public class GridManager : MonoBehaviour
             {
                 var spawnedTile = Instantiate(_tilePrefab, new Vector3(i, j), Quaternion.identity);
                 spawnedTile.name = $"Tile {i} {j}";
+                spawnedTile.transform.parent = _parent.transform;
                 var isOffset = (i + j)/(width) % 2 == 1;
                 spawnedTile.Init(isOffset);
                 tiles.Add(spawnedTile);
@@ -41,7 +44,7 @@ public class GridManager : MonoBehaviour
         
         
         
-        _camera.transform.position = new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10);
+        _parent.transform.position = (new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10))*-1;
         
         
     }
