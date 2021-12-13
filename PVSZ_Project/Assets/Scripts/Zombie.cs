@@ -2,26 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Zombie : MonoBehaviour
+public  class Zombie : MonoBehaviour
 {
     public int speed;
     private bool _lockDirection = false;
     public Tile _tile;
-    private GridManager gridManager;
+    protected GridManager gridManager;
     private int _random = 1;
-    private Vector3 _startVar;
+    protected Vector3 _startVar;
     private int _lastmove = 1;
-    public int health = 50;
-    void Start()
-    {
-        _startVar = transform.position;
-        Debug.Log(_startVar);
-        gridManager = GridManager.Instance;
-        
-        
-        
-    }
-    
+    [SerializeField] protected int health;
+    void Start(){ } //override in child
+    void Update(){ } //override in child
     
     
     public void OnCollisionEnter2D(Collision2D collision)
@@ -34,31 +26,6 @@ public class Zombie : MonoBehaviour
             
         }
     }
-    
-    void Update()
-    {
-        if (health <= 0)
-        {
-            Destroy(this.gameObject);
-            GameManager.Instance.OnAlienDeath(this);
-        }
-        
-        
-        if(!( _lockDirection))
-            if(_lastmove==1)
-            _random = Random.Range(0, 3);
-        else if (_lastmove == 0)
-            _random = Random.Range(0, 2);
-        else if(_lastmove == 2)
-            _random = Random.Range(1, 3);
-        
-        
-        
-        MoveIt(_random);
-    }
-    
-    
-    
     private void LeftOrDown()
     {
         int a = Random.Range(0, 10);
@@ -78,6 +45,7 @@ public class Zombie : MonoBehaviour
     
     private void MoveIt(int move)
     {
+        
         switch (move)
         {
             case 1:
@@ -85,12 +53,12 @@ public class Zombie : MonoBehaviour
             break;
             
             case 0:
-            if(gridManager.canAlienMove(_startVar, true))
+              if(gridManager.canAlienMove(_startVar, true))
                 moveUp();
             break;
             
             case 2:
-            if (gridManager.canAlienMove(_startVar, false))
+              if (gridManager.canAlienMove(_startVar, false))
                 moveDown();
             break;
             
@@ -98,7 +66,32 @@ public class Zombie : MonoBehaviour
         } 
     }
     
-    private void moveLeft()
+    protected void isDead(){
+
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
+            GameManager.Instance.OnAlienDeath(this);
+        }
+    
+    }
+
+    protected void moonWalk(){
+        if(!( _lockDirection))
+            if(_lastmove==1)
+            _random = Random.Range(0, 3);
+        else if (_lastmove == 0)
+            _random = Random.Range(0, 2);
+        else if(_lastmove == 2)
+            _random = Random.Range(1, 3);
+        
+        
+        
+        MoveIt(_random);
+    }
+
+
+    protected void moveLeft()
     {
         _lockDirection = true;
         

@@ -24,7 +24,9 @@ public class GameManager : MonoBehaviour
     public Preview removePrevPrefab;
     
     public Zombie alienPrefab; // TODO(sftl): change Class name
-    
+    public BaseZombie baseAlienPrefab;
+    public SpecialZombie specialAlienPrefab;
+
     public List<int> aliensPerLane;
     
     public GameEvent aliensDefeatedEvent;
@@ -153,7 +155,7 @@ public class GameManager : MonoBehaviour
             for (int i2 = 0; i2 < aliensPerLane[i]; i2++)
             {
                 var pos     = availablePos[i];
-                var alien   = Instantiate(alienPrefab, pos, Quaternion.identity);
+                var alien   = Instantiate(baseAlienPrefab, pos, Quaternion.identity); //baseZombie je sada zombie, treba metoda za svaku vrstu zombija
                 aliens.Add(alien);
             }
         }
