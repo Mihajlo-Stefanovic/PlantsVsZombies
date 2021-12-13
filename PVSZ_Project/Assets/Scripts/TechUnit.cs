@@ -10,6 +10,7 @@ public class TechUnit : FieldUnit
     float nextAttack = 0.5f;
     [SerializeField] private Transform reyPos;
     [SerializeField] private GameObject shotPrefab;
+    [SerializeField] private int health = 50;
     
     
 
@@ -21,6 +22,11 @@ private void Start() {
 
 void Update() {
     
+    if(health <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+
     Debug.DrawRay(reyPos.position, reyPos.right * distanceToDetect, Color.red);
 
     Ray ray = new Ray(reyPos.position, reyPos.right);

@@ -6,20 +6,41 @@ public class Zombie : MonoBehaviour
 {
     public int speed;
     private bool _lockDirection = false;
-    private bool _upDown = false;
     public Tile _tile;
-    public GameObject gridManager;
+    private GridManager gridManager;
     private int _random = 1;
     private Vector3 _startVar;
     private int _lastmove = 1;
+    public int health = 50;
     void Start()
     {
         _startVar = transform.position;
         Debug.Log(_startVar);
+        gridManager = GridManager.Instance;
+        
+        
+
+    }
+
+
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            health -= 30;
+            Destroy(collision.gameObject);
+
+
+        }
     }
 
     void Update()
     {
+        if (health <= 0)
+            Destroy(this.gameObject);
+
+
         if(!( _lockDirection))
             if(_lastmove==1)
                 _random = Random.Range(0, 3);
@@ -35,6 +56,23 @@ public class Zombie : MonoBehaviour
 
 
 
+    private void LeftOrDown()
+    {
+        int a = Random.Range(0, 10);
+        if (a % 2 == 0)
+            moveDown();
+        else
+            moveLeft();
+    }
+    private void LeftOrUp()
+    {
+        int a = Random.Range(0, 10);
+        if (a % 2 == 0)
+            moveUp();
+        else
+            moveLeft();
+    }
+
     private void MoveIt(int move)
     {
         switch (move)
@@ -44,12 +82,15 @@ public class Zombie : MonoBehaviour
                 break;
 
            case 0:
-                moveUp();
+                if(gridManager.canAlienMove(_startVar, true))
+                    moveUp();
                 break;
 
             case 2:
-                moveDown();
+                if (gridManager.canAlienMove(_startVar, false))
+                    moveDown();
                 break;
+               
 
         } 
     }
@@ -60,7 +101,7 @@ public class Zombie : MonoBehaviour
         
        
         
-        if ((int)Mathf.Abs(transform.position.x - _startVar.x) == _tile.GetComponent<Transform>().localScale.x) {
+        if (Mathf.Abs(transform.position.x - _startVar.x) > _tile.GetComponent<Transform>().localScale.x) {
 
             _lastmove = 1;
             _lockDirection = false;
@@ -74,14 +115,14 @@ public class Zombie : MonoBehaviour
     {
         _lockDirection = true;
         
-        if ((int)Mathf.Abs(transform.position.y - _startVar.y) == _tile.GetComponent<Transform>().localScale.y)
+        if (Mathf.Abs(transform.position.y - _startVar.y) > _tile.GetComponent<Transform>().localScale.y)
         {
             _lastmove = 0;
             _lockDirection = false;
             _startVar = transform.position;
             
         }
-        else
+        else 
             transform.position = transform.position + new Vector3(0f, speed * Time.deltaTime, 0f);
 
 
@@ -91,7 +132,7 @@ public class Zombie : MonoBehaviour
         
         _lockDirection = true;
         
-        if ((int)Mathf.Abs(_startVar.y - transform.position.y) == _tile.GetComponent<Transform>().localScale.y)
+        if (Mathf.Abs(_startVar.y - transform.position.y) > _tile.GetComponent<Transform>().localScale.y)
         {
             _lastmove = 2;
             _lockDirection = false;
@@ -101,4 +142,6 @@ public class Zombie : MonoBehaviour
         else
             transform.position = transform.position + new Vector3(0f, -speed * Time.deltaTime, 0f);
     }
+
+    
 }

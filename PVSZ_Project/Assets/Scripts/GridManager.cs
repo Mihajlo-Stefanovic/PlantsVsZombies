@@ -8,14 +8,27 @@ public class GridManager : MonoBehaviour
     [SerializeField] private int _width, _height;
     [SerializeField] private Tile _tilePrefab;
     [SerializeField] private Transform _camera;
-    
     [SerializeField] private GameObject _parent;
     
     List<List<Tile>> tiles = new();
-    
-    
-    
-    
+    public static GridManager Instance;
+ 
+
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,7 +64,21 @@ public class GridManager : MonoBehaviour
         
     }
     
-    
+    public bool canAlienMove(Vector3 startP,bool isUp)
+    {
+        float up = startP.y + _tilePrefab.transform.localScale.y;
+        float down = startP.y - _tilePrefab.transform.localScale.y;
+        var firstTile = tiles[0][0];
+        var lastTile = tiles[0].Last();
+        var bukizila = _tilePrefab.transform.localScale.y / 2;
+
+        if (down < firstTile.transform.position.y-bukizila && !(isUp))
+            return false;
+        else if (up > lastTile.transform.position.y + bukizila && isUp)
+            return false;
+
+        return true;
+    }
     
     // Update is called once per frame
     void Update()

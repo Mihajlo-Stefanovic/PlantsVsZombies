@@ -131,22 +131,11 @@ public class GameManager : MonoBehaviour
         endTurn.Dissable();
         SpawnAliens();
         
-        // NOTE(sftl): temp
-        StartCoroutine(EndAlienTurnDelayed());
+        
     }
     
     // NOTE(sftl): temp
     List<Zombie> aliens = new();
-    
-    IEnumerator EndAlienTurnDelayed()
-    {
-        yield return new WaitForSeconds(5f);
-        
-        foreach (var alien in aliens) Destroy(alien.gameObject);
-        aliens.Clear();
-        
-        EndAlienTurn();
-    }
     
     void EndAlienTurn()
     {
@@ -156,7 +145,7 @@ public class GameManager : MonoBehaviour
     
     void SpawnAliens()
     {
-        var numOfAliens     = 5;
+        var numOfAliens     = 10;
         var availablePos    = gridManager.GetAvailableSpawnPos();
         
         for (int i = 0; i < numOfAliens; i++)
