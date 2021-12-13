@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     
     public Zombie alienPrefab; // TODO(sftl): change Class name
     
+    public List<int> aliensPerLane;
+    
     Preview currPreview;
     TurnType currTurn = TurnType.Tech;
     
@@ -127,11 +129,9 @@ public class GameManager : MonoBehaviour
     
     public void EndTechTurn()
     {
-        currTurn = TurnType.Alien;
-        endTurn.Dissable();
+        //currTurn = TurnType.Alien;
+        //endTurn.Dissable();
         SpawnAliens();
-        
-        
     }
     
     // NOTE(sftl): temp
@@ -145,14 +145,17 @@ public class GameManager : MonoBehaviour
     
     void SpawnAliens()
     {
-        var numOfAliens     = 10;
         var availablePos    = gridManager.GetAvailableSpawnPos();
         
-        for (int i = 0; i < numOfAliens; i++)
+        //-spawn aliens by specified aliensPerLane
+        for (int i = 0; i < aliensPerLane.Count; i++)
         {
-            var pos     = availablePos[Random.Range(0, availablePos.Count)]; // NOTE(sftl): +1 to include maxYPos in range
-            var alien   = Instantiate(alienPrefab, pos, Quaternion.identity);
-            aliens.Add(alien);
+            for (int i2 = 0; i2 < aliensPerLane[i]; i2++)
+            {
+                var pos     = availablePos[i];
+                var alien   = Instantiate(alienPrefab, pos, Quaternion.identity);
+                aliens.Add(alien);
+            }
         }
     }
 }
