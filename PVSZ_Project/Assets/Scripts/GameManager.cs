@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     
     public GridManager gridManager;
-    public EndTurn endTurn;
+    public PlayUI playUI;
     
     public Preview shooterPrevPrefab;
     public TechUnit shooterPrefab;
@@ -27,8 +27,11 @@ public class GameManager : MonoBehaviour
     
     public List<int> aliensPerLane;
     
+    public GameEvent aliensDefeatedEvent;
+    
     Preview currPreview;
     TurnType currTurn = TurnType.Tech;
+    List<Zombie> aliens = new();
     
     void Awake()
     {
@@ -129,18 +132,15 @@ public class GameManager : MonoBehaviour
     
     public void EndTechTurn()
     {
-        //currTurn = TurnType.Alien;
-        //endTurn.Dissable();
+        currTurn = TurnType.Alien;
+        playUI.Dissable();
         SpawnAliens();
     }
     
-    // NOTE(sftl): temp
-    List<Zombie> aliens = new();
-    
-    void EndAlienTurn()
+    public void EndAlienTurn()
     {
         currTurn = TurnType.Tech;
-        endTurn.Enable();
+        playUI.Enable();
     }
     
     void SpawnAliens()
@@ -157,5 +157,11 @@ public class GameManager : MonoBehaviour
                 aliens.Add(alien);
             }
         }
+    }
+    
+    public void OnAlienDeath(Zombie alien)
+    {
+        aliens.Remove(alien);
+        if (aliens.Count == 0) aliensDefeatedEvent.Raise(); // NOTE(sftl): this loops back to GameManager EndAlienTurn currently.
     }
 }

@@ -19,43 +19,46 @@ public class Zombie : MonoBehaviour
         gridManager = GridManager.Instance;
         
         
-
+        
     }
-
-
-
+    
+    
+    
     public void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
             health -= 30;
             Destroy(collision.gameObject);
-
-
+            
+            
         }
     }
-
+    
     void Update()
     {
         if (health <= 0)
+        {
             Destroy(this.gameObject);
-
-
+            GameManager.Instance.OnAlienDeath(this);
+        }
+        
+        
         if(!( _lockDirection))
             if(_lastmove==1)
-                _random = Random.Range(0, 3);
-            else if (_lastmove == 0)
-                _random = Random.Range(0, 2);
-            else if(_lastmove == 2)
-                _random = Random.Range(1, 3);
-
-
-
+            _random = Random.Range(0, 3);
+        else if (_lastmove == 0)
+            _random = Random.Range(0, 2);
+        else if(_lastmove == 2)
+            _random = Random.Range(1, 3);
+        
+        
+        
         MoveIt(_random);
     }
-
-
-
+    
+    
+    
     private void LeftOrDown()
     {
         int a = Random.Range(0, 10);
@@ -72,37 +75,37 @@ public class Zombie : MonoBehaviour
         else
             moveLeft();
     }
-
+    
     private void MoveIt(int move)
     {
         switch (move)
         {
-           case 1:
-                moveLeft();
-                break;
-
-           case 0:
-                if(gridManager.canAlienMove(_startVar, true))
-                    moveUp();
-                break;
-
+            case 1:
+            moveLeft();
+            break;
+            
+            case 0:
+            if(gridManager.canAlienMove(_startVar, true))
+                moveUp();
+            break;
+            
             case 2:
-                if (gridManager.canAlienMove(_startVar, false))
-                    moveDown();
-                break;
-               
-
+            if (gridManager.canAlienMove(_startVar, false))
+                moveDown();
+            break;
+            
+            
         } 
     }
-
+    
     private void moveLeft()
     {
         _lockDirection = true;
         
-       
+        
         
         if (Mathf.Abs(transform.position.x - _startVar.x) > _tile.GetComponent<Transform>().localScale.x) {
-
+            
             _lastmove = 1;
             _lockDirection = false;
             _startVar = transform.position;
@@ -124,8 +127,8 @@ public class Zombie : MonoBehaviour
         }
         else 
             transform.position = transform.position + new Vector3(0f, speed * Time.deltaTime, 0f);
-
-
+        
+        
     }
     private void moveDown()
     {
@@ -137,11 +140,11 @@ public class Zombie : MonoBehaviour
             _lastmove = 2;
             _lockDirection = false;
             _startVar = transform.position;
-
+            
         }
         else
             transform.position = transform.position + new Vector3(0f, -speed * Time.deltaTime, 0f);
     }
-
+    
     
 }

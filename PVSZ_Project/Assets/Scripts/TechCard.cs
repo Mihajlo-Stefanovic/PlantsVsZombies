@@ -17,4 +17,14 @@ public class TechCard : MonoBehaviour, IPointerDownHandler
     {
         GameManager.Instance.TechCardClicked(this);
     }
+    
+    public void Enable()
+    {
+        gameObject.SetActive(true);
+    }
+    
+    public void Dissable()
+    {
+        gameObject.SetActive(false);
+    }
 }

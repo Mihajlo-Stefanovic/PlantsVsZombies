@@ -9,4 +9,14 @@ public class RemoveCard : MonoBehaviour, IPointerDownHandler
     {
         GameManager.Instance.RemoveCardClicked();
     }
+    
+    public void Enable()
+    {
+        gameObject.SetActive(true);
+    }
+    
+    public void Dissable()
+    {
+        gameObject.SetActive(false);
+    }
 }

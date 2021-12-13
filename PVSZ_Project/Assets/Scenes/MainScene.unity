@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 5941011}
   - component: {fileID: 5941013}
   m_Layer: 5
-  m_Name: Removal Card
+  m_Name: Remove Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -277,7 +277,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &142559974
 GameObject:
@@ -308,7 +308,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &196894680
 GameObject:
@@ -1049,7 +1049,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &699599379
 GameObject:
@@ -1237,7 +1237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1369,7 +1369,7 @@ RectTransform:
   - {fileID: 1856019243}
   - {fileID: 5941010}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1619,6 +1619,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1237729752}
   - component: {fileID: 1237729753}
+  - component: {fileID: 1237729754}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1654,12 +1655,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridManager: {fileID: 1830507265}
-  endTurn: {fileID: 818527430}
+  playUI: {fileID: 2053067852}
   shooterPrevPrefab: {fileID: 5439322812540631791, guid: 2f97183b0bf11454eb16230641487641, type: 3}
   shooterPrefab: {fileID: 5072785689260309729, guid: 5b0a5b9ba621e55458d0aa2aa0c8d998, type: 3}
   removePrevPrefab: {fileID: 4957960188916544787, guid: 84c27c587677b1b4188a6c29f5106928, type: 3}
   alienPrefab: {fileID: 2471615659415677079, guid: d4a29214ad108054e8d526daad3cb49e, type: 3}
   aliensPerLane: 010000000100000001000000010000000100000001000000010000000100000001000000
+  aliensDefeatedEvent: {fileID: 11400000, guid: 1316f68153ffe964681c6713198e6d5c, type: 2}
+--- !u!114 &1237729754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1237729751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e55997c3cfa8a047b2eb896c2279cdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 1316f68153ffe964681c6713198e6d5c, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1237729753}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: EndAlienTurn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1816672657
 GameObject:
   m_ObjectHideFlags: 0
@@ -1835,7 +1865,7 @@ RectTransform:
   - {fileID: 1816672658}
   - {fileID: 818527427}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1994,3 +2024,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1856019242}
   m_CullTransparentMesh: 1
+--- !u!1 &2053067851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2053067853}
+  - component: {fileID: 2053067852}
+  m_Layer: 0
+  m_Name: PlayUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2053067852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053067851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281b7ec6298d75d4a994e4de66456863, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endTurn: {fileID: 818527430}
+  card: {fileID: 1856019244}
+  removeCard: {fileID: 5941013}
+--- !u!4 &2053067853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053067851}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.16389006, y: 0.005553797, z: -0.54817104}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
