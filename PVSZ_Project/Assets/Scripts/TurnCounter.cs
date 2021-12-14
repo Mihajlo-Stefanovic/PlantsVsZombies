@@ -5,14 +5,16 @@ public class TurnCounter :  MonoBehaviour
 {
     public TextMeshProUGUI textPro;
     
+    
     public void Awake()
     {
         textPro.text = "1";
     }
     
-    public void IncrementCounter()
+    public void OnTurnIncremented()
     {
-        int nextWave = int.Parse(textPro.text) + 1;
-        textPro.text = nextWave.ToString();
+        textPro.text = GameManager.Instance.TurnNum.ToString();
+       
     }
+
 }

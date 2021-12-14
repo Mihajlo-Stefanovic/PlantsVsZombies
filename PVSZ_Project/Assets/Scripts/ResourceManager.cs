@@ -1,0 +1,43 @@
+
+using UnityEngine;
+using TMPro;
+
+public class ResourceManager : MonoBehaviour
+{
+    [SerializeField] public TextMeshProUGUI resourcesUI;
+    private static int totalResources;
+    [SerializeField] public int startingResources = 300;
+    [SerializeField] int gainPerTurn = 100;
+    [SerializeField] int gainPerTurnMultiplier = 10;
+
+    public void Awake()
+    {
+        totalResources = startingResources;
+        updateUI(startingResources);
+    }
+
+    public void OnTurnIncremented()
+    {
+        totalResources += gainPerTurn + GameManager.Instance.TurnNum * gainPerTurnMultiplier;
+        Debug.Log("total " + totalResources);
+        updateUI(totalResources);
+    }
+
+    private void updateUI(int r)
+    {
+        resourcesUI.text = r.ToString();
+    }
+
+    public void payForUnit(int unitCost)
+    {
+        totalResources -= unitCost;
+        updateUI(totalResources);
+    }
+
+    public static int getResources()
+    {
+        return totalResources;
+    }
+
+
+}

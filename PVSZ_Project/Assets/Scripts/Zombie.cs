@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public  class Zombie : MonoBehaviour
+public class Zombie : MonoBehaviour
 {
     public int speed;
     private bool _lockDirection = false;
@@ -15,41 +15,41 @@ public  class Zombie : MonoBehaviour
     private GameObject _techUnitToDamage;
     private float nextAttack = 0f;
     [SerializeField] protected int health;
-    void Start(){ } //override in child
+    void Start() { } //override in child
     void Update()
     {
         IsTechDead();
     }
 
-   
+
 
     public void IsTechDead()
     {
         if (_techUnitToDamage == null)
             _stopMoving = false;
-       
+
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-    
+
         if (collision.gameObject.CompareTag("Bullet"))
         {
             health -= 30;
             Destroy(collision.gameObject);
-            
+
         }
         else if (collision.gameObject.CompareTag("TechUnit"))
         {
             _stopMoving = true;
-            _techUnitToDamage = collision.gameObject; 
+            _techUnitToDamage = collision.gameObject;
             collision.gameObject.GetComponent<TechUnit>().takeDamage(20);
         }
     }
 
     public void OnCollisionStay2D(Collision2D collision)
     {
-        Debug.Log("stay Collision");
+
 
         if (collision.gameObject.CompareTag("TechUnit"))
         {
@@ -64,55 +64,57 @@ public  class Zombie : MonoBehaviour
 
 
         }
-    } 
+    }
 
     protected void MoveIt(int move)
     {
         if (_stopMoving)
             return;
 
-            switch (move)
+        switch (move)
         {
             case 1:
-            moveLeft();
-            break;
-            
+                moveLeft();
+                break;
+
             case 0:
-              if(gridManager.canAlienMove(_startVar, true))
-                moveUp();
-            break;
-            
+                if (gridManager.canAlienMove(_startVar, true))
+                    moveUp();
+                break;
+
             case 2:
-              if (gridManager.canAlienMove(_startVar, false))
-                moveDown();
-            break;
-            
-            
-        } 
+                if (gridManager.canAlienMove(_startVar, false))
+                    moveDown();
+                break;
+
+
+        }
     }
-    
-    protected void isDead(){
+
+    protected void isDead()
+    {
 
         if (health <= 0)
         {
             Destroy(this.gameObject);
             GameManager.Instance.OnAlienDeath(this);
         }
-    
+
     }
 
-    protected void moonWalk(){
-        if(!( _lockDirection))
-            if(_lastmove==1)
-            _random = Random.Range(0, 3);
-        else if (_lastmove == 0)
-            _random = Random.Range(0, 2);
-        else if(_lastmove == 2)
-            _random = Random.Range(1, 3);
-        
-        
-        
-            MoveIt(_random);
+    protected void moonWalk()
+    {
+        if (!(_lockDirection))
+            if (_lastmove == 1)
+                _random = Random.Range(0, 3);
+            else if (_lastmove == 0)
+                _random = Random.Range(0, 2);
+            else if (_lastmove == 2)
+                _random = Random.Range(1, 3);
+
+
+
+        MoveIt(_random);
     }
 
 
@@ -125,51 +127,52 @@ public  class Zombie : MonoBehaviour
             return;
 
         _lockDirection = true;
-       
 
 
-        if (Mathf.Abs(transform.position.x - _startVar.x) > _tile.GetComponent<Transform>().localScale.x) {
-            
+
+        if (Mathf.Abs(transform.position.x - _startVar.x) > _tile.GetComponent<Transform>().localScale.x)
+        {
+
             _lastmove = 1;
             _lockDirection = false;
             _startVar = transform.position;
-            
+
         }
         else
             transform.position = transform.position + new Vector3(-speed * Time.deltaTime, 0f, 0f);
     }
     private void moveUp()
     {
-        
+
         _lockDirection = true;
-        
+
         if (Mathf.Abs(transform.position.y - _startVar.y) > _tile.GetComponent<Transform>().localScale.y)
         {
             _lastmove = 0;
             _lockDirection = false;
             _startVar = transform.position;
-            
+
         }
-        else 
+        else
             transform.position = transform.position + new Vector3(0f, speed * Time.deltaTime, 0f);
-        
-        
+
+
     }
     private void moveDown()
     {
-        
+
         _lockDirection = true;
-        
+
         if (Mathf.Abs(_startVar.y - transform.position.y) > _tile.GetComponent<Transform>().localScale.y)
         {
             _lastmove = 2;
             _lockDirection = false;
             _startVar = transform.position;
-            
+
         }
         else
             transform.position = transform.position + new Vector3(0f, -speed * Time.deltaTime, 0f);
     }
-    
-    
+
+
 }
