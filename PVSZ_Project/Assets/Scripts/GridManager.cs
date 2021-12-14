@@ -10,11 +10,14 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Transform _camera;
     [SerializeField] private GameObject _parent;
     
+    public AlienLaneIndicator   indicatorPrefab;
+    List<AlienLaneIndicator>    indicators = new();
+    
     List<List<Tile>> tiles = new();
     public static GridManager Instance;
- 
-
-
+    
+    
+    
     private void Awake()
     {
         if (Instance != null)
@@ -27,12 +30,12 @@ public class GridManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
+        GenerateGrid();
     }
-
+    
     // Start is called before the first frame update
     void Start()
     {
-        GenerateGrid();
     }
     
     void GenerateGrid()
@@ -61,7 +64,7 @@ public class GridManager : MonoBehaviour
         
         _parent.transform.position = (new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10))*-1;
         
-        
+        SpawnAlienLaneIndicators();
     }
     
     public bool canAlienMove(Vector3 startP,bool isUp)
@@ -71,12 +74,12 @@ public class GridManager : MonoBehaviour
         var firstTile = tiles[0][0];
         var lastTile = tiles[0].Last();
         var bukizila = _tilePrefab.transform.localScale.y / 2;
-
+        
         if (down < firstTile.transform.position.y-bukizila && !(isUp))
             return false;
         else if (up > lastTile.transform.position.y + bukizila && isUp)
             return false;
-
+        
         return true;
     }
     
@@ -132,5 +135,27 @@ public class GridManager : MonoBehaviour
         }
         
         return r;
+    }
+    
+    public void SpawnAlienLaneIndicators()
+    {
+        var lastRow = tiles.Last();
+        
+        foreach (var tile in lastRow)
+        {
+            indicators.Add(Instantiate(indicatorPrefab, tile.transform.position, Quaternion.identity));
+        }
+    }
+    
+    public void SetAlienLaneIndicators()
+    {
+        // NOTE(sftl): temp
+        var aliensPerLane = GameManager.Instance.aliensPerLane;
+        
+        for (int i = 0; i < indicators.Count; i++)
+        {
+            var laneDifficuly = aliensPerLane[i].data.Sum(item => item.num); // NOTE(sftl): num of aliens in lane
+            indicators[i].SetDifficulty(laneDifficuly);
+        }
     }
 }

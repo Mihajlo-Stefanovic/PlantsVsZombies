@@ -56,6 +56,11 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    void Start()
+    {
+        StartTechTurn();
+    }
+    
     void Update()
     {
         if (Input.GetMouseButtonUp(1)) // NOTE(sftl): right click
@@ -140,6 +145,12 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    public void StartTechTurn()
+    {
+        // TODO(sftl): generate next alien wave
+        gridManager.SetAlienLaneIndicators();
+    }
+    
     public void EndTechTurn()
     {
         currTurn = TurnType.Alien;
@@ -150,6 +161,7 @@ public class GameManager : MonoBehaviour
     public void EndAlienTurn()
     {
         currTurn = TurnType.Tech;
+        StartTechTurn();
         playUI.Enable();
     }
     
