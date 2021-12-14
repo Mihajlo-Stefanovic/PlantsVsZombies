@@ -1660,7 +1660,28 @@ MonoBehaviour:
   shooterPrefab: {fileID: 5072785689260309729, guid: 5b0a5b9ba621e55458d0aa2aa0c8d998, type: 3}
   removePrevPrefab: {fileID: 4957960188916544787, guid: 84c27c587677b1b4188a6c29f5106928, type: 3}
   alienPrefab: {fileID: 2471615659415677079, guid: d4a29214ad108054e8d526daad3cb49e, type: 3}
-  aliensPerLane: 010000000100000001000000010000000100000001000000010000000100000001000000
+  baseAlienPrefab: {fileID: 0}
+  specialAlienPrefab: {fileID: 0}
+  aliensPerLane:
+  - data:
+    - alien: {fileID: 7604389893765740306, guid: bb255c1054e4e4b4b9699e7fabe1c952, type: 3}
+      num: 1
+    - alien: {fileID: -5131312041837843500, guid: 5877e966c16c5e24d8d5a39547e8001d, type: 3}
+      num: 1
+  - data:
+    - alien: {fileID: 7604389893765740306, guid: bb255c1054e4e4b4b9699e7fabe1c952, type: 3}
+      num: 1
+    - alien: {fileID: -5131312041837843500, guid: 5877e966c16c5e24d8d5a39547e8001d, type: 3}
+      num: 1
+  - data: []
+  - data: []
+  - data: []
+  - data: []
+  - data: []
+  - data: []
+  - data:
+    - alien: {fileID: -5131312041837843500, guid: 5877e966c16c5e24d8d5a39547e8001d, type: 3}
+      num: 1
   aliensDefeatedEvent: {fileID: 11400000, guid: 1316f68153ffe964681c6713198e6d5c, type: 2}
 --- !u!114 &1237729754
 MonoBehaviour:

@@ -1,5 +1,6 @@
 //#define DEBUG_GAMEMANAGER
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,13 @@ enum TurnType
 {
     Tech,
     Alien
+}
+
+[System.Serializable]
+public class AlienWithNum
+{
+    public Zombie alien;
+    public int num;
 }
 
 public class GameManager : MonoBehaviour
@@ -26,8 +34,8 @@ public class GameManager : MonoBehaviour
     public Zombie alienPrefab; // TODO(sftl): change Class name
     public BaseZombie baseAlienPrefab;
     public SpecialZombie specialAlienPrefab;
-
-    public List<int> aliensPerLane;
+    
+    public List<SerializableList<AlienWithNum>> aliensPerLane;
     
     public GameEvent aliensDefeatedEvent;
     
@@ -147,20 +155,22 @@ public class GameManager : MonoBehaviour
     
     void SpawnAliens()
     {
-        var availablePos    = gridManager.GetAvailableSpawnPos();
+        var availablePos = gridManager.GetAvailableSpawnPos();
         
         //-spawn aliens by specified aliensPerLane
         for (int i = 0; i < aliensPerLane.Count; i++)
         {
-            for (int i2 = 0; i2 < aliensPerLane[i]; i2++)
+            foreach (var alienWithNum in aliensPerLane[i].data)
             {
-                var pos     = availablePos[i];
-                var alien   = Instantiate(baseAlienPrefab, pos, Quaternion.identity); //baseZombie je sada zombie, treba metoda za svaku vrstu zombija
-                aliens.Add(alien);
+                for (int i2 = 0; i2 < alienWithNum.num; i2++)
+                {
+                    var pos = availablePos[i];
+                    var alien = Instantiate(alienWithNum.alien, pos, Quaternion.identity);
+                    aliens.Add(alien);
+                }
             }
         }
     }
-    
     public void OnAlienDeath(Zombie alien)
     {
         aliens.Remove(alien);
