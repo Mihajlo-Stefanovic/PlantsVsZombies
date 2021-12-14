@@ -14,16 +14,21 @@ public class TechUnit : FieldUnit
     
     
 
+
+
+
 private void Start() {
     distanceToDetect= distanceToDetect==0 ? 8: distanceToDetect;
     
 }
 
 
+
 void Update() {
     
     if(health <= 0)
         {
+            
             Destroy(this.gameObject);
         }
 
@@ -41,11 +46,14 @@ void Update() {
             Instantiate(shotPrefab,reyPos.position,Quaternion.identity);
 
         }
-        
-
-        
+       
         }
-    
 }
+
+    public void takeDamage(int damage)
+    {
+        health -= damage;
+
+    }
 
 }

@@ -11,42 +11,67 @@ public  class Zombie : MonoBehaviour
     private int _random = 1;
     protected Vector3 _startVar;
     private int _lastmove = 1;
+    private bool _stopMoving = false;
+    private GameObject _techUnitToDamage;
+    private float nextAttack = 0f;
     [SerializeField] protected int health;
     void Start(){ } //override in child
-    void Update(){ } //override in child
-    
-    
+    void Update()
+    {
+        IsTechDead();
+    }
+
+   
+
+    public void IsTechDead()
+    {
+        if (_techUnitToDamage == null)
+            _stopMoving = false;
+       
+    }
+
     public void OnCollisionEnter2D(Collision2D collision)
     {
+    
         if (collision.gameObject.CompareTag("Bullet"))
         {
             health -= 30;
             Destroy(collision.gameObject);
             
-            
+        }
+        else if (collision.gameObject.CompareTag("TechUnit"))
+        {
+            _stopMoving = true;
+            _techUnitToDamage = collision.gameObject; 
+            collision.gameObject.GetComponent<TechUnit>().takeDamage(20);
         }
     }
-    private void LeftOrDown()
+
+    public void OnCollisionStay2D(Collision2D collision)
     {
-        int a = Random.Range(0, 10);
-        if (a % 2 == 0)
-            moveDown();
-        else
-            moveLeft();
-    }
-    private void LeftOrUp()
+        Debug.Log("stay Collision");
+
+        if (collision.gameObject.CompareTag("TechUnit"))
+        {
+
+
+            if (Time.time > nextAttack)
+            {
+
+                nextAttack = Time.time + 0.5f;
+                collision.gameObject.GetComponent<TechUnit>().takeDamage(20);
+            }
+
+
+        }
+    } 
+
+    protected void MoveIt(int move)
     {
-        int a = Random.Range(0, 10);
-        if (a % 2 == 0)
-            moveUp();
-        else
-            moveLeft();
-    }
-    
-    private void MoveIt(int move)
-    {
-        
-        switch (move)
+        if (_stopMoving)
+            return;
+
+            switch (move)
         {
             case 1:
             moveLeft();
@@ -87,16 +112,22 @@ public  class Zombie : MonoBehaviour
         
         
         
-        MoveIt(_random);
+            MoveIt(_random);
     }
+
+
 
 
     protected void moveLeft()
     {
+
+        if (_stopMoving)
+            return;
+
         _lockDirection = true;
-        
-        
-        
+       
+
+
         if (Mathf.Abs(transform.position.x - _startVar.x) > _tile.GetComponent<Transform>().localScale.x) {
             
             _lastmove = 1;
@@ -109,6 +140,7 @@ public  class Zombie : MonoBehaviour
     }
     private void moveUp()
     {
+        
         _lockDirection = true;
         
         if (Mathf.Abs(transform.position.y - _startVar.y) > _tile.GetComponent<Transform>().localScale.y)
