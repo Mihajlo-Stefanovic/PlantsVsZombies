@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 
@@ -49,6 +50,8 @@ public class GameManager : MonoBehaviour
     Preview currPreview;
     TurnType currTurn = TurnType.Tech;
     List<Zombie> aliens = new();
+    List<TechUnit> techs = new();
+
     void Awake()
     {
         if (Instance != null)
@@ -100,18 +103,20 @@ public class GameManager : MonoBehaviour
 
                             resourceManager.payForUnit(unitCost);
 
-                            //-instantiate TechUnit
-                            var pos = tile.transform.position;
-                            var techUnit = Instantiate(shooterPrefab, pos, Quaternion.identity);
-                            tile.Unit = techUnit;
-
                             //-remove TechPreview
                             //Destroy(currPreview.gameObject);
                             //currPreview = null;
+
+                            //-instantiate TechUnit
+                            var pos = tile.transform.position;
+                            var techUnit = Instantiate(shooterPrefab, pos, Quaternion.identity);
+                            techs.Add(techUnit);
+                            tile.Unit = techUnit;
                         }
+
                     }
                 }
-                else // NOTE(sftl): remove preview
+                else // NOTE(sftl): RemovePreview
                 {
                     Tile tile = gridManager.GetSelectedTileIfOccupied();
 
@@ -119,6 +124,7 @@ public class GameManager : MonoBehaviour
                     {
                         //-remove TechUnit
                         Destroy(tile.Unit.gameObject);
+                        techs.Remove(tile.Unit as TechUnit); // NOTE(sftl): player is not able to try to remove alien unit
                         tile.Unit = null;
 
                         //-remove RemovePreview
@@ -126,6 +132,38 @@ public class GameManager : MonoBehaviour
                         //currPreview = null;
                     }
                 }
+            }
+        }
+
+        //-handle unit front rendering
+        // TODO(sftl): optimise, don't do this every frame, just when unit spawns or changes lane
+        // TODO(sftl): when spawning, rendering position may not be accurate the first frame
+        // TODO(sftl): handle infinite units
+
+        float precision = 0.2f; // Real world width for which units are considered to be on the same rendering layer and rendering order is not defined
+        int refOrder = 15000;   // SpriteRenderer.sortingOrder max is 32767
+
+        if (aliens.Count > 0)
+        {
+            float refPos = aliens.First().transform.position.y;
+
+            foreach (var alien in aliens)
+            {
+                var diffFromRefPos = refPos - alien.transform.position.y;
+                int diffFromRefOrder = (int)(diffFromRefPos / precision);
+                alien.GetComponent<SpriteRenderer>().sortingOrder = refOrder + diffFromRefOrder;
+            }
+        }
+
+        if (techs.Count > 0)
+        {
+            float refPos = techs.First().transform.position.y;
+
+            foreach (var tech in techs)
+            {
+                var diffFromRefPos = refPos - tech.transform.position.y;
+                int diffFromRefOrder = (int)(diffFromRefPos / precision);
+                tech.GetComponent<SpriteRenderer>().sortingOrder = refOrder + diffFromRefOrder;
             }
         }
     }
@@ -181,6 +219,11 @@ public class GameManager : MonoBehaviour
         TurnNum++;
         StartTechTurn();
         playUI.Enable();
+    }
+
+    public void OnTechDeath(TechUnit unit)
+    {
+        techs.Remove(unit);
     }
 
     void SpawnAliens()
