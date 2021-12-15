@@ -25,13 +25,13 @@ public class Tile : MonoBehaviour
     }
     
     
-    public void OnMouseEnter()
+    public void OnPointerRayEnter()
     {
         _highlight.SetActive(true);
         IsSelected = true;
     }
     
-    public void OnMouseExit()
+    public void OnPointerRayExit()
     {
         _highlight.SetActive(false);
         IsSelected = false;

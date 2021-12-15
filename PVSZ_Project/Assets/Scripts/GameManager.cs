@@ -31,10 +31,6 @@ public class GameManager : MonoBehaviour
     public GridManager gridManager;
     public PlayUI playUI;
 
-    private static Timer timer;
-
-
-
     public Preview shooterPrevPrefab;
     public TechUnit shooterPrefab;
 
@@ -68,7 +64,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
     }
 
