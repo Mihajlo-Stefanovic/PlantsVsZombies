@@ -213,6 +213,17 @@ public class GameManager : MonoBehaviour
     {
         currTurn = TurnType.Alien;
         playUI.Dissable();
+
+        // TODO(sftl): make this a method
+        if (currPreview != null)
+        {
+#if DEBUG_GAMEMANAGER
+                Debug.Log("Preview destroyed on right click.");
+#endif
+            Destroy(currPreview.gameObject);
+            currPreview = null;
+        }
+
         SpawnAliens();
     }
 
