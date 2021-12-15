@@ -1972,25 +1972,25 @@ MonoBehaviour:
   shooterPrevPrefab: {fileID: 5439322812540631791, guid: 2f97183b0bf11454eb16230641487641, type: 3}
   shooterPrefab: {fileID: 5072785689260309729, guid: 5b0a5b9ba621e55458d0aa2aa0c8d998, type: 3}
   removePrevPrefab: {fileID: 4957960188916544787, guid: 84c27c587677b1b4188a6c29f5106928, type: 3}
-  alienPrefab: {fileID: 2471615659415677079, guid: d4a29214ad108054e8d526daad3cb49e, type: 3}
-  baseAlienPrefab: {fileID: 0}
-  specialAlienPrefab: {fileID: 0}
+  baseAlienPrefab: {fileID: 6283117115383405422, guid: 754c4a94d8f83d8409e798dcc1a7c689, type: 3}
+  specialAlienPrefab: {fileID: 2117003689617801932, guid: fb3f37fd08f04e648bfec546c7647b6d, type: 3}
+  alienTankPrefab: {fileID: 6678296947489991112, guid: c47b1a142ba67d046b88f387f024e3c4, type: 3}
   aliensPerLane:
   - data:
-    - alien: {fileID: 7604389893765740306, guid: bb255c1054e4e4b4b9699e7fabe1c952, type: 3}
-      num: 1
-    - alien: {fileID: -5131312041837843500, guid: 5877e966c16c5e24d8d5a39547e8001d, type: 3}
+    - alien: {fileID: 6283117115383405422, guid: 754c4a94d8f83d8409e798dcc1a7c689, type: 3}
+      num: 4
+  - data:
+    - alien: {fileID: 6283117115383405422, guid: 754c4a94d8f83d8409e798dcc1a7c689, type: 3}
+      num: 2
+  - data:
+    - alien: {fileID: 6678296947489991112, guid: c47b1a142ba67d046b88f387f024e3c4, type: 3}
       num: 1
   - data:
-    - alien: {fileID: 7604389893765740306, guid: bb255c1054e4e4b4b9699e7fabe1c952, type: 3}
-      num: 1
-    - alien: {fileID: -5131312041837843500, guid: 5877e966c16c5e24d8d5a39547e8001d, type: 3}
-      num: 1
-  - data: []
+    - alien: {fileID: 6283117115383405422, guid: 754c4a94d8f83d8409e798dcc1a7c689, type: 3}
+      num: 3
   - data:
-    - alien: {fileID: -5131312041837843500, guid: 5877e966c16c5e24d8d5a39547e8001d, type: 3}
-      num: 10
-  - data: []
+    - alien: {fileID: 6283117115383405422, guid: 754c4a94d8f83d8409e798dcc1a7c689, type: 3}
+      num: 3
   unitCost: 30
   TurnNum: 1
   turnIncrementedEvent: {fileID: 11400000, guid: f72934727b362b9488f3bacd30bd1e22, type: 2}

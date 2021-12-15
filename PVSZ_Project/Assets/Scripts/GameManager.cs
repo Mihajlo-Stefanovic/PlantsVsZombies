@@ -4,8 +4,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 using UnityEngine;
-using TMPro;
+
+using Random = System.Random;
 
 enum TurnType
 {
@@ -29,6 +31,8 @@ public class GameManager : MonoBehaviour
     public GridManager gridManager;
     public PlayUI playUI;
 
+    private static Timer timer;
+
 
 
     public Preview shooterPrevPrefab;
@@ -36,20 +40,23 @@ public class GameManager : MonoBehaviour
 
     public Preview removePrevPrefab;
 
-    public Zombie alienPrefab; // TODO(sftl): change Class name
     public BaseZombie baseAlienPrefab;
     public SpecialZombie specialAlienPrefab;
+
+    public AlienTank alienTankPrefab;
 
     public List<SerializableList<AlienWithNum>> aliensPerLane;
 
 
     [SerializeField] public int unitCost;
     public int TurnNum = 1;
+
     public GameEvent turnIncrementedEvent;
 
     Preview currPreview;
     TurnType currTurn = TurnType.Tech;
     List<Zombie> aliens = new();
+
     List<TechUnit> techs = new();
 
     void Awake()
@@ -231,19 +238,32 @@ public class GameManager : MonoBehaviour
         var availablePos = gridManager.GetAvailableSpawnPos();
 
         //-spawn aliens by specified aliensPerLane
+        var random = new Random();
         for (int i = 0; i < aliensPerLane.Count; i++)
         {
             foreach (var alienWithNum in aliensPerLane[i].data)
             {
                 for (int i2 = 0; i2 < alienWithNum.num; i2++)
                 {
-                    var pos = availablePos[i];
-                    var alien = Instantiate(alienWithNum.alien, pos, Quaternion.identity);
-                    aliens.Add(alien);
+                    var sec = (float)random.NextDouble();
+                    var currIndex = i; // TODO(sftl): avoid this
+
+                    StartCoroutine(
+                        DoAfterSec(
+                            sec,
+                             () =>
+                             {
+                                 var pos = availablePos[currIndex];
+                                 var alien = Instantiate(alienWithNum.alien, pos, Quaternion.identity);
+                                 aliens.Add(alien);
+                             }
+                        )
+                    );
                 }
             }
         }
     }
+
     public void OnAlienDeath(Zombie alien)
     {
         aliens.Remove(alien);
@@ -255,9 +275,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void DecreaseResources()
+    IEnumerator DoAfterSec(float sec, Action action)
     {
-
+        yield return new WaitForSeconds(sec);
+        action();
     }
-
 }
