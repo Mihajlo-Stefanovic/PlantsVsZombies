@@ -24,34 +24,34 @@ public class GameManager : MonoBehaviour
 {
     // NOTE(sftl): singleton
     public static GameManager Instance;
-
+    
     public ResourceManager resourceManager;
     public GridManager gridManager;
     public PlayUI playUI;
-
-
-
+    
+    
+    
     public Preview shooterPrevPrefab;
     public TechUnit shooterPrefab;
-
+    
     public Preview removePrevPrefab;
-
+    
     public Zombie alienPrefab; // TODO(sftl): change Class name
     public BaseZombie baseAlienPrefab;
     public SpecialZombie specialAlienPrefab;
-
+    
     public List<SerializableList<AlienWithNum>> aliensPerLane;
-
-
+    
+    
     [SerializeField] public int unitCost;
     public int TurnNum = 1;
     public GameEvent turnIncrementedEvent;
-
+    
     Preview currPreview;
     TurnType currTurn = TurnType.Tech;
     List<Zombie> aliens = new();
     List<TechUnit> techs = new();
-
+    
     void Awake()
     {
         if (Instance != null)
@@ -61,20 +61,20 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
     }
-
+    
     void Start()
     {
         StartTechTurn();
-
-
+        
+        
     }
-
+    
     void Update()
     {
-
+        
         if (Input.GetMouseButtonUp(1)) // NOTE(sftl): right click
         {
             if (currPreview != null)
@@ -93,40 +93,40 @@ public class GameManager : MonoBehaviour
                 if (currPreview.type == PreviewType.Tech)
                 {
                     Tile tile = gridManager.GetSelectedTileIfAvailable();
-
-
+                    
+                    
                     if (tile != null)
                     {
                         if (ResourceManager.getResources() >= unitCost)
                         { // =checking if u have enough reosources to pay for the unit
-                          //-decreasing resources
-
+                            //-decreasing resources
+                            
                             resourceManager.payForUnit(unitCost);
-
+                            
                             //-remove TechPreview
                             //Destroy(currPreview.gameObject);
                             //currPreview = null;
-
+                            
                             //-instantiate TechUnit
                             var pos = tile.transform.position;
                             var techUnit = Instantiate(shooterPrefab, pos, Quaternion.identity);
                             techs.Add(techUnit);
                             tile.Unit = techUnit;
                         }
-
+                        
                     }
                 }
                 else // NOTE(sftl): RemovePreview
                 {
                     Tile tile = gridManager.GetSelectedTileIfOccupied();
-
+                    
                     if (tile != null)
                     {
                         //-remove TechUnit
                         Destroy(tile.Unit.gameObject);
                         techs.Remove(tile.Unit as TechUnit); // NOTE(sftl): player is not able to try to remove alien unit
                         tile.Unit = null;
-
+                        
                         //-remove RemovePreview
                         //Destroy(currPreview.gameObject);
                         //currPreview = null;
@@ -134,19 +134,19 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-
+        
         //-handle unit front rendering
         // TODO(sftl): optimise, don't do this every frame, just when unit spawns or changes lane
         // TODO(sftl): when spawning, rendering position may not be accurate the first frame
         // TODO(sftl): handle infinite units
-
+        
         float precision = 0.2f; // Real world width for which units are considered to be on the same rendering layer and rendering order is not defined
         int refOrder = 15000;   // SpriteRenderer.sortingOrder max is 32767
-
+        
         if (aliens.Count > 0)
         {
             float refPos = aliens.First().transform.position.y;
-
+            
             foreach (var alien in aliens)
             {
                 var diffFromRefPos = refPos - alien.transform.position.y;
@@ -154,11 +154,11 @@ public class GameManager : MonoBehaviour
                 alien.GetComponent<SpriteRenderer>().sortingOrder = refOrder + diffFromRefOrder;
             }
         }
-
+        
         if (techs.Count > 0)
         {
             float refPos = techs.First().transform.position.y;
-
+            
             foreach (var tech in techs)
             {
                 var diffFromRefPos = refPos - tech.transform.position.y;
@@ -167,14 +167,14 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
+    
     public void TechCardClicked(TechCard card)
     {
         var prevPreview = currPreview;
-
+        
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         currPreview = Instantiate(shooterPrevPrefab, pos, Quaternion.identity); // TODO(sftl): use card type
-
+        
         if (prevPreview != null)
         {
 #if DEBUG_GAMEMANAGER
@@ -183,14 +183,14 @@ public class GameManager : MonoBehaviour
             Destroy(prevPreview.gameObject);
         }
     }
-
+    
     public void RemoveCardClicked()
     {
         var prevPreview = currPreview;
-
+        
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         currPreview = Instantiate(removePrevPrefab, pos, Quaternion.identity);
-
+        
         if (prevPreview != null)
         {
 #if DEBUG_GAMEMANAGER
@@ -199,20 +199,20 @@ public class GameManager : MonoBehaviour
             Destroy(prevPreview.gameObject);
         }
     }
-
+    
     public void StartTechTurn()
     {
         // TODO(sftl): generate next alien wave
         gridManager.SetAlienLaneIndicators();
     }
-
+    
     public void EndTechTurn()
     {
         currTurn = TurnType.Alien;
         playUI.Dissable();
         SpawnAliens();
     }
-
+    
     public void EndAlienTurn()
     {
         currTurn = TurnType.Tech;
@@ -220,16 +220,16 @@ public class GameManager : MonoBehaviour
         StartTechTurn();
         playUI.Enable();
     }
-
+    
     public void OnTechDeath(TechUnit unit)
     {
         techs.Remove(unit);
     }
-
+    
     void SpawnAliens()
     {
         var availablePos = gridManager.GetAvailableSpawnPos();
-
+        
         //-spawn aliens by specified aliensPerLane
         for (int i = 0; i < aliensPerLane.Count; i++)
         {
@@ -247,17 +247,17 @@ public class GameManager : MonoBehaviour
     public void OnAlienDeath(Zombie alien)
     {
         aliens.Remove(alien);
-
+        
         if (aliens.Count == 0)
         {
             EndAlienTurn();
             turnIncrementedEvent.Raise();
         }
     }
-
+    
     public void DecreaseResources()
     {
-
+        
     }
-
+    
 }
