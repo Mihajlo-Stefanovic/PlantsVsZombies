@@ -16,9 +16,7 @@ public class BaseZombie : Zombie
     // Update is called once per frame
     void Update()
     {
-        
-        IsTechDead();
-        isDead();
+        CheckEverything();
         MoveIt(1);
     }
 }

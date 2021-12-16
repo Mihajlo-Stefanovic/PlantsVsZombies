@@ -20,16 +20,47 @@ public class Zombie : MonoBehaviour
     {
         IsTechDead();
     }
-    
-    
-    
     public void IsTechDead()
     {
         if (_techUnitToDamage == null)
             _stopMoving = false;
         
     }
-    
+
+    public void KillOutside()
+    {
+        if (gridManager.isAlienOutside(gameObject.transform.position))
+        {
+            StartCoroutine(KillAfterSec(2f));
+        }
+    }
+
+    public IEnumerator KillAfterSec(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        Destroy(this.gameObject);
+        GameManager.Instance.OnAlienDeath(this);
+
+    }
+
+    protected void isDead()
+    {
+
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
+            GameManager.Instance.OnAlienDeath(this);
+        }
+
+    }
+
+    protected void CheckEverything()
+    {
+        KillOutside();
+        IsTechDead();
+        isDead();
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("Bullet"))
@@ -40,30 +71,22 @@ public class Zombie : MonoBehaviour
         }
         else if (col.gameObject.CompareTag("TechUnit"))
         {
-            StartCoroutine(StopMovingAfterSec(0.1f));
-            //_stopMoving = true;
+            _stopMoving = true;
             _techUnitToDamage = col.gameObject;
-            col.gameObject.GetComponent<TechUnit>().takeDamage(20);
-            AudioManager.Instance.Play_AlienMelee();
         }
     }
-    
-    IEnumerator StopMovingAfterSec(float sec)
-    {
-        yield return new WaitForSeconds(sec);
-        _stopMoving = true;
-    }
-
+   
     void OnTriggerStay2D(Collider2D col)
     {
         
         
         if (col.gameObject.CompareTag("TechUnit"))
         {
-            
-            
+            Debug.Log("lelelelele");
+
             if (Time.time > nextAttack)
             {
+                
                 AudioManager.Instance.Play_AlienMelee();
                 nextAttack = Time.time + 0.5f;
                 col.gameObject.GetComponent<TechUnit>().takeDamage(20);
@@ -97,18 +120,7 @@ public class Zombie : MonoBehaviour
             
         }
     }
-    
-    protected void isDead()
-    {
-        
-        if (health <= 0)
-        {
-            Destroy(this.gameObject);
-            GameManager.Instance.OnAlienDeath(this);
-        }
-        
-    }
-    
+     
     protected void moonWalk()
     {
         if (!(_lockDirection))
@@ -118,15 +130,10 @@ public class Zombie : MonoBehaviour
             _random = Random.Range(0, 2);
         else if (_lastmove == 2)
             _random = Random.Range(1, 3);
-        
-        
-        
+
         MoveIt(_random);
     }
-    
-    
-    
-    
+   
     protected void moveLeft()
     {
         
@@ -134,8 +141,7 @@ public class Zombie : MonoBehaviour
             return;
         
         _lockDirection = true;
-        
-        
+  
         
         if (Mathf.Abs(transform.position.x - _startVar.x) > _tile.GetComponent<Transform>().localScale.x)
         {
