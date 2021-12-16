@@ -123,6 +123,21 @@ public class GridManager : MonoBehaviour
         return null;
     }
     
+    public void DeselectTile()
+    {
+        // TODO(sftl): optimise
+        foreach(var row in tiles)
+        {
+            foreach(var tile in row)
+            {
+                if (tile.IsSelected) 
+                {
+                    tile.Deselect();
+                }
+            }
+        }
+    }
+    
     public List<Vector3> GetAvailableSpawnPos()
     {
         var r = new List<Vector3>();

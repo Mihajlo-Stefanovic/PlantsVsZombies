@@ -7,7 +7,6 @@ public class PauseManu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
-    public GameObject PointerRaycaster;
     // Update is called once per frame
     void Update()
     {
@@ -18,7 +17,7 @@ public class PauseManu : MonoBehaviour
             {
                 
                 Resume();
-            
+                
             }else
             {
                 Pause();
@@ -26,20 +25,15 @@ public class PauseManu : MonoBehaviour
             }
         }
     }
-     public void Resume()
+    public void Resume()
     {
         pauseMenuUI.SetActive(false);
-        Time.timeScale=1f;
-        GameIsPaused=false;
-        PointerRaycaster.SetActive(true);
-        
+        GameManager.Instance.ResumeGame();
     }
     void Pause()
     {
         pauseMenuUI.SetActive(true);
-        Time.timeScale=0f;
-        GameIsPaused=true;
-        PointerRaycaster.SetActive(false);
+        GameManager.Instance.PauseGame();
     }
     public void LoadManu()
     {
