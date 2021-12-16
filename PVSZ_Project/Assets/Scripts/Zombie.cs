@@ -40,13 +40,20 @@ public class Zombie : MonoBehaviour
         }
         else if (col.gameObject.CompareTag("TechUnit"))
         {
-            _stopMoving = true;
+            StartCoroutine(StopMovingAfterSec(0.1f));
+            //_stopMoving = true;
             _techUnitToDamage = col.gameObject;
             col.gameObject.GetComponent<TechUnit>().takeDamage(20);
             AudioManager.Instance.Play_AlienMelee();
         }
     }
     
+    IEnumerator StopMovingAfterSec(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        _stopMoving = true;
+    }
+
     void OnTriggerStay2D(Collider2D col)
     {
         
@@ -57,7 +64,7 @@ public class Zombie : MonoBehaviour
             
             if (Time.time > nextAttack)
             {
-                
+                AudioManager.Instance.Play_AlienMelee();
                 nextAttack = Time.time + 0.5f;
                 col.gameObject.GetComponent<TechUnit>().takeDamage(20);
             }
