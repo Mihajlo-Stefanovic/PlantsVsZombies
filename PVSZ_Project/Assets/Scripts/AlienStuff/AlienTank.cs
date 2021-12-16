@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseZombie : Zombie
+public class AlienTank : Alien
 {
     // Start is called before the first frame update
-    
-    
     void Start()
     {
         _startVar = transform.position;

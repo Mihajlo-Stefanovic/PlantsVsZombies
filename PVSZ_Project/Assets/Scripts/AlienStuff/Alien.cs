@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Zombie : MonoBehaviour
+public class Alien : MonoBehaviour
 {
     public int speed;
     private bool _lockDirection = false;

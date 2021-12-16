@@ -24,7 +24,7 @@ enum GameState
 [System.Serializable]
 public class AlienWithNum
 {
-    public Zombie alien;
+    public Alien alien;
     public int num;
 }
 
@@ -46,8 +46,8 @@ public class GameManager : MonoBehaviour
     public Preview  removePrevPrefab;
     
     //- alien unit prefabs
-    public BaseZombie       baseAlienPrefab;
-    public SpecialZombie    specialAlienPrefab;
+    public AlienStandard       baseAlienPrefab;
+    public AlienMoonwalker    specialAlienPrefab;
     
     public AlienTank        alienTankPrefab;
     
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
     public List<SerializableList<AlienWithNum>> aliensPerLane;
     
     Preview         currPreview;
-    List<Zombie>    aliens = new();
+    List<Alien>    aliens = new();
     List<TechUnit>  techs = new();
     
     void Awake()
@@ -308,7 +308,7 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public void OnAlienDeath(Zombie alien)
+    public void OnAlienDeath(Alien alien)
     {
         aliens.Remove(alien);
         

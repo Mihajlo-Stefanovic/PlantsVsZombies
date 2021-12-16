@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2064569295670875050}
-  - component: {fileID: 6283117115383405422}
   - component: {fileID: -6069312373568931423}
   - component: {fileID: -2930873308041332228}
   - component: {fileID: -6165747713503345090}
+  - component: {fileID: 6122402345263599684}
   m_Layer: 7
   m_Name: BaseAlien
   m_TagString: Untagged
@@ -35,21 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6283117115383405422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 544512831379579636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de7d566826d6c8c4b922856b3a100094, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 1
-  _tile: {fileID: 4101567033614528602, guid: 1c23370466408f444a46311601e4d79d, type: 3}
-  health: 100
 --- !u!50 &-6069312373568931423
 Rigidbody2D:
   serializedVersion: 4
@@ -149,3 +134,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6122402345263599684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544512831379579636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4f19d151d6aaa14bbb50817befa06ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1
+  _tile: {fileID: 4101567033614528602, guid: 1c23370466408f444a46311601e4d79d, type: 3}
+  health: 100
