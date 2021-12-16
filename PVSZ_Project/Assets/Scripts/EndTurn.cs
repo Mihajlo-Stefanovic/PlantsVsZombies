@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class EndTurn : MonoBehaviour, IPointerDownHandler
+public class EndTurn : MonoBehaviour, IPointerUpHandler
 {
-    public void OnPointerDown(PointerEventData pointerEventData)
+    public void OnPointerUp(PointerEventData pointerEventData)
     {
         GameManager.Instance.EndTechTurn();
     }

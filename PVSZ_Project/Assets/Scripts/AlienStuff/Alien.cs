@@ -82,8 +82,6 @@ public class Alien : MonoBehaviour
         
         if (col.gameObject.CompareTag("TechUnit"))
         {
-            Debug.Log("lelelelele");
-
             if (Time.time > nextAttack)
             {
                 
