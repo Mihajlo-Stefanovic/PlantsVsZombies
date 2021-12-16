@@ -14,8 +14,7 @@ public class SpecialZombie : Zombie
     // Update is called once per frame
     void Update()
     {
-        IsTechDead();
-        isDead();
+        CheckEverything();
         moonWalk();
     }
 }

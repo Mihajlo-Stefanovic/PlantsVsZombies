@@ -82,6 +82,17 @@ public class GridManager : MonoBehaviour
         
         return true;
     }
+
+
+    public bool isAlienOutside(Vector3 pos)
+    {
+        var bukizila = _tilePrefab.transform.localScale.y / 2;
+        var firstTile = tiles[0][0];
+        if (pos.x < firstTile.transform.position.x - bukizila)
+            return true;
+
+        return false;
+    }
     
     // Update is called once per frame
     void Update()
@@ -121,6 +132,21 @@ public class GridManager : MonoBehaviour
             }
         }
         return null;
+    }
+    
+    public void DeselectTile()
+    {
+        // TODO(sftl): optimise
+        foreach(var row in tiles)
+        {
+            foreach(var tile in row)
+            {
+                if (tile.IsSelected) 
+                {
+                    tile.Deselect();
+                }
+            }
+        }
     }
     
     public List<Vector3> GetAvailableSpawnPos()

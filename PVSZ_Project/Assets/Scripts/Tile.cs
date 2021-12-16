@@ -33,6 +33,11 @@ public class Tile : MonoBehaviour
     
     public void OnPointerRayExit()
     {
+        Deselect();
+    }
+    
+    public void Deselect()
+    {
         _highlight.SetActive(false);
         IsSelected = false;
     }

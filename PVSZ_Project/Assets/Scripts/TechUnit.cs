@@ -38,19 +38,21 @@ public class TechUnit : FieldUnit
         Ray ray = new Ray(reyPos.position, reyPos.right);
         
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, distanceToDetect, LayerMask.GetMask("Alien"));
-        
-        if(hit) {
-            
-            if(Time.time>nextAttack){
-                
-                nextAttack = Time.time+attackSpeed;
-                Instantiate(shotPrefab,reyPos.position,Quaternion.identity);
-                
+
+        if (hit)
+        {
+
+            if (Time.time > nextAttack)
+            {
+                // NOTE(sftl): shooting
+                nextAttack = Time.time + attackSpeed;
+                Instantiate(shotPrefab, reyPos.position, Quaternion.identity);
+                AudioManager.Instance.Play_ShooterShoot();
             }
-            
+
         }
     }
-    
+
     public void takeDamage(int damage)
     {
         health -= damage;

@@ -20,75 +20,27 @@ public class Zombie : MonoBehaviour
     {
         IsTechDead();
     }
-
-
-
     public void IsTechDead()
     {
         if (_techUnitToDamage == null)
             _stopMoving = false;
-
+        
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    public void KillOutside()
     {
-
-        if (collision.gameObject.CompareTag("Bullet"))
+        if (gridManager.isAlienOutside(gameObject.transform.position))
         {
-            health -= 30;
-            Destroy(collision.gameObject);
-
-        }
-        else if (collision.gameObject.CompareTag("TechUnit"))
-        {
-            _stopMoving = true;
-            _techUnitToDamage = collision.gameObject;
-            collision.gameObject.GetComponent<TechUnit>().takeDamage(20);
+            StartCoroutine(KillAfterSec(2f));
         }
     }
 
-    public void OnCollisionStay2D(Collision2D collision)
+    public IEnumerator KillAfterSec(float sec)
     {
+        yield return new WaitForSeconds(sec);
+        Destroy(this.gameObject);
+        GameManager.Instance.OnAlienDeath(this);
 
-
-        if (collision.gameObject.CompareTag("TechUnit"))
-        {
-
-
-            if (Time.time > nextAttack)
-            {
-
-                nextAttack = Time.time + 0.5f;
-                collision.gameObject.GetComponent<TechUnit>().takeDamage(20);
-            }
-
-
-        }
-    }
-
-    protected void MoveIt(int move)
-    {
-        if (_stopMoving)
-            return;
-
-        switch (move)
-        {
-            case 1:
-                moveLeft();
-                break;
-
-            case 0:
-                if (gridManager.canAlienMove(_startVar, true))
-                    moveUp();
-                break;
-
-            case 2:
-                if (gridManager.canAlienMove(_startVar, false))
-                    moveDown();
-                break;
-
-
-        }
     }
 
     protected void isDead()
@@ -102,77 +54,138 @@ public class Zombie : MonoBehaviour
 
     }
 
+    protected void CheckEverything()
+    {
+        KillOutside();
+        IsTechDead();
+        isDead();
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("Bullet"))
+        {
+            health -= 30;
+            Destroy(col.gameObject);
+            
+        }
+        else if (col.gameObject.CompareTag("TechUnit"))
+        {
+            _stopMoving = true;
+            _techUnitToDamage = col.gameObject;
+        }
+    }
+   
+    void OnTriggerStay2D(Collider2D col)
+    {
+        
+        
+        if (col.gameObject.CompareTag("TechUnit"))
+        {
+            Debug.Log("lelelelele");
+
+            if (Time.time > nextAttack)
+            {
+                
+                AudioManager.Instance.Play_AlienMelee();
+                nextAttack = Time.time + 0.5f;
+                col.gameObject.GetComponent<TechUnit>().takeDamage(20);
+            }
+            
+            
+        }
+    }
+    
+    protected void MoveIt(int move)
+    {
+        if (_stopMoving)
+            return;
+        
+        switch (move)
+        {
+            case 1:
+            moveLeft();
+            break;
+            
+            case 0:
+            if (gridManager.canAlienMove(_startVar, true))
+                moveUp();
+            break;
+            
+            case 2:
+            if (gridManager.canAlienMove(_startVar, false))
+                moveDown();
+            break;
+            
+            
+        }
+    }
+     
     protected void moonWalk()
     {
         if (!(_lockDirection))
             if (_lastmove == 1)
-                _random = Random.Range(0, 3);
-            else if (_lastmove == 0)
-                _random = Random.Range(0, 2);
-            else if (_lastmove == 2)
-                _random = Random.Range(1, 3);
-
-
+            _random = Random.Range(0, 3);
+        else if (_lastmove == 0)
+            _random = Random.Range(0, 2);
+        else if (_lastmove == 2)
+            _random = Random.Range(1, 3);
 
         MoveIt(_random);
     }
-
-
-
-
+   
     protected void moveLeft()
     {
-
+        
         if (_stopMoving)
             return;
-
+        
         _lockDirection = true;
-
-
-
+  
+        
         if (Mathf.Abs(transform.position.x - _startVar.x) > _tile.GetComponent<Transform>().localScale.x)
         {
-
+            
             _lastmove = 1;
             _lockDirection = false;
             _startVar = transform.position;
-
+            
         }
         else
             transform.position = transform.position + new Vector3(-speed * Time.deltaTime, 0f, 0f);
     }
     private void moveUp()
     {
-
+        
         _lockDirection = true;
-
+        
         if (Mathf.Abs(transform.position.y - _startVar.y) > _tile.GetComponent<Transform>().localScale.y)
         {
             _lastmove = 0;
             _lockDirection = false;
             _startVar = transform.position;
-
+            
         }
         else
             transform.position = transform.position + new Vector3(0f, speed * Time.deltaTime, 0f);
-
-
+        
+        
     }
     private void moveDown()
     {
-
+        
         _lockDirection = true;
-
+        
         if (Mathf.Abs(_startVar.y - transform.position.y) > _tile.GetComponent<Transform>().localScale.y)
         {
             _lastmove = 2;
             _lockDirection = false;
             _startVar = transform.position;
-
+            
         }
         else
             transform.position = transform.position + new Vector3(0f, -speed * Time.deltaTime, 0f);
     }
-
-
+    
+    
 }
