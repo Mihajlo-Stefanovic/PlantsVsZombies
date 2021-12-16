@@ -42,10 +42,10 @@ public class TechUnit : FieldUnit
         if(hit) {
             
             if(Time.time>nextAttack){
-                
+                // NOTE(sftl): shooting
                 nextAttack = Time.time+attackSpeed;
                 Instantiate(shotPrefab,reyPos.position,Quaternion.identity);
-                
+                AudioManager.Instance.Play_ShooterShoot();
             }
             
         }

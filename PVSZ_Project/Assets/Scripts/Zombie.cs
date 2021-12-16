@@ -43,6 +43,7 @@ public class Zombie : MonoBehaviour
             _stopMoving = true;
             _techUnitToDamage = col.gameObject;
             col.gameObject.GetComponent<TechUnit>().takeDamage(20);
+            AudioManager.Instance.Play_AlienMelee();
         }
     }
     
