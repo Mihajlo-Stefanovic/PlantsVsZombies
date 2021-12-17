@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum PreviewType
 {
-    Tech,
+    Tech,       // TODO(sftl): rename to shooter
+    PowerScan,
     Remove
 }
 

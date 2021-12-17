@@ -26,7 +26,7 @@ public class Alien : MonoBehaviour
             _stopMoving = false;
         
     }
-
+    
     public void KillOutside()
     {
         if (gridManager.isAlienOutside(gameObject.transform.position))
@@ -34,48 +34,51 @@ public class Alien : MonoBehaviour
             StartCoroutine(KillAfterSec(2f));
         }
     }
-
+    
     public IEnumerator KillAfterSec(float sec)
     {
         yield return new WaitForSeconds(sec);
         Destroy(this.gameObject);
         GameManager.Instance.OnAlienDeath(this);
-
+        
     }
-
+    
     protected void isDead()
     {
-
+        
         if (health <= 0)
         {
             Destroy(this.gameObject);
             GameManager.Instance.OnAlienDeath(this);
         }
-
+        
     }
-
+    
     protected void CheckEverything()
     {
         KillOutside();
         IsTechDead();
         isDead();
     }
-
+    
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("Bullet"))
         {
             health -= 30;
-            Destroy(col.gameObject);
-            
+            Destroy(col.gameObject); // TODO(sftl): destroy in bullet, not here
         }
+        else if (col.gameObject.CompareTag("PowerScanBullet"))
+        {
+            health -= 50;
+        } 
         else if (col.gameObject.CompareTag("TechUnit"))
         {
             _stopMoving = true;
             _techUnitToDamage = col.gameObject;
         }
     }
-   
+    
     void OnTriggerStay2D(Collider2D col)
     {
         
@@ -87,7 +90,7 @@ public class Alien : MonoBehaviour
                 
                 AudioManager.Instance.Play_AlienMelee();
                 nextAttack = Time.time + 0.5f;
-                col.gameObject.GetComponent<TechUnit>().takeDamage(20);
+                col.gameObject.GetComponent<ITechAbilities>().takeDamage(20);
             }
             
             
@@ -118,7 +121,7 @@ public class Alien : MonoBehaviour
             
         }
     }
-     
+    
     protected void moonWalk()
     {
         if (!(_lockDirection))
@@ -128,10 +131,10 @@ public class Alien : MonoBehaviour
             _random = Random.Range(0, 2);
         else if (_lastmove == 2)
             _random = Random.Range(1, 3);
-
+        
         MoveIt(_random);
     }
-   
+    
     protected void moveLeft()
     {
         
@@ -139,7 +142,7 @@ public class Alien : MonoBehaviour
             return;
         
         _lockDirection = true;
-  
+        
         
         if (Mathf.Abs(transform.position.x - _startVar.x) > _tile.GetComponent<Transform>().localScale.x)
         {

@@ -4,6 +4,5 @@ using UnityEngine;
 
 public interface ITechAbilities
 {
-    void DetectEnemyShoot();
     void takeDamage(int damage);
 }

@@ -45,14 +45,19 @@ public class GameManager : MonoBehaviour
     
     public Preview  removePrevPrefab;
     
+    //- power prefabs
+    public PowerScan    powerScanPrefab;
+    public Preview      powerScanPrevPrefab;
+    
     //- alien unit prefabs
-    public AlienStandard       baseAlienPrefab;
-    public AlienMoonwalker    specialAlienPrefab;
+    public AlienStandard    baseAlienPrefab;
+    public AlienMoonwalker  specialAlienPrefab;
     
     public AlienTank        alienTankPrefab;
     
     //- unit costs
-    [SerializeField] public int unitCost;
+    public int unitCost;
+    public int powerScanCost;
     
     //- turns
     public int  TurnNum = 1;
@@ -65,9 +70,10 @@ public class GameManager : MonoBehaviour
     //- utils
     public List<SerializableList<AlienWithNum>> aliensPerLane;
     
-    Preview         currPreview;
-    List<Alien>    aliens = new();
-    List<TechUnit>  techs = new();
+    Preview                 currPreview;
+    List<Alien>             aliens = new();
+    List<TechPrototype>     techs = new();
+    List<TechPrototype>     temp_techs = new();
     
     void Awake()
     {
@@ -120,7 +126,27 @@ public class GameManager : MonoBehaviour
                             techs.Add(techUnit);
                             tile.Unit = techUnit;
                         }
-                        
+                    }
+                }
+                else if (currPreview.type == PreviewType.PowerScan) // NOTE(sftl): method?
+                {
+                    Tile tile = gridManager.GetSelectedTileIfAvailable();
+                    
+                    if (tile != null)
+                    {
+                        if (ResourceManager.getResources() >= powerScanCost)
+                        { // =checking if u have enough reosources to pay for the unit
+                            //-decreasing resources
+                            
+                            resourceManager.payForUnit(powerScanCost);
+                            
+                            //-instantiate TechUnit
+                            var pos = tile.transform.position;
+                            var techUnit = Instantiate(powerScanPrefab, pos, Quaternion.identity);
+                            techs.Add(techUnit);
+                            temp_techs.Add(techUnit);
+                            tile.Unit = techUnit;
+                        }
                     }
                 }
                 else // NOTE(sftl): RemovePreview
@@ -236,6 +262,22 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    public void PowerCardClicked(PowerCard card)
+    {
+        var prevPreview = currPreview;
+        
+        var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        currPreview = Instantiate(powerScanPrevPrefab, pos, Quaternion.identity);
+        
+        if (prevPreview != null)
+        {
+#if DEBUG_GAMEMANAGER
+            Debug.Log("Preview destroyed since new one is initialized.");
+#endif
+            Destroy(prevPreview.gameObject);
+        }
+    }
+    
     void ClearPreview()
     {
 #if DEBUG_GAMEMANAGER
@@ -254,7 +296,7 @@ public class GameManager : MonoBehaviour
     public void EndTechTurn()
     {
         currTurn = TurnType.Alien;
-        playUI.Dissable();
+        playUI.OnAlienTurn();
         
         if (currPreview != null)
         {
@@ -269,12 +311,26 @@ public class GameManager : MonoBehaviour
         currTurn = TurnType.Tech;
         TurnNum++;
         StartTechTurn();
-        playUI.Enable();
+        playUI.OnTechTurn();
+        
+        if (currPreview != null)
+        {
+            ClearPreview();
+        }
+        
+        //-remove temp tech units
+        foreach (var unit in temp_techs)
+        {
+            Destroy(unit.gameObject);
+            techs.Remove(unit);
+        }
+        temp_techs.Clear();
     }
     
-    public void OnTechDeath(TechUnit unit)
+    public void OnTechDeath(TechPrototype unit)
     {
         techs.Remove(unit);
+        temp_techs.Remove(unit);
     }
     
     void SpawnAliens()
