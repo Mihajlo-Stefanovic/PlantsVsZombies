@@ -137,6 +137,7 @@ MonoBehaviour:
   reyPos: {fileID: 1542630477790904345}
   shotPrefab: {fileID: 1761053074145525064, guid: 03e3e97925416d44dab37badeb67f693, type: 3}
   health: 50
+  animator: {fileID: 5102922123688342228}
 --- !u!50 &-7077561886830576135
 Rigidbody2D:
   serializedVersion: 4
@@ -280,7 +281,7 @@ Animator:
   m_GameObject: {fileID: 5072785689260309734}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 79f0620136e519c48af3b4d36b2ce189, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
