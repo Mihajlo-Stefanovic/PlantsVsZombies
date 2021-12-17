@@ -39,5 +39,11 @@ public class ResourceManager : MonoBehaviour
         return totalResources;
     }
 
+    public void setResources(int newResources)
+    {
+        totalResources = newResources;
+        updateUI(totalResources);
+    }
+
 
 }
