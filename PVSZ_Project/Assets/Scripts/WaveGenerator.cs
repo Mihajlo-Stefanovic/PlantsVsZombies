@@ -15,7 +15,7 @@ public class WaveGenerator : MonoBehaviour
     List<int> difficulties;                                 // NOTE(sftl): per turn, sum of individual alien difficulties
     List<List<List<Alien>>> turn_combs;                     // NOTE(sftl): list of combinations per turn, of which one must be generated
     
-    bool is_predefined = true;
+    bool is_predefined = false;
     List<List<Alien>> predefined;                           // NOTE(sftl): aliens per lane
     
     void Awake()
@@ -44,6 +44,7 @@ public class WaveGenerator : MonoBehaviour
             33,
             // turn 4
             50,
+            
         };
         
         turn_combs = new()
@@ -63,12 +64,12 @@ public class WaveGenerator : MonoBehaviour
                 // combination 0
                 new()
                 {
-                    tank, tank, tank
+                    tank, tank
                 },
                 // combination 1
                 new()
                 {
-                    moon_walker, moon_walker, moon_walker, moon_walker
+                    moon_walker, moon_walker, moon_walker
                 },
             },
             
@@ -87,6 +88,7 @@ public class WaveGenerator : MonoBehaviour
                 // combination 0
                 new()
                 {
+                    tank, tank, tank, tank
                 },
             },
             
@@ -118,7 +120,6 @@ public class WaveGenerator : MonoBehaviour
             // lane 2
             new()
             {
-                
             },
             
             // lane 3
@@ -130,9 +131,7 @@ public class WaveGenerator : MonoBehaviour
             // lane 4
             new()
             {
-                
             },
-            
         };
     }
     
@@ -145,15 +144,22 @@ public class WaveGenerator : MonoBehaviour
         var random = new System.Random();
         
         // NOTE(sftl): add combination
-        var combs   = turn_combs[turn_num];
-        var comb    = combs[random.Next(0, combs.Count)]; // NOTE(sftl): random combination
+        List<List<Alien>> combs;
+        if      (turn_num < turn_combs.Count) combs = turn_combs[turn_num];
+        else    combs = new() { new() }; // NOTE(sftl): empty combination
+        
+        var comb = combs[random.Next(0, combs.Count)]; // NOTE(sftl): random combination
+        
+        int df;
+        if      (turn_num < difficulties.Count) df = difficulties[turn_num];
+        else    df = difficulties.Last(); // NOTE(sftl): continue with the latest difficulty
+        
+        var comb_df = comb.Sum((Alien x) => x.Difficulty);
+        df -= comb_df;
         
         List<Alien> wave = new(comb);
         
         // NOTE(sftl): fill wave until difficulty is satisfied
-        var comb_df = comb.Sum((Alien x) => x.Difficulty);
-        var df = difficulties[turn_num] - comb_df;
-        
         int low_bound = 0;
         while(df > 0)
         {

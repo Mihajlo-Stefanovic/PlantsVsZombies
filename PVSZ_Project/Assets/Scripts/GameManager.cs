@@ -47,12 +47,6 @@ public class GameManager : MonoBehaviour
     public PowerScan    powerScanPrefab;
     public Preview      powerScanPrevPrefab;
     
-    //- alien unit prefabs
-    public AlienStandard    baseAlienPrefab;
-    public AlienMoonwalker  specialAlienPrefab;
-    
-    public AlienTank        alienTankPrefab;
-    
     //- unit costs
     public int unitCost;
     public int powerScanCost;
@@ -151,15 +145,15 @@ public class GameManager : MonoBehaviour
                 else if (currPreview.type == PreviewType.ResourceUnit) // NOTE(sftl): method?
                 {
                     Tile tile = gridManager.GetSelectedTileIfAvailable();
-
+                    
                     if (tile != null)
                     {
                         if (ResourceManager.getResources() >= unitCost)
                         { // =checking if u have enough reosources to pay for the unit
-                          //-decreasing resources
-
+                            //-decreasing resources
+                            
                             resourceManager.payForUnit(unitCost);
-
+                            
                             //-instantiate TechUnit
                             var pos = tile.transform.position;
                             var techUnit = Instantiate(resourceCollectorPrefab, pos, Quaternion.identity);
@@ -171,15 +165,15 @@ public class GameManager : MonoBehaviour
                 else if (currPreview.type == PreviewType.MachineGun) // NOTE(sftl): method?
                 {
                     Tile tile = gridManager.GetSelectedTileIfAvailable();
-
+                    
                     if (tile != null)
                     {
                         if (ResourceManager.getResources() >= unitCost)
                         { // =checking if u have enough reosources to pay for the unit
-                          //-decreasing resources
-
+                            //-decreasing resources
+                            
                             resourceManager.payForUnit(unitCost);
-
+                            
                             //-instantiate TechUnit
                             var pos = tile.transform.position;
                             var techUnit = Instantiate(machineGunPrefab, pos, Quaternion.identity);
@@ -273,17 +267,17 @@ public class GameManager : MonoBehaviour
     {
         var prevPreview = currPreview;
         
-
+        
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (card.type == CardType.Shooter)
-        currPreview = Instantiate(shooterPrevPrefab, pos, Quaternion.identity); // TODO(sftl): use card type
+            currPreview = Instantiate(shooterPrevPrefab, pos, Quaternion.identity); // TODO(sftl): use card type
         
         if (card.type == CardType.Collector)
             currPreview = Instantiate(resourceCollectorPrevPrefab, pos, Quaternion.identity);
-
+        
         if (card.type == CardType.MachineGun)
             currPreview = Instantiate(machineGunPrevPrefab, pos, Quaternion.identity);
-
+        
         if (prevPreview != null)
         {
 #if DEBUG_GAMEMANAGER
@@ -371,16 +365,16 @@ public class GameManager : MonoBehaviour
         //check if unit is of certain type
         foreach (TechPrototype unit in techs)
         {
-
+            
             if (unit.GetType() == typeof(TechResourceUnit))
             {
                 Debug.Log("unit je type RESOURCE Tech unit jee");
                 TechResourceUnit resourceUnit = (TechResourceUnit)unit;
                 resourceUnit.IncreaseRescources();
-
-
+                
+                
             }
-
+            
         }
         temp_techs.Clear();
         
@@ -408,7 +402,7 @@ public class GameManager : MonoBehaviour
             {
                 var sec = (float)random.NextDouble(); // NOTE(sftl): range [0, 1)
                 var pos = availablePos[i];
-
+                
                 StartCoroutine(
                                DoAfterSec(
                                           sec,
