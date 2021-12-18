@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f19d151d6aaa14bbb50817befa06ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Difficulty: 1
   speed: 1
   _tile: {fileID: 4101567033614528602, guid: 1c23370466408f444a46311601e4d79d, type: 3}
   health: 100

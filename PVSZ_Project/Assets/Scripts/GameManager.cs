@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using UnityEngine;
-
+using UnityEngine.Assertions;
 using Random = System.Random;
 
 enum TurnType
@@ -21,13 +21,6 @@ enum GameState
     Paused
 }
 
-[System.Serializable]
-public class AlienWithNum
-{
-    public Alien alien;
-    public int num;
-}
-
 public class GameManager : MonoBehaviour
 {
     // NOTE(sftl): singleton
@@ -38,6 +31,7 @@ public class GameManager : MonoBehaviour
     public GridManager      gridManager;
     public PlayUI           playUI;
     public PointerRaycaster raycaster;
+    public WaveGenerator    waveGen;
     
     //- tech unit prefabs
     public Preview  shooterPrevPrefab;
@@ -68,10 +62,11 @@ public class GameManager : MonoBehaviour
     GameState   gameState = GameState.Playing;
     
     //- utils
-    public List<SerializableList<AlienWithNum>> aliensPerLane;
-    
     Preview                 currPreview;
+    
     List<Alien>             aliens = new();
+    List<List<Alien>>       nextWaveAliens = new();
+    
     List<TechPrototype>     techs = new();
     List<TechPrototype>     temp_techs = new();
     
@@ -90,7 +85,7 @@ public class GameManager : MonoBehaviour
     
     void Start()
     {
-        StartTechTurn();
+        GenWaveAndShow();
     }
     
     void Update()
@@ -287,10 +282,10 @@ public class GameManager : MonoBehaviour
         currPreview = null;
     }
     
-    public void StartTechTurn()
+    public void GenWaveAndShow()
     {
-        // TODO(sftl): generate next alien wave
-        gridManager.SetAlienLaneIndicators();
+        nextWaveAliens = waveGen.GetWave(TurnNum);
+        gridManager.SetAlienLaneIndicators(nextWaveAliens);
     }
     
     public void EndTechTurn()
@@ -308,10 +303,7 @@ public class GameManager : MonoBehaviour
     
     public void EndAlienTurn()
     {
-        currTurn = TurnType.Tech;
-        TurnNum++;
-        StartTechTurn();
-        playUI.OnTechTurn();
+        Assert.IsTrue(aliens.Count == 0);
         
         if (currPreview != null)
         {
@@ -325,6 +317,11 @@ public class GameManager : MonoBehaviour
             techs.Remove(unit);
         }
         temp_techs.Clear();
+        
+        currTurn = TurnType.Tech;
+        TurnNum++;
+        playUI.OnTechTurn();
+        GenWaveAndShow();
     }
     
     public void OnTechDeath(TechPrototype unit)
@@ -337,29 +334,25 @@ public class GameManager : MonoBehaviour
     {
         var availablePos = gridManager.GetAvailableSpawnPos();
         
-        //-spawn aliens by specified aliensPerLane
+        // NOTE(sftl): spawning with small random time differences
         var random = new Random();
-        for (int i = 0; i < aliensPerLane.Count; i++)
+        for (int i = 0; i < nextWaveAliens.Count; i++)
         {
-            foreach (var alienWithNum in aliensPerLane[i].data)
+            foreach (var alienPrefab in nextWaveAliens[i])
             {
-                for (int i2 = 0; i2 < alienWithNum.num; i2++)
-                {
-                    var sec = (float)random.NextDouble();
-                    var currIndex = i; // TODO(sftl): avoid this
-                    
-                    StartCoroutine(
-                                   DoAfterSec(
-                                              sec,
-                                              () =>
-                                              {
-                                                  var pos = availablePos[currIndex];
-                                                  var alien = Instantiate(alienWithNum.alien, pos, Quaternion.identity);
-                                                  aliens.Add(alien);
-                                              }
-                                              )
-                                   );
-                }
+                var sec = (float)random.NextDouble(); // NOTE(sftl): range [0, 1)
+                var pos = availablePos[i];
+                
+                StartCoroutine(
+                               DoAfterSec(
+                                          sec,
+                                          () =>
+                                          {
+                                              var alien = Instantiate(alienPrefab, pos, Quaternion.identity);
+                                              aliens.Add(alien);
+                                          }
+                                          )
+                               );
             }
         }
     }
