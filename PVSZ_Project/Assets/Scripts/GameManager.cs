@@ -256,8 +256,13 @@ public class GameManager : MonoBehaviour
     {
         var prevPreview = currPreview;
 
+
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        currPreview = Instantiate(shooterPrevPrefab, pos, Quaternion.identity); // TODO(sftl): use card type
+        if (card.type == CardType.Shooter)
+            currPreview = Instantiate(shooterPrevPrefab, pos, Quaternion.identity); // TODO(sftl): use card type
+
+        if (card.type == CardType.Collector)
+            currPreview = Instantiate(resourceCollectorPrevPrefab, pos, Quaternion.identity);
 
         if (prevPreview != null)
         {
@@ -290,22 +295,6 @@ public class GameManager : MonoBehaviour
 
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         currPreview = Instantiate(powerScanPrevPrefab, pos, Quaternion.identity);
-
-        if (prevPreview != null)
-        {
-#if DEBUG_GAMEMANAGER
-            Debug.Log("Preview destroyed since new one is initialized.");
-#endif
-            Destroy(prevPreview.gameObject);
-        }
-    }
-
-    public void ResourceCardClicked(TechCard card)
-    {
-        var prevPreview = currPreview;
-
-        var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        currPreview = Instantiate(resourceCollectorPrevPrefab, pos, Quaternion.identity);
 
         if (prevPreview != null)
         {

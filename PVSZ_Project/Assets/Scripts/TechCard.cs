@@ -15,8 +15,9 @@ public class TechCard : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData pointerEventData)
     {
-        if (this.type == CardType.Shooter) GameManager.Instance.TechCardClicked(this);
-        if (this.type == CardType.Collector) GameManager.Instance.ResourceCardClicked(this);
+
+        GameManager.Instance.TechCardClicked(this);
+
 
     }
 
