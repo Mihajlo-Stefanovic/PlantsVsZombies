@@ -28,17 +28,18 @@ public class TechUnit : TechPrototype, ITechAbilities
 
         if (hit)
         {
+           
             if (Time.time > nextAttack)
             {
                 // NOTE(sftl): shooting
                 nextAttack = Time.time + attackDelay;
                 Instantiate(shotPrefab, reyPos.position, Quaternion.identity);
-                animator.SetFloat("Shoot", nextAttack);
+                animator.SetFloat("Shoot", 1);
                 AudioManager.Instance.Play_ShooterShoot();
             }
 
         }
-
+            else    animator.SetFloat("Shoot", 0);
     }
     public void takeDamage(int damage)
     {
