@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Alien : MonoBehaviour
 {
+    public int Difficulty;
+    
     public int speed;
     public int damage;
     private bool _lockDirection = false;

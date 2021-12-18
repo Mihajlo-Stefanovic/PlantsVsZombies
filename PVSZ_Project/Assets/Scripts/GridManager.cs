@@ -9,13 +9,14 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Tile _tilePrefab;
     [SerializeField] private Transform _camera;
     [SerializeField] private GameObject _parent;
-    
-    public AlienLaneIndicator   indicatorPrefab;
-    List<AlienLaneIndicator>    indicators = new();
-    
+
+    public AlienLaneIndicator indicatorPrefab;
+    List<AlienLaneIndicator> indicators = new();
+
     List<List<Tile>> tiles = new();
     public static GridManager Instance;
-    
+
+    public int NumOfLanes { get { return _height; } }
     
     
     private void Awake()
@@ -82,15 +83,15 @@ public class GridManager : MonoBehaviour
         
         return true;
     }
-
-
+    
+    
     public bool isAlienOutside(Vector3 pos)
     {
         var bukizila = _tilePrefab.transform.localScale.y / 2;
         var firstTile = tiles[0][0];
         if (pos.x < firstTile.transform.position.x - bukizila)
             return true;
-
+        
         return false;
     }
     
@@ -173,14 +174,11 @@ public class GridManager : MonoBehaviour
         }
     }
     
-    public void SetAlienLaneIndicators()
+    public void SetAlienLaneIndicators(List<List<Alien>> nextWave)
     {
-        // NOTE(sftl): temp
-        var aliensPerLane = GameManager.Instance.aliensPerLane;
-        
         for (int i = 0; i < indicators.Count; i++)
         {
-            var laneDifficuly = aliensPerLane[i].data.Sum(item => item.num); // NOTE(sftl): num of aliens in lane
+            var laneDifficuly = nextWave[i].Count;
             indicators[i].SetDifficulty(laneDifficuly);
         }
     }

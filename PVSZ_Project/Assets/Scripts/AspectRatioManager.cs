@@ -1,3 +1,5 @@
+//#define ASPECT_DEBUG
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,8 +26,9 @@ public class AspectRatioManager : MonoBehaviour
         // TODO(sftl): optimise, don't check this every fame if possible
         if(currW != lastW || currH != lastH)
         {
+#if ASPECT_DEBUG
             Debug.Log("Screen size changed: current width " + currW.ToString() + " current height " + currH.ToString());
-            
+#endif
             SetAspectRatio();
             lastW = currW;
             lastH = currH;
