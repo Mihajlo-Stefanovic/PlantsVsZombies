@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 public enum CardType
 {
     Shooter,
-    Collector
+    Collector,
+    MachineGun
 }
 
 public class TechCard : MonoBehaviour, IPointerDownHandler

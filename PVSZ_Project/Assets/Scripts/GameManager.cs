@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
     public TechUnit shooterPrefab;
     public Preview resourceCollectorPrevPrefab;
     public TechResourceUnit resourceCollectorPrefab;
+    public Preview machineGunPrevPrefab;
+    public TechMachineGun machineGunPrefab;
 
     public Preview removePrevPrefab;
 
@@ -171,6 +173,26 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
+                else if (currPreview.type == PreviewType.MachineGun) // NOTE(sftl): method?
+                {
+                    Tile tile = gridManager.GetSelectedTileIfAvailable();
+
+                    if (tile != null)
+                    {
+                        if (ResourceManager.getResources() >= unitCost)
+                        { // =checking if u have enough reosources to pay for the unit
+                          //-decreasing resources
+
+                            resourceManager.payForUnit(unitCost);
+
+                            //-instantiate TechUnit
+                            var pos = tile.transform.position;
+                            var techUnit = Instantiate(machineGunPrefab, pos, Quaternion.identity);
+                            techs.Add(techUnit);
+                            tile.Unit = techUnit;
+                        }
+                    }
+                }
                 else // NOTE(sftl): RemovePreview
                 {
                     Tile tile = gridManager.GetSelectedTileIfOccupied();
@@ -263,6 +285,9 @@ public class GameManager : MonoBehaviour
 
         if (card.type == CardType.Collector)
             currPreview = Instantiate(resourceCollectorPrevPrefab, pos, Quaternion.identity);
+
+        if (card.type == CardType.MachineGun)
+            currPreview = Instantiate(machineGunPrevPrefab, pos, Quaternion.identity);
 
         if (prevPreview != null)
         {

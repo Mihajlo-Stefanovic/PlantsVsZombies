@@ -7,7 +7,8 @@ public enum PreviewType
     Tech,       // TODO(sftl): rename to shooter
     PowerScan,
     Remove,
-    ResourceUnit
+    ResourceUnit,
+    MachineGun
 }
 
 public class Preview : MonoBehaviour
