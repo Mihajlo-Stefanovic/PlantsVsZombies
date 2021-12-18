@@ -36,6 +36,10 @@ public class GameManager : MonoBehaviour
     //- tech unit prefabs
     public Preview  shooterPrevPrefab;
     public TechUnit shooterPrefab;
+    public Preview resourceCollectorPrevPrefab;
+    public TechResourceUnit resourceCollectorPrefab;
+    public Preview machineGunPrevPrefab;
+    public TechMachineGun machineGunPrefab;
     
     public Preview  removePrevPrefab;
     
@@ -144,6 +148,46 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
+                else if (currPreview.type == PreviewType.ResourceUnit) // NOTE(sftl): method?
+                {
+                    Tile tile = gridManager.GetSelectedTileIfAvailable();
+
+                    if (tile != null)
+                    {
+                        if (ResourceManager.getResources() >= unitCost)
+                        { // =checking if u have enough reosources to pay for the unit
+                          //-decreasing resources
+
+                            resourceManager.payForUnit(unitCost);
+
+                            //-instantiate TechUnit
+                            var pos = tile.transform.position;
+                            var techUnit = Instantiate(resourceCollectorPrefab, pos, Quaternion.identity);
+                            techs.Add(techUnit);
+                            tile.Unit = techUnit;
+                        }
+                    }
+                }
+                else if (currPreview.type == PreviewType.MachineGun) // NOTE(sftl): method?
+                {
+                    Tile tile = gridManager.GetSelectedTileIfAvailable();
+
+                    if (tile != null)
+                    {
+                        if (ResourceManager.getResources() >= unitCost)
+                        { // =checking if u have enough reosources to pay for the unit
+                          //-decreasing resources
+
+                            resourceManager.payForUnit(unitCost);
+
+                            //-instantiate TechUnit
+                            var pos = tile.transform.position;
+                            var techUnit = Instantiate(machineGunPrefab, pos, Quaternion.identity);
+                            techs.Add(techUnit);
+                            tile.Unit = techUnit;
+                        }
+                    }
+                }
                 else // NOTE(sftl): RemovePreview
                 {
                     Tile tile = gridManager.GetSelectedTileIfOccupied();
@@ -229,9 +273,17 @@ public class GameManager : MonoBehaviour
     {
         var prevPreview = currPreview;
         
+
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (card.type == CardType.Shooter)
         currPreview = Instantiate(shooterPrevPrefab, pos, Quaternion.identity); // TODO(sftl): use card type
         
+        if (card.type == CardType.Collector)
+            currPreview = Instantiate(resourceCollectorPrevPrefab, pos, Quaternion.identity);
+
+        if (card.type == CardType.MachineGun)
+            currPreview = Instantiate(machineGunPrevPrefab, pos, Quaternion.identity);
+
         if (prevPreview != null)
         {
 #if DEBUG_GAMEMANAGER
@@ -316,6 +368,20 @@ public class GameManager : MonoBehaviour
             Destroy(unit.gameObject);
             techs.Remove(unit);
         }
+        //check if unit is of certain type
+        foreach (TechPrototype unit in techs)
+        {
+
+            if (unit.GetType() == typeof(TechResourceUnit))
+            {
+                Debug.Log("unit je type RESOURCE Tech unit jee");
+                TechResourceUnit resourceUnit = (TechResourceUnit)unit;
+                resourceUnit.IncreaseRescources();
+
+
+            }
+
+        }
         temp_techs.Clear();
         
         currTurn = TurnType.Tech;
@@ -342,7 +408,7 @@ public class GameManager : MonoBehaviour
             {
                 var sec = (float)random.NextDouble(); // NOTE(sftl): range [0, 1)
                 var pos = availablePos[i];
-                
+
                 StartCoroutine(
                                DoAfterSec(
                                           sec,

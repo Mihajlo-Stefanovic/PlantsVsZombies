@@ -6,23 +6,27 @@ using UnityEngine.EventSystems;
 public enum CardType
 {
     Shooter,
-    Collector
+    Collector,
+    MachineGun
 }
 
 public class TechCard : MonoBehaviour, IPointerDownHandler
 {
     public CardType type;
-    
+
     public void OnPointerDown(PointerEventData pointerEventData)
     {
+
         GameManager.Instance.TechCardClicked(this);
+
+
     }
-    
+
     public void Enable()
     {
         gameObject.SetActive(true);
     }
-    
+
     public void Dissable()
     {
         gameObject.SetActive(false);
