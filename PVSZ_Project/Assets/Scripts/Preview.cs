@@ -8,21 +8,22 @@ public enum PreviewType
     PowerScan,
     Remove,
     ResourceUnit,
-    MachineGun
+    MachineGun,
+    PowerBlock
 }
 
 public class Preview : MonoBehaviour
 {
-    public float moveSpeed;
+    float moveSpeed = 50f;
     public PreviewType type;
-
+    
     Vector3 mousePosition;
-
+    
     void Update()
     {
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0; // NOTE(sftl): in front of camera
-
+        
         transform.position = Vector2.Lerp(transform.position, mousePosition, moveSpeed * Time.deltaTime);
     }
 }

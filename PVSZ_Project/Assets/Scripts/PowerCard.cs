@@ -1,8 +1,16 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public enum PowerCardType
+{
+    Scan,
+    Block
+}
+
 public class PowerCard : MonoBehaviour, IPointerDownHandler
 {
+    public PowerCardType Type;
+    
     public void OnPointerDown(PointerEventData pointerEventData)
     {
         GameManager.Instance.PowerCardClicked(this);

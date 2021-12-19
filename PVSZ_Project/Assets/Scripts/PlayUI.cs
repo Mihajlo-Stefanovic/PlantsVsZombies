@@ -3,9 +3,9 @@ using UnityEngine;
 public class PlayUI : MonoBehaviour
 {
     public EndTurn      endTurn;
-    public TechCard     card; // NOTE(sftl): handle multiple
+    public TechCard     card;           // NOTE(sftl): handle multiple
     public RemoveCard   removeCard;
-    public PowerCard    powerCard; // NOTE(sftl): handle multiple
+    public GameObject   powerCards;
     
     public void OnAlienTurn()
     {
@@ -13,7 +13,7 @@ public class PlayUI : MonoBehaviour
         card.Dissable();
         removeCard.Dissable();
         
-        powerCard.Enable();
+        powerCards.SetActive(true);
     }
     
     public void OnTechTurn()
@@ -22,6 +22,6 @@ public class PlayUI : MonoBehaviour
         card.Enable();
         removeCard.Enable();
         
-        powerCard.Disable();
+        powerCards.SetActive(false);
     }
 }

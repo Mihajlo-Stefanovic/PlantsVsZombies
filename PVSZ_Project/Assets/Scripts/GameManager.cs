@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
     public PowerScan    powerScanPrefab;
     public Preview      powerScanPrevPrefab;
     
+    public Preview      powerBlockPrevPrefab;
+    
     //- unit costs
     public int unitCost;
     public int powerScanCost;
@@ -182,6 +184,31 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
+                else if (currPreview.type == PreviewType.PowerBlock) // NOTE(sftl): method?
+                {
+                    var laneData = gridManager.GetSelectedLaneStartEndPos();
+                    
+                    if (laneData != null)
+                    {
+                        if (ResourceManager.getResources() >= unitCost)
+                        { // =checking if u have enough reosources to pay for the unit
+                            //-decreasing resources
+                            
+                            resourceManager.payForUnit(unitCost);
+                            
+                            var (laneStartPos, laneEndPos) = laneData.Value;
+                            var dir = Vector3.Normalize(laneEndPos - laneStartPos);
+                            var hits = Physics2D.RaycastAll(laneStartPos, dir, Mathf.Infinity, LayerMask.GetMask("Alien"));
+                            
+                            foreach (var hit in hits)
+                            {
+                                hit.collider.gameObject.GetComponent<Alien>().MoveToNeightourLane();
+                            }
+                            
+                            ClearPreview();
+                        }
+                    }
+                }
                 else // NOTE(sftl): RemovePreview
                 {
                     Tile tile = gridManager.GetSelectedTileIfOccupied();
@@ -308,7 +335,13 @@ public class GameManager : MonoBehaviour
         var prevPreview = currPreview;
         
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        currPreview = Instantiate(powerScanPrevPrefab, pos, Quaternion.identity);
+        
+        if(card.Type == PowerCardType.Scan) {
+            currPreview = Instantiate(powerScanPrevPrefab, pos, Quaternion.identity);
+        }
+        else if(card.Type == PowerCardType.Block) {
+            currPreview = Instantiate(powerBlockPrevPrefab, pos, Quaternion.identity);
+        }
         
         if (prevPreview != null)
         {

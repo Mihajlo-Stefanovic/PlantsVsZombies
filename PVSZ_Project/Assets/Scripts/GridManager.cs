@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,13 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Tile _tilePrefab;
     [SerializeField] private Transform _camera;
     [SerializeField] private GameObject _parent;
-
+    
     public AlienLaneIndicator indicatorPrefab;
     List<AlienLaneIndicator> indicators = new();
-
+    
     List<List<Tile>> tiles = new();
     public static GridManager Instance;
-
+    
     public int NumOfLanes { get { return _height; } }
     
     
@@ -162,6 +163,41 @@ public class GridManager : MonoBehaviour
         }
         
         return r;
+    }
+    
+    // NOTE(sftl): return null if no lane is selected
+    public (Vector3, Vector3)? GetSelectedLaneStartEndPos()
+    {
+        // TODO(sftl): optimise
+        int tileIndex = -1;
+        for (int i = 0; i < tiles.Count; i++)
+        {   
+            for (int j = 0; j < tiles[i].Count; j++)
+            {
+                if (tiles[i][j].IsSelected)
+                {
+                    tileIndex = j;
+                }
+            }
+        }
+        
+        if (tileIndex == -1) return null;
+        
+        var start = tiles.First()[tileIndex].transform.position;
+        var end = tiles.Last()[tileIndex].transform.position;
+        return (start, end);
+    }
+    
+    public float GetNeighbourLaneY(Alien alien)
+    {
+        var tileSize = _tilePrefab.transform.localScale.y;
+        var alienPos = alien.transform.position;
+        
+        var possibilities = new List<float>();
+        if (canAlienMove(alienPos, isUp: true)) possibilities.Add(alienPos.y + tileSize);   // TODO(sftl): local scale is used frequently, should we have a field?
+        if (canAlienMove(alienPos, isUp: false)) possibilities.Add(alienPos.y - tileSize);  // NOTE(sftl): if can't move up, Alien must be able to move down
+        
+        return possibilities[UnityEngine.Random.Range(0, possibilities.Count)];
     }
     
     public void SpawnAlienLaneIndicators()
