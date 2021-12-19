@@ -8,11 +8,11 @@ public class GridManager : MonoBehaviour
 {
     [SerializeField] private int _width, _height;
     [SerializeField] private Tile _tilePrefab;
-    [SerializeField] private Transform _camera;
     [SerializeField] private GameObject _parent;
     
     public AlienLaneIndicator indicatorPrefab;
     List<AlienLaneIndicator> indicators = new();
+    public GameObject indicatorParent;
     
     List<List<Tile>> tiles = new();
     public static GridManager Instance;
@@ -206,7 +206,9 @@ public class GridManager : MonoBehaviour
         
         foreach (var tile in lastRow)
         {
-            indicators.Add(Instantiate(indicatorPrefab, tile.transform.position, Quaternion.identity));
+            var curr = Instantiate(indicatorPrefab, tile.transform.position, Quaternion.identity);
+            curr.transform.parent = indicatorParent.transform;
+            indicators.Add(curr);
         }
     }
     
