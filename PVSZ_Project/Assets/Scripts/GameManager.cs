@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
     GameState   gameState = GameState.Playing;
     
     //- utils
-    Preview                 currPreview;
+    public Preview          CurrentPreview;
     
     List<Alien>             aliens = new();
     List<List<Alien>>       nextWaveAliens = new();
@@ -94,16 +94,17 @@ public class GameManager : MonoBehaviour
         
         if (Input.GetMouseButtonUp(1)) // NOTE(sftl): right click
         {
-            if (currPreview != null)
+            if (CurrentPreview != null)
             {
-                ClearPreview();
+                DestroyPreviewIfNotNull();
+                SetPreview(null);
             }
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            if (currPreview != null)
+            if (CurrentPreview != null)
             {
-                if (currPreview.type == PreviewType.Tech)
+                if (CurrentPreview.Type == PreviewType.Tech)
                 {
                     Tile tile = gridManager.GetSelectedTileIfAvailable();
                     
@@ -123,7 +124,7 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
-                else if (currPreview.type == PreviewType.PowerScan) // NOTE(sftl): method?
+                else if (CurrentPreview.Type == PreviewType.PowerScan) // NOTE(sftl): method?
                 {
                     Tile tile = gridManager.GetSelectedTileIfAvailable();
                     
@@ -144,7 +145,7 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
-                else if (currPreview.type == PreviewType.ResourceUnit) // NOTE(sftl): method?
+                else if (CurrentPreview.Type == PreviewType.ResourceUnit) // NOTE(sftl): method?
                 {
                     Tile tile = gridManager.GetSelectedTileIfAvailable();
                     
@@ -164,7 +165,7 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
-                else if (currPreview.type == PreviewType.MachineGun) // NOTE(sftl): method?
+                else if (CurrentPreview.Type == PreviewType.MachineGun) // NOTE(sftl): method?
                 {
                     Tile tile = gridManager.GetSelectedTileIfAvailable();
                     
@@ -184,7 +185,7 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
-                else if (currPreview.type == PreviewType.PowerBlock) // NOTE(sftl): method?
+                else if (CurrentPreview.Type == PreviewType.PowerBlock) // NOTE(sftl): method?
                 {
                     var laneData = gridManager.GetSelectedLaneStartEndPos();
                     
@@ -205,7 +206,8 @@ public class GameManager : MonoBehaviour
                                 hit.collider.gameObject.GetComponent<Alien>().MoveToNeightourLane();
                             }
                             
-                            ClearPreview();
+                            DestroyPreviewIfNotNull();
+                            SetPreview(null);
                         }
                     }
                 }
@@ -263,14 +265,13 @@ public class GameManager : MonoBehaviour
         gameState       = GameState.Paused;
         
         raycaster.Deactivate();
-        gridManager.DeselectTile();
         
-        if (currPreview != null)
+        if (CurrentPreview != null)
         {
 #if DEBUG_GAMEMANAGER
             Debug.Log("Preview hidden on pause.");
 #endif
-            currPreview.gameObject.SetActive(false);
+            CurrentPreview.gameObject.SetActive(false);
         }
     }
     
@@ -281,84 +282,59 @@ public class GameManager : MonoBehaviour
         
         raycaster.Activate();
         
-        if (currPreview != null)
+        if (CurrentPreview != null)
         {
 #if DEBUG_GAMEMANAGER
             Debug.Log("Preview un-hidden on pause.");
 #endif
-            currPreview.gameObject.SetActive(true);
+            CurrentPreview.gameObject.SetActive(true);
         }
     }
     
     public void TechCardClicked(TechCard card)
     {
-        var prevPreview = currPreview;
-        
+#if DEBUG_GAMEMANAGER
+        Debug.Log("Preview destroyed since new one is initialized.");
+#endif
+        DestroyPreviewIfNotNull();
         
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (card.type == CardType.Shooter)
-            currPreview = Instantiate(shooterPrevPrefab, pos, Quaternion.identity); // TODO(sftl): use card type
+            SetPreview(Instantiate(shooterPrevPrefab, pos, Quaternion.identity)); // TODO(sftl): use card type
         
         if (card.type == CardType.Collector)
-            currPreview = Instantiate(resourceCollectorPrevPrefab, pos, Quaternion.identity);
+            SetPreview(Instantiate(resourceCollectorPrevPrefab, pos, Quaternion.identity));
         
         if (card.type == CardType.MachineGun)
-            currPreview = Instantiate(machineGunPrevPrefab, pos, Quaternion.identity);
-        
-        if (prevPreview != null)
-        {
-#if DEBUG_GAMEMANAGER
-            Debug.Log("Preview destroyed since new one is initialized.");
-#endif
-            Destroy(prevPreview.gameObject);
-        }
+            SetPreview(Instantiate(machineGunPrevPrefab, pos, Quaternion.identity));
     }
     
     public void RemoveCardClicked()
     {
-        var prevPreview = currPreview;
+#if DEBUG_GAMEMANAGER
+        Debug.Log("Preview destroyed since new one is initialized.");
+#endif
+        DestroyPreviewIfNotNull();
         
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        currPreview = Instantiate(removePrevPrefab, pos, Quaternion.identity);
-        
-        if (prevPreview != null)
-        {
-#if DEBUG_GAMEMANAGER
-            Debug.Log("Preview destroyed since new one is initialized.");
-#endif
-            Destroy(prevPreview.gameObject);
-        }
+        SetPreview(Instantiate(removePrevPrefab, pos, Quaternion.identity));
     }
     
     public void PowerCardClicked(PowerCard card)
     {
-        var prevPreview = currPreview;
+#if DEBUG_GAMEMANAGER
+        Debug.Log("Preview destroyed since new one is initialized.");
+#endif
+        DestroyPreviewIfNotNull();
         
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
         if(card.Type == PowerCardType.Scan) {
-            currPreview = Instantiate(powerScanPrevPrefab, pos, Quaternion.identity);
+            SetPreview(Instantiate(powerScanPrevPrefab, pos, Quaternion.identity));
         }
         else if(card.Type == PowerCardType.Block) {
-            currPreview = Instantiate(powerBlockPrevPrefab, pos, Quaternion.identity);
+            SetPreview(Instantiate(powerBlockPrevPrefab, pos, Quaternion.identity));
         }
-        
-        if (prevPreview != null)
-        {
-#if DEBUG_GAMEMANAGER
-            Debug.Log("Preview destroyed since new one is initialized.");
-#endif
-            Destroy(prevPreview.gameObject);
-        }
-    }
-    
-    void ClearPreview()
-    {
-#if DEBUG_GAMEMANAGER
-        Debug.Log("Preview destroyed on right click.");
-#endif
-        Destroy(currPreview.gameObject);
-        currPreview = null;
     }
     
     public void GenWaveAndShow()
@@ -372,9 +348,10 @@ public class GameManager : MonoBehaviour
         currTurn = TurnType.Alien;
         playUI.OnAlienTurn();
         
-        if (currPreview != null)
+        if (CurrentPreview != null)
         {
-            ClearPreview();
+            DestroyPreviewIfNotNull();
+            SetPreview(null);
         }
         
         SpawnAliens();
@@ -384,9 +361,10 @@ public class GameManager : MonoBehaviour
     {
         Assert.IsTrue(aliens.Count == 0);
         
-        if (currPreview != null)
+        if (CurrentPreview != null)
         {
-            ClearPreview();
+            DestroyPreviewIfNotNull();
+            SetPreview(null);
         }
         
         //-remove temp tech units
@@ -401,11 +379,8 @@ public class GameManager : MonoBehaviour
             
             if (unit.GetType() == typeof(TechResourceUnit))
             {
-                Debug.Log("unit je type RESOURCE Tech unit jee");
                 TechResourceUnit resourceUnit = (TechResourceUnit)unit;
                 resourceUnit.IncreaseRescources();
-                
-                
             }
             
         }
@@ -415,6 +390,22 @@ public class GameManager : MonoBehaviour
         TurnNum++;
         playUI.OnTechTurn();
         GenWaveAndShow();
+    }
+    
+    void DestroyPreviewIfNotNull()
+    {
+        if (CurrentPreview == null) return;
+        Destroy(CurrentPreview.gameObject);
+    }
+    
+    void SetPreview(Preview newPreview)
+    {
+        // TODO(sftl): we shouldn't even change preview objects if they are of same type?
+        var oldPreview = CurrentPreview;
+        
+        CurrentPreview = newPreview;
+        
+        if(oldPreview != null && newPreview == null) gridManager.PreviewCleared(oldPreview);
     }
     
     public void OnTechDeath(TechPrototype unit)

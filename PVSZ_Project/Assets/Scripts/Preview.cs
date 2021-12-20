@@ -15,7 +15,7 @@ public enum PreviewType
 public class Preview : MonoBehaviour
 {
     float moveSpeed = 50f;
-    public PreviewType type;
+    public PreviewType Type;
     
     Vector3 mousePosition;
     

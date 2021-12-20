@@ -2803,6 +2803,7 @@ MonoBehaviour:
   powerScanCost: 50
   TurnNum: 1
   turnIncrementedEvent: {fileID: 11400000, guid: f72934727b362b9488f3bacd30bd1e22, type: 2}
+  CurrentPreview: {fileID: 0}
 --- !u!1 &1500738381
 GameObject:
   m_ObjectHideFlags: 0
