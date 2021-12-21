@@ -5,6 +5,7 @@ using UnityEngine;
 public class TechUnit : TechPrototype, ITechAbilities
 {
     public Animator animator;
+    public ParticleSystem shootParticles;
     public int damage;
     float nextAttack = 0f;
     // TO DO: [SerializeField] public float projectileSpeed;
@@ -35,6 +36,7 @@ public class TechUnit : TechPrototype, ITechAbilities
                 nextAttack = Time.time + attackDelay;
                 Instantiate(shotPrefab, reyPos.position, Quaternion.identity);
                 animator.SetFloat("Shoot", 1);
+                shootParticles.Play();
                 AudioManager.Instance.Play_ShooterShoot();
             }
             
