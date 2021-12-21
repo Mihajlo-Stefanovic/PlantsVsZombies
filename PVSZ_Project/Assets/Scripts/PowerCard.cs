@@ -5,7 +5,8 @@ public enum PowerCardType
 {
     Scan,
     Block,
-    Slow
+    Slow,
+    Shield
 }
 
 public class PowerCard : MonoBehaviour, IPointerDownHandler

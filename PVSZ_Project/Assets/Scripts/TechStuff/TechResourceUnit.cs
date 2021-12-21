@@ -9,28 +9,29 @@ public class TechResourceUnit : TechPrototype, ITechAbilities
     private int currResources = ResourceManager.getResources();
     void Start()
     {
-
+        
     }
-
+    
     // Update is called once per frame
     void Update()
     {
-
+        CheckShield();
     }
-
-
+    
+    
     public void takeDamage(int damage)
     {
+        if (HasShield) return;
         health -= damage;
         if (health <= 0)
         {
-
+            
             Destroy(this.gameObject);
             GameManager.Instance.OnTechDeath(this);
         }
-
+        
     }
-
+    
     public void IncreaseRescources()
     {
         currResources = ResourceManager.getResources();

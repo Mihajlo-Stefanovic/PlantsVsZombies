@@ -10,7 +10,8 @@ public enum PreviewType
     ResourceUnit,
     MachineGun,
     PowerBlock,
-    PowerSlow
+    PowerSlow,
+    PowerShield
 }
 
 public class Preview : MonoBehaviour

@@ -45,11 +45,11 @@ public class GameManager : MonoBehaviour
     
     //- power prefabs
     public PowerScan    powerScanPrefab;
+    
     public Preview      powerScanPrevPrefab;
-    
     public Preview      powerBlockPrevPrefab;
-    
     public Preview      powerSlowPrevPrefab;
+    public Preview      powerShieldPrevPrefab; 
     
     //- unit costs
     public int unitCost;
@@ -232,6 +232,23 @@ public class GameManager : MonoBehaviour
                         }
                     }
                 }
+                else if (CurrentPreview.Type == PreviewType.PowerShield)
+                {
+                    if (gridManager.SelectedTile != null)
+                    {
+                        if (ResourceManager.getResources() >= unitCost)
+                        { // =checking if u have enough reosources to pay for the unit
+                            //-decreasing resources
+                            
+                            resourceManager.payForUnit(unitCost);
+                            
+                            techs.ForEach(action: (TechPrototype a) => { a.AddShieldForSec(5); });
+                            
+                            DestroyPreviewIfNotNull();
+                            SetPreview(null);
+                        }
+                    }
+                }
                 else // NOTE(sftl): RemovePreview
                 {
                     Tile tile = gridManager.GetSelectedTileIfOccupied();
@@ -361,6 +378,10 @@ public class GameManager : MonoBehaviour
         else if(card.Type == PowerCardType.Slow)
         {
             SetPreview(Instantiate(powerSlowPrevPrefab, pos, Quaternion.identity));
+        }
+        else if(card.Type == PowerCardType.Shield)
+        {
+            SetPreview(Instantiate(powerShieldPrevPrefab, pos, Quaternion.identity));
         }
     }
     

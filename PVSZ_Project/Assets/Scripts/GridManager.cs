@@ -90,6 +90,13 @@ public class GridManager : MonoBehaviour
                 column.ForEach(action: (Tile t) => { t.SetHighlight(true); });
             }
         }
+        else if (preview.Type == PreviewType.PowerShield) // NOTE(sftl): highligh whole grid
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(true); });
+            }
+        }
         else
         {
             tile.SetHighlight(true);
@@ -121,6 +128,13 @@ public class GridManager : MonoBehaviour
                 column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
             }
         }
+        else if (preview.Type == PreviewType.PowerShield)
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
+            }
+        }
         else
         {
             tile.SetHighlight(false);
@@ -143,8 +157,14 @@ public class GridManager : MonoBehaviour
                 column[SelectedTile.Row].SetHighlight(false);
             }
         }
-        
-        if (oldPreview?.Type == PreviewType.PowerSlow)
+        else if (oldPreview?.Type == PreviewType.PowerSlow)
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
+            }
+        }
+        else if (oldPreview?.Type == PreviewType.PowerShield)
         {
             foreach (var column in tiles)
             {
