@@ -5,7 +5,9 @@ using UnityEngine;
 public class Alien : MonoBehaviour
 {
     public int Difficulty;
+    
     public bool IsSlowed;
+    public float SlowStopTime;
     public float SlowFactor = 0.3f;
     
     public int speed;
@@ -58,13 +60,12 @@ public class Alien : MonoBehaviour
     public void SlowForSec(float sec)
     {
         IsSlowed = true;
-        StartCoroutine(RemoveSlowAfterSec(sec));
+        SlowStopTime = Time.time + sec;
     }
     
-    IEnumerator RemoveSlowAfterSec(float sec)
+    private void CheckSlow()
     {
-        yield return new WaitForSeconds(sec);
-        IsSlowed = false;
+        if (Time.time > SlowStopTime) IsSlowed = false;
     }
     
     protected void isDead()
@@ -83,6 +84,7 @@ public class Alien : MonoBehaviour
         KillOutside();
         IsTechDead();
         isDead();
+        CheckSlow();
     }
     
     void OnTriggerEnter2D(Collider2D col)
