@@ -4,7 +4,8 @@ using UnityEngine.EventSystems;
 public enum PowerCardType
 {
     Scan,
-    Block
+    Block,
+    Slow
 }
 
 public class PowerCard : MonoBehaviour, IPointerDownHandler

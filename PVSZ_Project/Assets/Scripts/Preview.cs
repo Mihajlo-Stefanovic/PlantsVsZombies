@@ -9,7 +9,8 @@ public enum PreviewType
     Remove,
     ResourceUnit,
     MachineGun,
-    PowerBlock
+    PowerBlock,
+    PowerSlow
 }
 
 public class Preview : MonoBehaviour

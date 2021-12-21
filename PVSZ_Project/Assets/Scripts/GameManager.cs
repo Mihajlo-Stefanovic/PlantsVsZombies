@@ -49,6 +49,8 @@ public class GameManager : MonoBehaviour
     
     public Preview      powerBlockPrevPrefab;
     
+    public Preview      powerSlowPrevPrefab;
+    
     //- unit costs
     public int unitCost;
     public int powerScanCost;
@@ -203,8 +205,27 @@ public class GameManager : MonoBehaviour
                             
                             foreach (var hit in hits)
                             {
-                                hit.collider.gameObject.GetComponent<Alien>().MoveToNeightourLane();
+                                var alien = hit.collider.gameObject.GetComponent<Alien>();
+                                //if(!alien.IsChangingLanes) 
+                                alien.MoveToNeightourLane();
                             }
+                            
+                            DestroyPreviewIfNotNull();
+                            SetPreview(null);
+                        }
+                    }
+                }
+                else if (CurrentPreview.Type == PreviewType.PowerSlow)
+                {
+                    if (gridManager.SelectedTile != null)
+                    {
+                        if (ResourceManager.getResources() >= unitCost)
+                        { // =checking if u have enough reosources to pay for the unit
+                            //-decreasing resources
+                            
+                            resourceManager.payForUnit(unitCost);
+                            
+                            aliens.ForEach(action: (Alien a) => { a.SlowForSec(5); });
                             
                             DestroyPreviewIfNotNull();
                             SetPreview(null);
@@ -329,11 +350,17 @@ public class GameManager : MonoBehaviour
         
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
-        if(card.Type == PowerCardType.Scan) {
+        if(card.Type == PowerCardType.Scan) 
+        {
             SetPreview(Instantiate(powerScanPrevPrefab, pos, Quaternion.identity));
         }
-        else if(card.Type == PowerCardType.Block) {
+        else if(card.Type == PowerCardType.Block)
+        {
             SetPreview(Instantiate(powerBlockPrevPrefab, pos, Quaternion.identity));
+        }
+        else if(card.Type == PowerCardType.Slow)
+        {
+            SetPreview(Instantiate(powerSlowPrevPrefab, pos, Quaternion.identity));
         }
     }
     

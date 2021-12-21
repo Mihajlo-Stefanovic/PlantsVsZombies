@@ -5,6 +5,8 @@ using UnityEngine;
 public class Alien : MonoBehaviour
 {
     public int Difficulty;
+    public bool IsSlowed;
+    public float SlowFactor = 0.3f;
     
     public int speed;
     public int damage;
@@ -51,6 +53,18 @@ public class Alien : MonoBehaviour
     {
         var newY = GameManager.Instance.gridManager.GetNeighbourLaneY(this);
         transform.position = new Vector3(transform.position.x, newY, transform.position.z); // TODO(sftl): move smoothly
+    }
+    
+    public void SlowForSec(float sec)
+    {
+        IsSlowed = true;
+        StartCoroutine(RemoveSlowAfterSec(sec));
+    }
+    
+    IEnumerator RemoveSlowAfterSec(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        IsSlowed = false;
     }
     
     protected void isDead()
@@ -165,7 +179,7 @@ public class Alien : MonoBehaviour
             
         }
         else
-            transform.position = transform.position + new Vector3(-speed * Time.deltaTime, 0f, 0f);
+            transform.position = transform.position + new Vector3(-SpeedWithSlow() * Time.deltaTime, 0f, 0f);
     }
     private void moveUp()
     {
@@ -180,7 +194,7 @@ public class Alien : MonoBehaviour
             
         }
         else
-            transform.position = transform.position + new Vector3(0f, speed * Time.deltaTime, 0f);
+            transform.position = transform.position + new Vector3(0f, SpeedWithSlow() * Time.deltaTime, 0f);
         
         
     }
@@ -197,8 +211,11 @@ public class Alien : MonoBehaviour
             
         }
         else
-            transform.position = transform.position + new Vector3(0f, -speed * Time.deltaTime, 0f);
+            transform.position = transform.position + new Vector3(0f, -SpeedWithSlow() * Time.deltaTime, 0f);
     }
     
-    
+    private float SpeedWithSlow()
+    {
+        return (IsSlowed) ? speed * SlowFactor : speed;
+    }
 }

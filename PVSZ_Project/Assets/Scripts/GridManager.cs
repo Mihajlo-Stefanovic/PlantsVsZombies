@@ -18,8 +18,8 @@ public class GridManager : MonoBehaviour
     
     public int NumOfLanes { get { return _height; } }
     
+    public Tile SelectedTile = null;
     List<List<Tile>> tiles = new();
-    Tile selected = null;
     
     private void Awake()
     {
@@ -67,7 +67,7 @@ public class GridManager : MonoBehaviour
     
     public void TileHover(Tile tile) {
         //-select
-        selected = tile;
+        SelectedTile = tile;
         
         //-highlight
         var preview = GameManager.Instance.CurrentPreview;
@@ -76,22 +76,29 @@ public class GridManager : MonoBehaviour
         {
             tile.SetHighlight(true);
         }
-        else if (preview.Type != PreviewType.PowerBlock) 
-        {
-            tile.SetHighlight(true);
-        }
-        else // NOTE(sftl): highlight lane
+        else if (preview.Type == PreviewType.PowerBlock) // NOTE(sftl): highlight lane 
         {
             foreach (var column in tiles)
             {
                 column[tile.Row].SetHighlight(true);
             }
         }
+        else if (preview.Type == PreviewType.PowerSlow) // NOTE(sftl): highligh whole grid
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(true); });
+            }
+        }
+        else
+        {
+            tile.SetHighlight(true);
+        }
     }
     
     public void TileHoverExit(Tile tile) {
         // NOTE(sftl): when moving cursor from one tile to the other, it is not defined wheter TileHoverExit or TileHover will be called first?
-        if (tile != selected) return;
+        if (tile != SelectedTile) return;
         
         //-remove highlight
         var preview = GameManager.Instance.CurrentPreview;
@@ -100,33 +107,48 @@ public class GridManager : MonoBehaviour
         {
             tile.SetHighlight(false);
         }
-        else if (preview.Type != PreviewType.PowerBlock) 
-        {
-            tile.SetHighlight(false);
-        }
-        else // NOTE(sftl): highlight lane
+        else if (preview.Type == PreviewType.PowerBlock)
         {
             foreach (var column in tiles)
             {
                 column[tile.Row].SetHighlight(false);
             }
         }
+        else if (preview.Type == PreviewType.PowerSlow)
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
+            }
+        }
+        else
+        {
+            tile.SetHighlight(false);
+        }
         
         //-deselect
-        selected = null;
+        SelectedTile = null;
     }
     
     // NOTE(sftl): player can clear preview while inside grid
     public void PreviewCleared(Preview oldPreview)
     {
-        if (selected == null) return; // NOTE(sftl): change doesn't concern grid
+        if (SelectedTile == null) return; // NOTE(sftl): change doesn't concern grid
         
         if (oldPreview?.Type == PreviewType.PowerBlock)
         {
             //-remove highligh from lane
             foreach (var column in tiles)
             {
-                column[selected.Row].SetHighlight(false);
+                column[SelectedTile.Row].SetHighlight(false);
+            }
+        }
+        
+        if (oldPreview?.Type == PreviewType.PowerSlow)
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
             }
         }
     }
@@ -160,13 +182,13 @@ public class GridManager : MonoBehaviour
     // NOTE(sftl): returns null if none is selected
     public Tile GetSelectedTileIfAvailable()
     {
-        return selected;
+        return SelectedTile;
     }
     
     // NOTE(sftl): returns null if none is selected or tile is not occupied
     public Tile GetSelectedTileIfOccupied()
     {
-        return (selected?.Unit is TechUnit) ? selected : null;
+        return (SelectedTile?.Unit is TechUnit) ? SelectedTile : null;
     }
     
     public List<Vector3> GetAvailableSpawnPos()
@@ -186,8 +208,8 @@ public class GridManager : MonoBehaviour
     // NOTE(sftl): return null if no lane is selected
     public (Vector3, Vector3)? GetSelectedLaneStartEndPos()
     {
-        if (selected == null) return null;
-        return (tiles.First()[selected.Row].transform.position, tiles.Last()[selected.Row].transform.position);
+        if (SelectedTile == null) return null;
+        return (tiles.First()[SelectedTile.Row].transform.position, tiles.Last()[SelectedTile.Row].transform.position);
     }
     
     public float GetNeighbourLaneY(Alien alien)
