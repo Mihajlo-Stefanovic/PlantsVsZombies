@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class EndTurn : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
+public class FastForward :  MonoBehaviour, IPointerUpHandler, IPointerDownHandler
 {
+    public PlayUI playUI;
     
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -11,7 +12,8 @@ public class EndTurn : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
     
     public void OnPointerUp(PointerEventData pointerEventData)
     {
-        GameManager.Instance.EndTechTurn();
+        GameManager.Instance.FastForward();
+        playUI.OnFastForward();
     }
     
     public void Enable()
@@ -23,4 +25,5 @@ public class EndTurn : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
     {
         gameObject.SetActive(false);
     }
+    
 }

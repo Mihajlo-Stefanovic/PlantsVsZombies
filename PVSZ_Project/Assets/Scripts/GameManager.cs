@@ -438,6 +438,13 @@ public class GameManager : MonoBehaviour
         TurnNum++;
         playUI.OnTechTurn();
         GenWaveAndShow();
+        
+        Time.timeScale = 1f; // NOTE(sftl): if fast forwarded, reset to normal speed
+    }
+    
+    public void FastForward()
+    {
+        Time.timeScale = 10f;
     }
     
     void DestroyPreviewIfNotNull()
