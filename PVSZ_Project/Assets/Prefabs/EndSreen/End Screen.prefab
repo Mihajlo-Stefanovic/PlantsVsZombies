@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 852711985853972952}
   - component: {fileID: 852711985853972955}
   m_Layer: 5
-  m_Name: Retry
+  m_Name: Reload
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -545,7 +545,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Retry
+  m_text: 'Reload
 
 '
   m_isRightToLeft: 0
@@ -806,6 +806,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   winLoseText: {fileID: 852711987752974816}
+  reloadText: {fileID: 852711986597617357}
 --- !u!1 &852711987298599756
 GameObject:
   m_ObjectHideFlags: 0

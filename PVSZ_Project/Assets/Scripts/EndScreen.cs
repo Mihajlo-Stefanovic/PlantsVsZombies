@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class EndScreen : MonoBehaviour
 {
     public TextMeshProUGUI winLoseText;
+    public TextMeshProUGUI reloadText;
     
     public void Retry()
     {
@@ -27,7 +28,14 @@ public class EndScreen : MonoBehaviour
     
     public void SetWinState(bool won)
     {
-        if (won) winLoseText.text = "You WON!";
-        else winLoseText.text = "You lost.";
+        if (won){
+            winLoseText.text    = "You WON";
+            reloadText.text     = "Again!";
+        }
+        else 
+        {
+            winLoseText.text    = "You lost";
+            reloadText.text     = "Retry";
+        }
     }
 }
