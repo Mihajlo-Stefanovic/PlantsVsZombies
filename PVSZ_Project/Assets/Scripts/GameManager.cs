@@ -56,8 +56,14 @@ public class GameManager : MonoBehaviour
     public Preview      powerShieldPrevPrefab; 
     
     //- unit costs
-    public int unitCost;
+    public int shooterCost;
+    public int machineGunCost;
+    public int resourceCollectorCost;
+    
     public int powerScanCost;
+    public int powerBlockCost;
+    public int powerSlowCost;
+    public int powerShieldCost;
     
     //- turns
     public const int    EndTurnNum = 5;
@@ -116,11 +122,11 @@ public class GameManager : MonoBehaviour
                     
                     if (tile != null)
                     {
-                        if (ResourceManager.getResources() >= unitCost)
+                        if (ResourceManager.getResources() >= shooterCost)
                         { // =checking if u have enough reosources to pay for the unit
                             //-decreasing resources
                             
-                            resourceManager.payForUnit(unitCost);
+                            resourceManager.payForUnit(shooterCost);
                             
                             //-instantiate TechUnit
                             var pos = tile.transform.position;
@@ -157,11 +163,11 @@ public class GameManager : MonoBehaviour
                     
                     if (tile != null)
                     {
-                        if (ResourceManager.getResources() >= unitCost)
+                        if (ResourceManager.getResources() >= resourceCollectorCost)
                         { // =checking if u have enough reosources to pay for the unit
                             //-decreasing resources
                             
-                            resourceManager.payForUnit(unitCost);
+                            resourceManager.payForUnit(resourceCollectorCost);
                             
                             //-instantiate TechUnit
                             var pos = tile.transform.position;
@@ -177,11 +183,11 @@ public class GameManager : MonoBehaviour
                     
                     if (tile != null)
                     {
-                        if (ResourceManager.getResources() >= unitCost)
+                        if (ResourceManager.getResources() >= machineGunCost)
                         { // =checking if u have enough reosources to pay for the unit
                             //-decreasing resources
                             
-                            resourceManager.payForUnit(unitCost);
+                            resourceManager.payForUnit(machineGunCost);
                             
                             //-instantiate TechUnit
                             var pos = tile.transform.position;
@@ -197,11 +203,11 @@ public class GameManager : MonoBehaviour
                     
                     if (laneData != null)
                     {
-                        if (ResourceManager.getResources() >= unitCost)
+                        if (ResourceManager.getResources() >= powerBlockCost)
                         { // =checking if u have enough reosources to pay for the unit
                             //-decreasing resources
                             
-                            resourceManager.payForUnit(unitCost);
+                            resourceManager.payForUnit(powerBlockCost);
                             
                             var (laneStartPos, laneEndPos) = laneData.Value;
                             var dir = Vector3.Normalize(laneEndPos - laneStartPos);
@@ -223,11 +229,11 @@ public class GameManager : MonoBehaviour
                 {
                     if (gridManager.SelectedTile != null)
                     {
-                        if (ResourceManager.getResources() >= unitCost)
+                        if (ResourceManager.getResources() >= powerSlowCost)
                         { // =checking if u have enough reosources to pay for the unit
                             //-decreasing resources
                             
-                            resourceManager.payForUnit(unitCost);
+                            resourceManager.payForUnit(powerSlowCost);
                             
                             aliens.ForEach(action: (Alien a) => { a.SlowForSec(5); });
                             
@@ -240,11 +246,11 @@ public class GameManager : MonoBehaviour
                 {
                     if (gridManager.SelectedTile != null)
                     {
-                        if (ResourceManager.getResources() >= unitCost)
+                        if (ResourceManager.getResources() >= powerShieldCost)
                         { // =checking if u have enough reosources to pay for the unit
                             //-decreasing resources
                             
-                            resourceManager.payForUnit(unitCost);
+                            resourceManager.payForUnit(powerShieldCost);
                             
                             techs.ForEach(action: (TechPrototype a) => { a.AddShieldForSec(5); });
                             
@@ -259,6 +265,7 @@ public class GameManager : MonoBehaviour
                     
                     if (tile != null)
                     {
+                        // TODO(sftl): give reseources back for units that are placed this turn or maybe even previous turns
                         //-remove TechUnit
                         Destroy(tile.Unit.gameObject);
                         techs.Remove(tile.Unit as TechPrototype); // NOTE(sftl): player is not able to try to remove alien unit
@@ -443,16 +450,15 @@ public class GameManager : MonoBehaviour
             Destroy(unit.gameObject);
             techs.Remove(unit);
         }
+        
         //check if unit is of certain type
         foreach (TechPrototype unit in techs)
         {
-            
             if (unit.GetType() == typeof(TechResourceUnit))
             {
-                TechResourceUnit resourceUnit = (TechResourceUnit)unit;
+                TechResourceUnit resourceUnit = (TechResourceUnit) unit;
                 resourceUnit.IncreaseRescources();
             }
-            
         }
         temp_techs.Clear();
         
