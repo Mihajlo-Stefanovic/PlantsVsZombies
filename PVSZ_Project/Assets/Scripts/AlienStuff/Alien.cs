@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Alien : MonoBehaviour
 {
+    private Animator animator;
     public int Difficulty;
-    
     public int speed;
     public int damage;
     private bool _lockDirection = false;
@@ -26,7 +26,9 @@ public class Alien : MonoBehaviour
     public void IsTechDead()
     {
         if (_techUnitToDamage == null)
-            _stopMoving = false;
+        {   _stopMoving = false;
+             
+        }
         
     }
     
@@ -58,9 +60,11 @@ public class Alien : MonoBehaviour
         
         if (health <= 0)
         {
+            
             Destroy(this.gameObject);
             GameManager.Instance.OnAlienDeath(this);
         }
+       
         
     }
     
@@ -103,9 +107,10 @@ public class Alien : MonoBehaviour
                 AudioManager.Instance.Play_AlienMelee();
                 nextAttack = Time.time + 0.5f;
                 col.gameObject.GetComponent<ITechAbilities>().takeDamage(20);
+               
             }
             
-            
+        
         }
     }
     
