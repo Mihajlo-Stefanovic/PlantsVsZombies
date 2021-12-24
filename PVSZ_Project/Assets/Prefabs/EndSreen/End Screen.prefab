@@ -805,6 +805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3bfb9040ba5e5f419f8d6be753b78d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  winLoseText: {fileID: 852711987752974816}
 --- !u!1 &852711987298599756
 GameObject:
   m_ObjectHideFlags: 0
@@ -951,7 +952,7 @@ GameObject:
   - component: {fileID: 852711987752974817}
   - component: {fileID: 852711987752974816}
   m_Layer: 5
-  m_Name: You Lost
+  m_Name: You Won/Lost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1005,7 +1006,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You lost
+  m_text: You Won/Lost
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}

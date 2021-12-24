@@ -60,7 +60,9 @@ public class GameManager : MonoBehaviour
     public int powerScanCost;
     
     //- turns
-    public int  TurnNum = 1;
+    public const int    EndTurnNum = 5;
+    public int          TurnNum = 1;
+    
     TurnType    currTurn = TurnType.Tech;
     public      GameEvent turnIncrementedEvent;
     
@@ -522,6 +524,14 @@ public class GameManager : MonoBehaviour
         
         if (aliens.Count == 0)
         {
+            //-handle win
+#if !NO_END_GAME
+            if (TurnNum >= EndTurnNum){
+                PlayerWon();
+                return;
+            }
+#endif
+            
             EndAlienTurn();
             turnIncrementedEvent.Raise();
         }
@@ -543,6 +553,26 @@ public class GameManager : MonoBehaviour
         }
         
         endScreen.gameObject.SetActive(true);
+        endScreen.SetWinState(won: false);
+    }
+    
+    public void PlayerWon()
+    {
+        Time.timeScale  = 0f;
+        gameState       = GameState.End;
+        
+        raycaster.Deactivate();
+        
+        if (CurrentPreview != null)
+        {
+#if DEBUG_GAMEMANAGER
+            Debug.Log("Preview hidden on end game.");
+#endif
+            CurrentPreview.gameObject.SetActive(false);
+        }
+        
+        endScreen.gameObject.SetActive(true);
+        endScreen.SetWinState(won: true);
     }
     
     IEnumerator DoAfterSec(float sec, Action action)

@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class EndScreen : MonoBehaviour
 {
+    public TextMeshProUGUI winLoseText;
+    
     public void Retry()
     {
         Time.timeScale = 1f;
@@ -20,5 +23,11 @@ public class EndScreen : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+    
+    public void SetWinState(bool won)
+    {
+        if (won) winLoseText.text = "You WON!";
+        else winLoseText.text = "You lost.";
     }
 }
