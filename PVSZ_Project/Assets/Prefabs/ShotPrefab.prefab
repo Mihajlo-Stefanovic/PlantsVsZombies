@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4166709383685411214}
   - component: {fileID: 2599792914030481366}
   - component: {fileID: -7200167866411799067}
-  - component: {fileID: 2235712159226618071}
   - component: {fileID: 2175804254098241400}
+  - component: {fileID: 2235712159226618071}
   m_Layer: 6
   m_Name: ShotPrefab
   m_TagString: Bullet
@@ -103,18 +103,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &2235712159226618071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761053074145525064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 253be39e3b1c73c4d876e59d3af8c028, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &2175804254098241400
 Rigidbody2D:
   serializedVersion: 4
@@ -136,3 +124,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &2235712159226618071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761053074145525064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 253be39e3b1c73c4d876e59d3af8c028, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10

@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-// TODO(sftl): works for tiles, make universal
+// NOTE(sftl): works on tiles when game is in play mode
 public class PointerRaycaster : MonoBehaviour
 {
     int     dist    = 50;                       // NOTE(sftl): must be greater that tile from camera distance
@@ -49,6 +49,8 @@ public class PointerRaycaster : MonoBehaviour
     
     public void Deactivate()
     {
+        currTile?.OnPointerRayExit();
+        currTile = null;
         gameObject.SetActive(false);
     }
 }

@@ -6,6 +6,10 @@ public class Alien : MonoBehaviour
 {
     private Animator animator;
     public int Difficulty;
+    public bool IsSlowed;
+    public float SlowStopTime;
+    public float SlowFactor = 0.3f;
+    
     public int speed;
     public int damage;
     private bool _lockDirection = false;
@@ -32,14 +36,6 @@ public class Alien : MonoBehaviour
         
     }
     
-    public void KillOutside()
-    {
-        if (gridManager.isAlienOutside(gameObject.transform.position))
-        {
-            StartCoroutine(KillAfterSec(2f));
-        }
-    }
-    
     public IEnumerator KillAfterSec(float sec)
     {
         yield return new WaitForSeconds(sec);
@@ -53,6 +49,17 @@ public class Alien : MonoBehaviour
     {
         var newY = GameManager.Instance.gridManager.GetNeighbourLaneY(this);
         transform.position = new Vector3(transform.position.x, newY, transform.position.z); // TODO(sftl): move smoothly
+    }
+    
+    public void SlowForSec(float sec)
+    {
+        IsSlowed = true;
+        SlowStopTime = Time.time + sec;
+    }
+    
+    private void CheckSlow()
+    {
+        if (Time.time > SlowStopTime) IsSlowed = false;
     }
     
     protected void isDead()
@@ -70,9 +77,9 @@ public class Alien : MonoBehaviour
     
     protected void CheckEverything()
     {
-        KillOutside();
         IsTechDead();
         isDead();
+        CheckSlow();
     }
     
     void OnTriggerEnter2D(Collider2D col)
@@ -170,7 +177,7 @@ public class Alien : MonoBehaviour
             
         }
         else
-            transform.position = transform.position + new Vector3(-speed * Time.deltaTime, 0f, 0f);
+            transform.position = transform.position + new Vector3(-SpeedWithSlow() * Time.deltaTime, 0f, 0f);
     }
     private void moveUp()
     {
@@ -185,7 +192,7 @@ public class Alien : MonoBehaviour
             
         }
         else
-            transform.position = transform.position + new Vector3(0f, speed * Time.deltaTime, 0f);
+            transform.position = transform.position + new Vector3(0f, SpeedWithSlow() * Time.deltaTime, 0f);
         
         
     }
@@ -202,8 +209,11 @@ public class Alien : MonoBehaviour
             
         }
         else
-            transform.position = transform.position + new Vector3(0f, -speed * Time.deltaTime, 0f);
+            transform.position = transform.position + new Vector3(0f, -SpeedWithSlow() * Time.deltaTime, 0f);
     }
     
-    
+    private float SpeedWithSlow()
+    {
+        return (IsSlowed) ? speed * SlowFactor : speed;
+    }
 }

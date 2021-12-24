@@ -6,19 +6,20 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    public static GridManager Instance;
+    
     [SerializeField] private int _width, _height;
     [SerializeField] private Tile _tilePrefab;
-    [SerializeField] private Transform _camera;
     [SerializeField] private GameObject _parent;
     
     public AlienLaneIndicator indicatorPrefab;
     List<AlienLaneIndicator> indicators = new();
-    
-    List<List<Tile>> tiles = new();
-    public static GridManager Instance;
+    public GameObject indicatorParent;
     
     public int NumOfLanes { get { return _height; } }
     
+    public Tile SelectedTile = null;
+    List<List<Tile>> tiles = new();
     
     private void Awake()
     {
@@ -35,11 +36,6 @@ public class GridManager : MonoBehaviour
         GenerateGrid();
     }
     
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-    
     void GenerateGrid()
     {
         int width = (int)_tilePrefab.GetComponent<Transform>().localScale.x;
@@ -52,6 +48,8 @@ public class GridManager : MonoBehaviour
             for (int j = 0; j < _height; )
             {
                 var spawnedTile = Instantiate(_tilePrefab, new Vector3(i, j), Quaternion.identity);
+                spawnedTile.Row = j;
+                spawnedTile.Column = i;
                 spawnedTile.name = $"Tile {i} {j}";
                 spawnedTile.transform.parent = _parent.transform;
                 var isOffset = (i + j)/(width) % 2 == 1;
@@ -62,11 +60,117 @@ public class GridManager : MonoBehaviour
             i += width;
         }
         
-        
-        
         _parent.transform.position = (new Vector3((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f, -10))*-1;
         
         SpawnAlienLaneIndicators();
+    }
+    
+    public void TileHover(Tile tile) {
+        //-select
+        SelectedTile = tile;
+        
+        //-highlight
+        var preview = GameManager.Instance.CurrentPreview;
+        
+        if (preview == null) 
+        {
+            tile.SetHighlight(true);
+        }
+        else if (preview.Type == PreviewType.PowerBlock) // NOTE(sftl): highlight lane 
+        {
+            foreach (var column in tiles)
+            {
+                column[tile.Row].SetHighlight(true);
+            }
+        }
+        else if (preview.Type == PreviewType.PowerSlow) // NOTE(sftl): highligh whole grid
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(true); });
+            }
+        }
+        else if (preview.Type == PreviewType.PowerShield) // NOTE(sftl): highligh whole grid
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(true); });
+            }
+        }
+        else
+        {
+            tile.SetHighlight(true);
+        }
+    }
+    
+    public void TileHoverExit(Tile tile) {
+        // NOTE(sftl): when moving cursor from one tile to the other, it is not defined wheter TileHoverExit or TileHover will be called first?
+        if (tile != SelectedTile) return;
+        
+        //-remove highlight
+        var preview = GameManager.Instance.CurrentPreview;
+        
+        if (preview == null) 
+        {
+            tile.SetHighlight(false);
+        }
+        else if (preview.Type == PreviewType.PowerBlock)
+        {
+            foreach (var column in tiles)
+            {
+                column[tile.Row].SetHighlight(false);
+            }
+        }
+        else if (preview.Type == PreviewType.PowerSlow)
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
+            }
+        }
+        else if (preview.Type == PreviewType.PowerShield)
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
+            }
+        }
+        else
+        {
+            tile.SetHighlight(false);
+        }
+        
+        //-deselect
+        SelectedTile = null;
+    }
+    
+    // NOTE(sftl): player can clear preview while inside grid
+    public void PreviewCleared(Preview oldPreview)
+    {
+        if (SelectedTile == null) return; // NOTE(sftl): change doesn't concern grid
+        
+        if (oldPreview?.Type == PreviewType.PowerBlock)
+        {
+            //-remove highligh from lane
+            foreach (var column in tiles)
+            {
+                column[SelectedTile.Row].SetHighlight(false);
+            }
+        }
+        else if (oldPreview?.Type == PreviewType.PowerSlow)
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
+            }
+        }
+        else if (oldPreview?.Type == PreviewType.PowerShield)
+        {
+            foreach (var column in tiles)
+            {
+                column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
+            }
+        }
     }
     
     public bool canAlienMove(Vector3 startP,bool isUp)
@@ -85,70 +189,25 @@ public class GridManager : MonoBehaviour
         return true;
     }
     
-    
-    public bool isAlienOutside(Vector3 pos)
+    public bool IsAlienInPlayerBase(Vector3 pos)
     {
-        var bukizila = _tilePrefab.transform.localScale.y / 2;
+        var tileW = _tilePrefab.transform.localScale.y;
         var firstTile = tiles[0][0];
-        if (pos.x < firstTile.transform.position.x - bukizila)
-            return true;
         
+        if (pos.x < firstTile.transform.position.x - tileW) return true;
         return false;
     }
     
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
+    // NOTE(sftl): returns null if none is selected
     public Tile GetSelectedTileIfAvailable()
     {
-        // TODO(sftl): optimise
-        foreach(var row in tiles)
-        {
-            foreach(var tile in row)
-            {
-                if (tile.IsSelected) 
-                {
-                    if (tile.Unit == null)  return tile;
-                    else                    return null;
-                }
-            }
-        }
-        return null;
+        return SelectedTile;
     }
     
+    // NOTE(sftl): returns null if none is selected or tile is not occupied
     public Tile GetSelectedTileIfOccupied()
     {
-        // TODO(sftl): optimise
-        foreach(var row in tiles)
-        {
-            foreach(var tile in row)
-            {
-                if (tile.IsSelected) 
-                {
-                    if (tile.Unit is TechUnit)  return tile;
-                    else                        return null;
-                }
-            }
-        }
-        return null;
-    }
-    
-    public void DeselectTile()
-    {
-        // TODO(sftl): optimise
-        foreach(var row in tiles)
-        {
-            foreach(var tile in row)
-            {
-                if (tile.IsSelected) 
-                {
-                    tile.Deselect();
-                }
-            }
-        }
+        return (SelectedTile?.Unit is TechPrototype) ? SelectedTile : null;
     }
     
     public List<Vector3> GetAvailableSpawnPos()
@@ -168,24 +227,8 @@ public class GridManager : MonoBehaviour
     // NOTE(sftl): return null if no lane is selected
     public (Vector3, Vector3)? GetSelectedLaneStartEndPos()
     {
-        // TODO(sftl): optimise
-        int tileIndex = -1;
-        for (int i = 0; i < tiles.Count; i++)
-        {   
-            for (int j = 0; j < tiles[i].Count; j++)
-            {
-                if (tiles[i][j].IsSelected)
-                {
-                    tileIndex = j;
-                }
-            }
-        }
-        
-        if (tileIndex == -1) return null;
-        
-        var start = tiles.First()[tileIndex].transform.position;
-        var end = tiles.Last()[tileIndex].transform.position;
-        return (start, end);
+        if (SelectedTile == null) return null;
+        return (tiles.First()[SelectedTile.Row].transform.position, tiles.Last()[SelectedTile.Row].transform.position);
     }
     
     public float GetNeighbourLaneY(Alien alien)
@@ -206,7 +249,9 @@ public class GridManager : MonoBehaviour
         
         foreach (var tile in lastRow)
         {
-            indicators.Add(Instantiate(indicatorPrefab, tile.transform.position, Quaternion.identity));
+            var curr = Instantiate(indicatorPrefab, tile.transform.position, Quaternion.identity);
+            curr.transform.SetParent(indicatorParent.transform);
+            indicators.Add(curr);
         }
     }
     

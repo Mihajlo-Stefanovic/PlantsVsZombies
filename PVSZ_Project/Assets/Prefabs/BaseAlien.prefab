@@ -147,6 +147,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Difficulty: 1
+  IsSlowed: 0
+  SlowStopTime: 0
+  SlowFactor: 0.3
   speed: 1
+  damage: 0
   _tile: {fileID: 4101567033614528602, guid: 1c23370466408f444a46311601e4d79d, type: 3}
-  health: 100
+  health: 50

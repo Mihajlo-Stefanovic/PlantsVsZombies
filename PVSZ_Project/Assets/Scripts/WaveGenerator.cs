@@ -37,13 +37,13 @@ public class WaveGenerator : MonoBehaviour
             // turn 0
             1,
             // turn 1
-            12,
+            5,
             // turn 2
-            20,
+            10,
             // turn 3
-            33,
+            15,
             // turn 4
-            50,
+            20,
             
         };
         
@@ -64,12 +64,7 @@ public class WaveGenerator : MonoBehaviour
                 // combination 0
                 new()
                 {
-                    tank, tank
-                },
-                // combination 1
-                new()
-                {
-                    moon_walker, moon_walker, moon_walker
+                    standard, standard
                 },
             },
             
@@ -79,6 +74,12 @@ public class WaveGenerator : MonoBehaviour
                 // combination 0
                 new()
                 {
+                    tank
+                },
+                // combination 1
+                new()
+                {
+                    moon_walker, moon_walker
                 },
             },
             
@@ -88,7 +89,6 @@ public class WaveGenerator : MonoBehaviour
                 // combination 0
                 new()
                 {
-                    tank, tank, tank, tank
                 },
             },
             
@@ -98,6 +98,7 @@ public class WaveGenerator : MonoBehaviour
                 // combination 0
                 new()
                 {
+                    tank, tank, tank, tank
                 },
             },
             

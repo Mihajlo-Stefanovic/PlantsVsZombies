@@ -3,25 +3,35 @@ using UnityEngine;
 public class PlayUI : MonoBehaviour
 {
     public EndTurn      endTurn;
-    public TechCard     card;           // NOTE(sftl): handle multiple
+    public GameObject   techCards;
     public RemoveCard   removeCard;
+    
     public GameObject   powerCards;
+    public FastForward  fastForward;
     
     public void OnAlienTurn()
     {
         endTurn.Dissable();
-        card.Dissable();
         removeCard.Dissable();
+        techCards.SetActive(false);
         
         powerCards.SetActive(true);
+        fastForward.Enable();
     }
     
     public void OnTechTurn()
     {
         endTurn.Enable();
-        card.Enable();
         removeCard.Enable();
+        techCards.SetActive(true);
         
         powerCards.SetActive(false);
+        fastForward.Dissable();
+    }
+    
+    public void OnFastForward()
+    {
+        powerCards.SetActive(false);
+        fastForward.Dissable();
     }
 }

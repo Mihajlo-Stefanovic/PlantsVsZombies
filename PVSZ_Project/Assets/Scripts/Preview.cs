@@ -9,13 +9,15 @@ public enum PreviewType
     Remove,
     ResourceUnit,
     MachineGun,
-    PowerBlock
+    PowerBlock,
+    PowerSlow,
+    PowerShield
 }
 
 public class Preview : MonoBehaviour
 {
     float moveSpeed = 50f;
-    public PreviewType type;
+    public PreviewType Type;
     
     Vector3 mousePosition;
     
