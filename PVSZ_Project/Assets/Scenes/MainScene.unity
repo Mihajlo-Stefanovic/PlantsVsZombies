@@ -2926,10 +2926,10 @@ MonoBehaviour:
   shooterCost: 30
   machineGunCost: 100
   resourceCollectorCost: 50
-  powerScanCost: 100
-  powerBlockCost: 150
-  powerSlowCost: 150
-  powerShieldCost: 150
+  powerScanCost: 150
+  powerBlockCost: 100
+  powerSlowCost: 100
+  powerShieldCost: 100
   TurnNum: 1
   turnIncrementedEvent: {fileID: 11400000, guid: f72934727b362b9488f3bacd30bd1e22, type: 2}
   CurrentPreview: {fileID: 0}
@@ -4007,10 +4007,6 @@ PrefabInstance:
     - target: {fileID: 6995495689553431568, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
       propertyPath: m_Name
       value: Power Cards
-      objectReference: {fileID: 0}
-    - target: {fileID: 6995495689553431568, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6995495689553431571, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
       propertyPath: m_Pivot.x
