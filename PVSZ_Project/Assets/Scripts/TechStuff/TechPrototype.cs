@@ -29,4 +29,10 @@ public abstract class TechPrototype : MonoBehaviour
             ShieldSprite.SetActive(false);
         }
     }
+    
+    public void RemoveStatusEffects()
+    {
+        HasShield = false;
+        ShieldSprite.SetActive(false);
+    }
 }

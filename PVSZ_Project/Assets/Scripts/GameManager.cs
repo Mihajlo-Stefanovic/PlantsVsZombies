@@ -456,6 +456,12 @@ public class GameManager : MonoBehaviour
         }
         temp_techs.Clear();
         
+        //-remove status effects
+        foreach (var unit in techs)
+        {
+            unit.RemoveStatusEffects();
+        }
+        
         currTurn = TurnType.Tech;
         TurnNum++;
         playUI.OnTechTurn();
