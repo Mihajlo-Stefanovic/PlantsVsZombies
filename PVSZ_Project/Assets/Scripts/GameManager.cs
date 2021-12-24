@@ -261,7 +261,7 @@ public class GameManager : MonoBehaviour
                     {
                         //-remove TechUnit
                         Destroy(tile.Unit.gameObject);
-                        techs.Remove(tile.Unit as TechUnit); // NOTE(sftl): player is not able to try to remove alien unit
+                        techs.Remove(tile.Unit as TechPrototype); // NOTE(sftl): player is not able to try to remove alien unit
                         tile.Unit = null;
                     }
                 }

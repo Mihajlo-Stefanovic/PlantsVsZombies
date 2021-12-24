@@ -207,7 +207,7 @@ public class GridManager : MonoBehaviour
     // NOTE(sftl): returns null if none is selected or tile is not occupied
     public Tile GetSelectedTileIfOccupied()
     {
-        return (SelectedTile?.Unit is TechUnit) ? SelectedTile : null;
+        return (SelectedTile?.Unit is TechPrototype) ? SelectedTile : null;
     }
     
     public List<Vector3> GetAvailableSpawnPos()
