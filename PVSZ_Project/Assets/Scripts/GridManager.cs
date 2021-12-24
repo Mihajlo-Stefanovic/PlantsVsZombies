@@ -189,13 +189,12 @@ public class GridManager : MonoBehaviour
         return true;
     }
     
-    public bool isAlienOutside(Vector3 pos)
+    public bool IsAlienInPlayerBase(Vector3 pos)
     {
-        var bukizila = _tilePrefab.transform.localScale.y / 2;
+        var tileW = _tilePrefab.transform.localScale.y;
         var firstTile = tiles[0][0];
-        if (pos.x < firstTile.transform.position.x - bukizila)
-            return true;
         
+        if (pos.x < firstTile.transform.position.x - tileW) return true;
         return false;
     }
     
@@ -251,7 +250,7 @@ public class GridManager : MonoBehaviour
         foreach (var tile in lastRow)
         {
             var curr = Instantiate(indicatorPrefab, tile.transform.position, Quaternion.identity);
-            curr.transform.parent = indicatorParent.transform;
+            curr.transform.SetParent(indicatorParent.transform);
             indicators.Add(curr);
         }
     }

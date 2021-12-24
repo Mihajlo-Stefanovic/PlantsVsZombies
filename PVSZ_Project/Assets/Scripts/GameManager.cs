@@ -1,4 +1,5 @@
 //#define DEBUG_GAMEMANAGER
+//#define NO_END_GAME
 
 using System;
 using System.Collections;
@@ -18,7 +19,8 @@ enum TurnType
 enum GameState
 {
     Playing,
-    Paused
+    Paused,
+    End,
 }
 
 public class GameManager : MonoBehaviour
@@ -32,6 +34,8 @@ public class GameManager : MonoBehaviour
     public PlayUI           playUI;
     public PointerRaycaster raycaster;
     public WaveGenerator    waveGen;
+    
+    public EndScreen        endScreen;
     
     //- tech unit prefabs
     public Preview  shooterPrevPrefab;
@@ -76,13 +80,11 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null)
         {
-            Destroy(gameObject);
+            Destroy(Instance.gameObject);
+            Debug.Log("Tried to create mutliple GameManager instances.");
         }
-        else
-        {
-            Instance = this;
-            //DontDestroyOnLoad(gameObject);
-        }
+        
+        Instance = this;
     }
     
     void Start()
@@ -92,7 +94,7 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        if(gameState == GameState.Paused) return;
+        if(gameState == GameState.Paused || gameState == GameState.End) return;
         
         if (Input.GetMouseButtonUp(1)) // NOTE(sftl): right click
         {
@@ -264,13 +266,11 @@ public class GameManager : MonoBehaviour
             }
         }
         
-        //-handle unit front rendering
-        // TODO(sftl): optimise, don't do this every frame, just when unit spawns or changes lane
-        // TODO(sftl): when spawning, rendering position may not be accurate the first frame
-        // TODO(sftl): handle infinite units
-        
         float precision = 0.2f; // Real world width for which units are considered to be on the same rendering layer and rendering order is not defined
         int refOrder = 15000;   // SpriteRenderer.sortingOrder max is 32767
+        
+        //-alien loop
+        List<Alien> aliensInBase = new();
         
         if (aliens.Count > 0)
         {
@@ -278,12 +278,32 @@ public class GameManager : MonoBehaviour
             
             foreach (var alien in aliens)
             {
+                // handle aliens in base
+                if (gridManager.IsAlienInPlayerBase(alien.transform.position))
+                {
+                    aliensInBase.Add(alien);
+                }
+                
+                //-handle unit front rendering
+                // TODO(sftl): optimise, don't do this every frame, just when unit spawns or changes lane
+                // TODO(sftl): when spawning, rendering position may not be accurate the first frame
+                // TODO(sftl): handle infinite units
                 var diffFromRefPos = refPos - alien.transform.position.y;
                 int diffFromRefOrder = (int)(diffFromRefPos / precision);
                 alien.GetComponent<SpriteRenderer>().sortingOrder = refOrder + diffFromRefOrder;
             }
         }
         
+#if NO_END_GAME
+        aliensInBase.ForEach(alien => {
+                                 OnAlienDeath(alien);
+                                 Destroy(alien.gameObject);
+                             });
+#else
+        if (aliensInBase.Count > 0) PlayerLost();
+#endif
+        
+        //-tech loop
         if (techs.Count > 0)
         {
             float refPos = techs.First().transform.position.y;
@@ -505,6 +525,24 @@ public class GameManager : MonoBehaviour
             EndAlienTurn();
             turnIncrementedEvent.Raise();
         }
+    }
+    
+    public void PlayerLost()
+    {
+        Time.timeScale  = 0f;
+        gameState       = GameState.End;
+        
+        raycaster.Deactivate();
+        
+        if (CurrentPreview != null)
+        {
+#if DEBUG_GAMEMANAGER
+            Debug.Log("Preview hidden on end game.");
+#endif
+            CurrentPreview.gameObject.SetActive(false);
+        }
+        
+        endScreen.gameObject.SetActive(true);
     }
     
     IEnumerator DoAfterSec(float sec, Action action)

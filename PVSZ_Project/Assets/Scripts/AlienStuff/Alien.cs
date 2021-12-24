@@ -34,14 +34,6 @@ public class Alien : MonoBehaviour
         
     }
     
-    public void KillOutside()
-    {
-        if (gridManager.isAlienOutside(gameObject.transform.position))
-        {
-            StartCoroutine(KillAfterSec(2f));
-        }
-    }
-    
     public IEnumerator KillAfterSec(float sec)
     {
         yield return new WaitForSeconds(sec);
@@ -81,7 +73,6 @@ public class Alien : MonoBehaviour
     
     protected void CheckEverything()
     {
-        KillOutside();
         IsTechDead();
         isDead();
         CheckSlow();
