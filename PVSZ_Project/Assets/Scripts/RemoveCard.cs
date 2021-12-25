@@ -5,9 +5,12 @@ using UnityEngine.EventSystems;
 
 public class RemoveCard : MonoBehaviour, IPointerDownHandler
 {
-    public void OnPointerDown(PointerEventData pointerEventData)
+    public void OnPointerDown(PointerEventData pointerData)
     {
-        GameManager.Instance.RemoveCardClicked();
+        if (pointerData.button == PointerEventData.InputButton.Left)
+        {
+            GameManager.Instance.RemoveCardClicked();
+        }
     }
     
     public void Enable()

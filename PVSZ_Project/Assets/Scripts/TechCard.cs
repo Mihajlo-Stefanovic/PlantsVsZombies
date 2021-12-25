@@ -15,10 +15,13 @@ public class TechCard : MonoBehaviour, IPointerDownHandler
     public CardType type;
     public ParticleSystem ps;
     
-    public void OnPointerDown(PointerEventData pointerEventData)
+    public void OnPointerDown(PointerEventData pointerData)
     {
-        GameManager.Instance.TechCardClicked(this);
-        ps.Play();
+        if (pointerData.button == PointerEventData.InputButton.Left)
+        {
+            GameManager.Instance.TechCardClicked(this);
+            ps.Play();
+        }
     }
     
     public void Enable()

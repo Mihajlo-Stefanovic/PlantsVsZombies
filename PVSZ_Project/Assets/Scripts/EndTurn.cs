@@ -9,9 +9,12 @@ public class EndTurn : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
         // NOTE(sftl): nothing
     }
     
-    public void OnPointerUp(PointerEventData pointerEventData)
+    public void OnPointerUp(PointerEventData pointerData)
     {
-        GameManager.Instance.EndTechTurn();
+        if (pointerData.button == PointerEventData.InputButton.Left)
+        {
+            GameManager.Instance.EndTechTurn();
+        }
     }
     
     public void Enable()

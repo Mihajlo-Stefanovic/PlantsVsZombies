@@ -13,9 +13,12 @@ public class PowerCard : MonoBehaviour, IPointerDownHandler
 {
     public PowerCardType Type;
     
-    public void OnPointerDown(PointerEventData pointerEventData)
+    public void OnPointerDown(PointerEventData pointerData)
     {
-        GameManager.Instance.PowerCardClicked(this);
+        if (pointerData.button == PointerEventData.InputButton.Left)
+        {
+            GameManager.Instance.PowerCardClicked(this);
+        }
     }
     
     public void Enable()

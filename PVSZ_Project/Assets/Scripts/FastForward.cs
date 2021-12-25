@@ -10,10 +10,13 @@ public class FastForward :  MonoBehaviour, IPointerUpHandler, IPointerDownHandle
         // NOTE(sftl): nothing
     }
     
-    public void OnPointerUp(PointerEventData pointerEventData)
+    public void OnPointerUp(PointerEventData pointerData)
     {
-        GameManager.Instance.FastForward();
-        playUI.OnFastForward();
+        if (pointerData.button == PointerEventData.InputButton.Left)
+        {
+            GameManager.Instance.FastForward();
+            playUI.OnFastForward();
+        }
     }
     
     public void Enable()
