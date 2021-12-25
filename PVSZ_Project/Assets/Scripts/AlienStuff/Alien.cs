@@ -10,10 +10,6 @@ public class Alien : MonoBehaviour
     public Collider2D collider;
     public Animator animator;
     
-    // don't animate by default
-    protected Action<bool> SetAttackAnim = delegate (bool isAttacking) {};
-    protected Action PlayDeathAnim = delegate () {};
-    
     public int Difficulty;
     public bool IsSlowed;
     public float SlowStopTime;
@@ -39,14 +35,14 @@ public class Alien : MonoBehaviour
     {
         IsTechDead();
     }
+    
     public void IsTechDead()
     {
-        if (_techUnitToDamage == null && _stopMoving == true)
+        if (_stopMoving && _techUnitToDamage == null && !_isDead)
         {   
             _stopMoving = false;
             SetAttackAnim(false);
         }
-        
     }
     
     public IEnumerator KillAfterSec(float sec)
@@ -54,12 +50,12 @@ public class Alien : MonoBehaviour
         yield return new WaitForSeconds(sec);
         Destroy(this.gameObject);
         GameManager.Instance.OnAlienDeath(this);
-        
     }
     
     // NOTE(sftl): used when Power Block is casted
     public void MoveToNeightourLane()
     {
+        if (_isDead) return;
         var newY = GameManager.Instance.gridManager.GetNeighbourLaneY(this);
         transform.position = new Vector3(transform.position.x, newY, transform.position.z); // TODO(sftl): move smoothly
     }
@@ -77,20 +73,19 @@ public class Alien : MonoBehaviour
     
     protected void isDead()
     {
-        
-        if (_isDead == false && health <= 0)
+        if (!_isDead && health <= 0)
         {
             _isDead = true;
             collider.enabled = false;
             PlayDeathAnim();
             StartCoroutine(KillAfterSec(1f));
         }
-        
-        
     }
     
     protected void CheckEverything()
     {
+        if (_isDead) return;
+        
         IsTechDead();
         isDead();
         CheckSlow();
@@ -98,11 +93,8 @@ public class Alien : MonoBehaviour
     
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (_isDead) return;
-        
         if (col.gameObject.CompareTag("Bullet"))
         {
-            
             damage = GameManager.Instance.shooterPrefab.damage;
             health -= damage;
             Destroy(col.gameObject); // TODO(sftl): destroy in bullet, not here
@@ -121,27 +113,24 @@ public class Alien : MonoBehaviour
     
     void OnTriggerStay2D(Collider2D col)
     {
-        if (_isDead) return;
-        
         if (col.gameObject.CompareTag("TechUnit"))
         {
             if (Time.time > nextAttack)
             {
-                
                 AudioManager.Instance.Play_AlienMelee();
                 nextAttack = Time.time + 0.5f;
                 col.gameObject.GetComponent<ITechAbilities>().takeDamage(20);
-                
             }
-            
-            
         }
     }
     
+    // don't animate by default
+    virtual protected void SetAttackAnim(bool isAttacking) {}
+    virtual protected void PlayDeathAnim() {}
+    
     protected void MoveIt(int move)
     {
-        if (_stopMoving || _isDead)
-            return;
+        if (_stopMoving || _isDead) return;
         
         switch (move)
         {
