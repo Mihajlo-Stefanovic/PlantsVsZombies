@@ -3479,10 +3479,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fast Forward
       objectReference: {fileID: 0}
-    - target: {fileID: 5675386890015169738, guid: 0e28c17ec99105846a36234860eb26bc, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e28c17ec99105846a36234860eb26bc, type: 3}
 --- !u!1001 &6764763094331756270
