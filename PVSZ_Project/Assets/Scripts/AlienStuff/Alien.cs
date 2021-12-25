@@ -9,11 +9,11 @@ public class Alien : MonoBehaviour
 {
     public Collider2D collider;
     public Animator animator;
-
+    
     // don't animate by default
     protected Action<bool> SetAttackAnim = delegate (bool isAttacking) {};
     protected Action PlayDeathAnim = delegate () {};
-
+    
     public int Difficulty;
     public bool IsSlowed;
     public float SlowStopTime;
@@ -32,7 +32,7 @@ public class Alien : MonoBehaviour
     private GameObject _techUnitToDamage;
     private float nextAttack = 0f;
     [SerializeField] protected int health;
-
+    
     protected void Awake() { } //override in child
     void Start() { } //override in child
     void Update()
@@ -80,13 +80,12 @@ public class Alien : MonoBehaviour
         
         if (_isDead == false && health <= 0)
         {
-            // TODO dissable collider
             _isDead = true;
             collider.enabled = false;
             PlayDeathAnim();
             StartCoroutine(KillAfterSec(1f));
         }
-       
+        
         
     }
     
@@ -100,7 +99,7 @@ public class Alien : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col)
     {
         if (_isDead) return;
-
+        
         if (col.gameObject.CompareTag("Bullet"))
         {
             
@@ -132,13 +131,13 @@ public class Alien : MonoBehaviour
                 AudioManager.Instance.Play_AlienMelee();
                 nextAttack = Time.time + 0.5f;
                 col.gameObject.GetComponent<ITechAbilities>().takeDamage(20);
-
+                
             }
             
-        
+            
         }
     }
-
+    
     protected void MoveIt(int move)
     {
         if (_stopMoving || _isDead)
