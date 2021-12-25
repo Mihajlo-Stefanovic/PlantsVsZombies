@@ -50,6 +50,9 @@ TagManager:
   - name: Units
     uniqueID: 1864837273
     locked: 0
+  - name: Field Effects
+    uniqueID: 2577984197
+    locked: 0
   - name: Cards
     uniqueID: 1380048699
     locked: 0
