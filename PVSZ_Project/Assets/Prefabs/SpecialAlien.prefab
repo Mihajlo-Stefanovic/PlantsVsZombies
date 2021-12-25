@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7185919559371297422}
   - component: {fileID: -6546043354728399989}
   - component: {fileID: 6076515451738191051}
+  - component: {fileID: 9091613580338674171}
   m_Layer: 7
   m_Name: SpecialAlien
   m_TagString: Untagged
@@ -146,6 +147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b23652e236fc6641b293aa84c497a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collider: {fileID: 7185919559371297422}
+  animator: {fileID: 9091613580338674171}
   Difficulty: 5
   IsSlowed: 0
   SlowStopTime: 0
@@ -154,3 +157,23 @@ MonoBehaviour:
   damage: 0
   _tile: {fileID: 4101567033614528602, guid: 1c23370466408f444a46311601e4d79d, type: 3}
   health: 70
+--- !u!95 &9091613580338674171
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429237644671786071}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 658a1ffd232a6134798826dc9fe99ba7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

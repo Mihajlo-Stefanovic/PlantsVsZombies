@@ -146,6 +146,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f19d151d6aaa14bbb50817befa06ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collider: {fileID: -2930873308041332228}
+  animator: {fileID: 0}
   Difficulty: 1
   IsSlowed: 0
   SlowStopTime: 0
