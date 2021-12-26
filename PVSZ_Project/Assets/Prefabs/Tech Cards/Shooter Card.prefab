@@ -167,8 +167,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca056864a2ef5be498e9f2979da94d66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  image: {fileID: 262250379975385864}
+  disabledMaterial: {fileID: 2100000, guid: a35fd6d28776ccc4e8ea450c389608b6, type: 2}
   ps: {fileID: 99507281273173684}
+  type: 0
+  isAble: 1
 --- !u!1001 &7689705809143182936
 PrefabInstance:
   m_ObjectHideFlags: 0
