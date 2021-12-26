@@ -248,6 +248,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &145615006 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5675386890742271038, guid: 0e28c17ec99105846a36234860eb26bc, type: 3}
+  m_PrefabInstance: {fileID: 5675386889831226269}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &196894680
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,7 +624,7 @@ SpriteRenderer:
   m_Size: {x: 38.399998, y: 21.599998}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &351225893
@@ -3261,9 +3272,6 @@ MonoBehaviour:
   removeCard: {fileID: 5941013}
   powerCardsHolder: {fileID: 1637825517}
   fastForward: {fileID: 487573339}
-  techCards:
-  - {fileID: 2100672007}
-  powerCards: []
 --- !u!4 &2053067853
 Transform:
   m_ObjectHideFlags: 0
@@ -3757,9 +3765,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1022091756}
     m_Modifications:
+    - target: {fileID: 2159939282038525725, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
+      propertyPath: image
+      value: 
+      objectReference: {fileID: 145615006}
+    - target: {fileID: 2165051512452816962, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1667955fff4e1a141a5a99428fc35767, type: 3}
     - target: {fileID: 6995495689553431568, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
       propertyPath: m_Name
       value: Power Cards
+      objectReference: {fileID: 0}
+    - target: {fileID: 6995495689553431568, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6995495689553431571, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
       propertyPath: m_Pivot.x
@@ -3844,6 +3864,26 @@ PrefabInstance:
     - target: {fileID: 6995495689553431571, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6995495690359035429, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0d1dc8ade7e63d14da6ea8a209621906, type: 3}
+    - target: {fileID: 6995495690359035434, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 102.99
+      objectReference: {fileID: 0}
+    - target: {fileID: 6995495690359035434, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 85.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6995495690359035434, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 6995495690359035434, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2.23
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f86e73615d0caa147a23b88292cd7f87, type: 3}
