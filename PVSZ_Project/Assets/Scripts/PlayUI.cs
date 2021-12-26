@@ -1,37 +1,40 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayUI : MonoBehaviour
 {
+    //-enabled on tech turn
     public EndTurn      endTurn;
-    public GameObject   techCards;
+    public GameObject   techCardsHolder;
     public RemoveCard   removeCard;
     
-    public GameObject   powerCards;
+    //-enabled on alien turn
+    public GameObject   powerCardsHolder;
     public FastForward  fastForward;
     
     public void OnAlienTurn()
     {
         endTurn.Dissable();
-        removeCard.Dissable();
-        techCards.SetActive(false);
+        //removeCard.Dissable();
+        techCardsHolder.SetActive(false);
         
-        powerCards.SetActive(true);
+        powerCardsHolder.SetActive(true);
         fastForward.Enable();
     }
     
     public void OnTechTurn()
     {
         endTurn.Enable();
-        removeCard.Enable();
-        techCards.SetActive(true);
+        //removeCard.Enable();
+        techCardsHolder.SetActive(true);
         
-        powerCards.SetActive(false);
+        powerCardsHolder.SetActive(false);
         fastForward.Dissable();
     }
     
     public void OnFastForward()
     {
-        powerCards.SetActive(false);
+        powerCardsHolder.SetActive(false);
         fastForward.Dissable();
     }
 }

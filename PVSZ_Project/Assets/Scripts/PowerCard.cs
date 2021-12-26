@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public enum PowerCardType
 {
@@ -11,11 +12,17 @@ public enum PowerCardType
 
 public class PowerCard : MonoBehaviour, IPointerDownHandler
 {
+    public Image    image;
+    public Material disabledMaterial;
+    
     public PowerCardType Type;
+
+    [HideInInspector]
+    public bool isAble = true;
     
     public void OnPointerDown(PointerEventData pointerData)
     {
-        if (pointerData.button == PointerEventData.InputButton.Left)
+        if ((pointerData.button == PointerEventData.InputButton.Left) && isAble)
         {
             GameManager.Instance.PowerCardClicked(this);
         }
@@ -23,11 +30,13 @@ public class PowerCard : MonoBehaviour, IPointerDownHandler
     
     public void Enable()
     {
-        gameObject.SetActive(true);
+        image.material = null; // NOTE(sftl): default material for UI
+        isAble = true;
     }
     
     public void Disable()
     {
-        gameObject.SetActive(false);
+        image.material = disabledMaterial;
+        isAble = false;
     }
 }

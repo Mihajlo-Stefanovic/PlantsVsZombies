@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public enum CardType
 {
@@ -12,12 +13,19 @@ public enum CardType
 
 public class TechCard : MonoBehaviour, IPointerDownHandler
 {
-    public CardType type;
+    public Image    image;
+    public Material disabledMaterial;
+    
     public ParticleSystem ps;
+    
+    public CardType type;
+    
+    [HideInInspector] 
+    public bool isAble = true;
     
     public void OnPointerDown(PointerEventData pointerData)
     {
-        if (pointerData.button == PointerEventData.InputButton.Left)
+        if ((pointerData.button == PointerEventData.InputButton.Left) && isAble)
         {
             GameManager.Instance.TechCardClicked(this);
             ps.Play();
@@ -26,11 +34,13 @@ public class TechCard : MonoBehaviour, IPointerDownHandler
     
     public void Enable()
     {
-        gameObject.SetActive(true);
+        image.material = null; // NOTE(sftl): default material for UI
+        isAble = true;
     }
     
-    public void Dissable()
+    public void Disable()
     {
-        gameObject.SetActive(false);
+        image.material = disabledMaterial; 
+        isAble = false;
     }
 }

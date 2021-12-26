@@ -5,18 +5,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = System.Random;
 
-enum TurnType
+public enum TurnType
 {
     Tech,
     Alien
 }
 
-enum GameState
+public enum GameState
 {
     Playing,
     Paused,
@@ -65,11 +64,21 @@ public class GameManager : MonoBehaviour
     public int powerSlowCost;
     public int powerShieldCost;
     
+    //- unit cards
+    public TechCard shooterCard;
+    public TechCard machineGunCard;
+    public TechCard resourceCollectorCard;
+    
+    public PowerCard scanCard;
+    public PowerCard blockCard;
+    public PowerCard slowCard;
+    public PowerCard shieldCard;
+    
     //- turns
     public const int    EndTurnNum = 5;
     public int          TurnNum = 1;
     
-    TurnType    currTurn = TurnType.Tech;
+    public      TurnType  TurnType = TurnType.Tech;
     public      GameEvent turnIncrementedEvent;
     
     //- game state
@@ -422,7 +431,7 @@ public class GameManager : MonoBehaviour
     
     public void EndTechTurn()
     {
-        currTurn = TurnType.Alien;
+        TurnType = TurnType.Alien;
         playUI.OnAlienTurn();
         
         if (CurrentPreview != null)
@@ -468,7 +477,7 @@ public class GameManager : MonoBehaviour
             unit.RemoveStatusEffects();
         }
         
-        currTurn = TurnType.Tech;
+        TurnType = TurnType.Tech;
         TurnNum++;
         playUI.OnTechTurn();
         GenWaveAndShow();
@@ -585,6 +594,31 @@ public class GameManager : MonoBehaviour
         
         endScreen.gameObject.SetActive(true);
         endScreen.SetWinState(won: true);
+    }
+    
+    public void UpdateCardsForResources(int res)
+    {
+        var turnType = GameManager.Instance.TurnType;
+        
+        //-tech cards 
+        if (res < shooterCost)              shooterCard.Disable();
+        if (res < machineGunCost)           machineGunCard.Disable();
+        if (res < resourceCollectorCost)    resourceCollectorCard.Disable();
+        
+        if (res >= shooterCost)              shooterCard.Enable();
+        if (res >= machineGunCost)           machineGunCard.Enable();
+        if (res >= resourceCollectorCost)    resourceCollectorCard.Enable();
+        
+        //-power cards
+        if (res < powerScanCost)    scanCard.Disable();
+        if (res < powerBlockCost)   blockCard.Disable();
+        if (res < powerSlowCost)    slowCard.Disable();
+        if (res < powerShieldCost)  shieldCard.Disable();
+        
+        if (res >= powerScanCost)    scanCard.Enable();
+        if (res >= powerBlockCost)   blockCard.Enable();
+        if (res >= powerSlowCost)    slowCard.Enable();
+        if (res >= powerShieldCost)  shieldCard.Enable();
     }
     
     IEnumerator DoAfterSec(float sec, Action action)
