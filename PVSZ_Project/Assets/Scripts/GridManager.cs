@@ -213,12 +213,13 @@ public class GridManager : MonoBehaviour
     public List<Vector3> GetAvailableSpawnPos()
     {
         var r = new List<Vector3>();
+        var offset = new Vector3(_tilePrefab.transform.localScale.x * 2f, 0f, 0f);
         
         // NOTE(sftl): get first row y positions
         var lastRow = tiles.Last();
         foreach (var tile in lastRow)
         {
-            r.Add(tile.transform.position);
+            r.Add(tile.transform.position + offset);
         }
         
         return r;
