@@ -247,10 +247,11 @@ public class GridManager : MonoBehaviour
     public void SpawnAlienLaneIndicators()
     {
         var lastRow = tiles.Last();
+        var offset = new Vector3(_tilePrefab.transform.localScale.x, 0f, 0f);
         
         foreach (var tile in lastRow)
         {
-            var curr = Instantiate(indicatorPrefab, tile.transform.position, Quaternion.identity);
+            var curr = Instantiate(indicatorPrefab, tile.transform.position + offset, Quaternion.identity);
             curr.transform.SetParent(indicatorParent.transform);
             indicators.Add(curr);
         }
