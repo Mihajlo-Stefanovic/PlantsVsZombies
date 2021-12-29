@@ -2590,6 +2590,8 @@ MonoBehaviour:
   resourceCollectorPrefab: {fileID: -109858222217300961, guid: 2c3d77ae2c2a0804aa9907dc4eac7ef9, type: 3}
   machineGunPrevPrefab: {fileID: -2175353314929148685, guid: 5b624ddc4c55f604398151ecfa6f8136, type: 3}
   machineGunPrefab: {fileID: 1997862102087792006, guid: fe3fe76839264ad4e84686df328736e3, type: 3}
+  wallPrevPrefab: {fileID: 3075245074544519995, guid: 1e08048e8f48bc746950128f30afc334, type: 3}
+  wallPrefab: {fileID: 350832977804805719, guid: 6031e5bd771244740ac9d226411f4405, type: 3}
   removePrevPrefab: {fileID: 4957960188916544787, guid: 84c27c587677b1b4188a6c29f5106928, type: 3}
   powerScanPrefab: {fileID: 6901252958978690289, guid: 2b79f5db5a5953c429f2d6c4a680d77b, type: 3}
   powerScanPrevPrefab: {fileID: -5551941720353553352, guid: d434f48d9d37f73408e4cd0d6a4a7e19, type: 3}
@@ -2599,6 +2601,7 @@ MonoBehaviour:
   shooterCost: 30
   machineGunCost: 100
   resourceCollectorCost: 50
+  wallCost: 30
   powerScanCost: 150
   powerBlockCost: 100
   powerSlowCost: 100

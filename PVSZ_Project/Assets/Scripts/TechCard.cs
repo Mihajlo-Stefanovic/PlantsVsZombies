@@ -8,7 +8,8 @@ public enum CardType
 {
     Shooter,
     Collector,
-    MachineGun
+    MachineGun,
+    Wall
 }
 
 public class TechCard : MonoBehaviour, IPointerDownHandler
@@ -21,7 +22,7 @@ public class TechCard : MonoBehaviour, IPointerDownHandler
     public CardType type;
     
     [HideInInspector] 
-    public bool isAble = true;
+        public bool isAble = true;
     
     public void OnPointerDown(PointerEventData pointerData)
     {

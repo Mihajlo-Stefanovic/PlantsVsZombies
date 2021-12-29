@@ -11,7 +11,8 @@ public enum PreviewType
     MachineGun,
     PowerBlock,
     PowerSlow,
-    PowerShield
+    PowerShield,
+    Wall
 }
 
 public class Preview : MonoBehaviour

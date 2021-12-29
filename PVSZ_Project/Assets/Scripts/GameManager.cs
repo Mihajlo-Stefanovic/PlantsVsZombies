@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
     public ResourceUnit resourceCollectorPrefab;
     public Preview machineGunPrevPrefab;
     public MachineGunUnit machineGunPrefab;
+    public Preview wallPrevPrefab;
+    public WallUnit wallPrefab;
     
     public Preview  removePrevPrefab;
     
@@ -58,6 +60,7 @@ public class GameManager : MonoBehaviour
     public int shooterCost;
     public int machineGunCost;
     public int resourceCollectorCost;
+    public int wallCost;
     
     public int powerScanCost;
     public int powerBlockCost;
@@ -206,6 +209,26 @@ public class GameManager : MonoBehaviour
                             //-instantiate TechUnit
                             var pos = tile.transform.position;
                             var techUnit = Instantiate(machineGunPrefab, pos, Quaternion.identity);
+                            techs.Add(techUnit);
+                            tile.Unit = techUnit;
+                        }
+                    }
+                }
+                else if (CurrentPreview.Type == PreviewType.Wall)
+                {
+                    Tile tile = gridManager.GetSelectedTileIfAvailable();
+
+                    if (tile != null)
+                    {
+                        if (ResourceManager.getResources() >= wallCost)
+                        { // =checking if u have enough reosources to pay for the unit
+                            //-decreasing resources
+                            
+                            resourceManager.payForUnit(wallCost);
+                            
+                            //-instantiate TechUnit
+                            var pos = tile.transform.position;
+                            var techUnit = Instantiate(wallPrefab, pos, Quaternion.identity);
                             techs.Add(techUnit);
                             tile.Unit = techUnit;
                         }
@@ -370,6 +393,9 @@ public class GameManager : MonoBehaviour
         
         if (card.type == CardType.MachineGun)
             SetPreview(Instantiate(machineGunPrevPrefab, pos, Quaternion.identity));
+        
+        if (card.type == CardType.Wall)
+            SetPreview(Instantiate(wallPrevPrefab, pos, Quaternion.identity));
     }
     
     public void RemoveCardClicked()
