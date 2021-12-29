@@ -13,7 +13,7 @@ public class Tile : MonoBehaviour
     public int Column;
     public int Row;
     
-    public TechPrototype Unit;
+    public TechUnit Unit;
     
     public void Init(bool isOffset)
     {

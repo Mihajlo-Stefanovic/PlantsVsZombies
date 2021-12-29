@@ -95,13 +95,7 @@ public class Alien : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Bullet"))
         {
-            damage = GameManager.Instance.shooterPrefab.damage;
-            health -= damage;
-            Destroy(col.gameObject); // TODO(sftl): destroy in bullet, not here
-        }
-        else if (col.gameObject.CompareTag("PowerScanBullet"))
-        {
-            health -= 50;
+            health -= col.GetComponent<Bullet>().Damage;
         }
         else if (col.gameObject.CompareTag("TechUnit"))
         {
@@ -119,7 +113,7 @@ public class Alien : MonoBehaviour
             {
                 AudioManager.Instance.Play_AlienMelee();
                 nextAttack = Time.time + 0.5f;
-                col.gameObject.GetComponent<ITechAbilities>().takeDamage(20);
+                col.gameObject.GetComponent<TechUnit>().TakeDamage(20);
             }
         }
     }

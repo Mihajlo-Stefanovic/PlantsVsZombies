@@ -47,7 +47,7 @@ public class AudioManager : MonoBehaviour
         music_source.Play();
     }
     
-    public void Play_ShooterShoot()
+    public void Play_GuardianShoot()
     {
         play_eff(shooter_shoot, ref shooter_shoot_last);
     }

@@ -38,16 +38,16 @@ public class GameManager : MonoBehaviour
     
     //- tech unit prefabs
     public Preview  shooterPrevPrefab;
-    public TechUnit shooterPrefab;
+    public GuardianUnit shooterPrefab;
     public Preview resourceCollectorPrevPrefab;
-    public TechResourceUnit resourceCollectorPrefab;
+    public ResourceUnit resourceCollectorPrefab;
     public Preview machineGunPrevPrefab;
-    public TechMachineGun machineGunPrefab;
+    public MachineGunUnit machineGunPrefab;
     
     public Preview  removePrevPrefab;
     
     //- power prefabs
-    public PowerScan    powerScanPrefab;
+    public ScanUnit    powerScanPrefab;
     
     public Preview      powerScanPrevPrefab;
     public Preview      powerBlockPrevPrefab;
@@ -85,13 +85,17 @@ public class GameManager : MonoBehaviour
     GameState   gameState = GameState.Playing;
     
     //- utils
+    public readonly Vector3 DrawOrderRefPos = Vector3.zero;
+    public readonly int     DrawOrderRefNum = 15000;    // SpriteRenderer.sortingOrder max is 32767
+    public readonly float   DrawOrderPrecision = 0.2f;  // Real world width for which units are considered to be on the same rendering layer and rendering order is not defined
+
     public Preview          CurrentPreview;
-    
+
     List<Alien>             aliens = new();
     List<List<Alien>>       nextWaveAliens = new();
     
-    List<TechPrototype>     techs = new();
-    List<TechPrototype>     temp_techs = new();
+    List<TechUnit>     techs = new();
+    List<TechUnit>     temp_techs = new();
     
     void Awake()
     {
@@ -261,7 +265,7 @@ public class GameManager : MonoBehaviour
                             
                             resourceManager.payForUnit(powerShieldCost);
                             
-                            techs.ForEach(action: (TechPrototype a) => { a.AddShieldForSec(5); });
+                            techs.ForEach(action: (TechUnit a) => { a.AddShieldForSec(5); });
                             
                             DestroyPreviewIfNotNull();
                             SetPreview(null);
@@ -277,23 +281,18 @@ public class GameManager : MonoBehaviour
                         // TODO(sftl): give reseources back for units that are placed this turn or maybe even previous turns
                         //-remove TechUnit
                         Destroy(tile.Unit.gameObject);
-                        techs.Remove(tile.Unit as TechPrototype); // NOTE(sftl): player is not able to try to remove alien unit
+                        techs.Remove(tile.Unit as TechUnit); // NOTE(sftl): player is not able to try to remove alien unit
                         tile.Unit = null;
                     }
                 }
             }
         }
         
-        float precision = 0.2f; // Real world width for which units are considered to be on the same rendering layer and rendering order is not defined
-        int refOrder = 15000;   // SpriteRenderer.sortingOrder max is 32767
-        
         //-alien loop
         List<Alien> aliensInBase = new();
         
         if (aliens.Count > 0)
         {
-            float refPos = aliens.First().transform.position.y;
-            
             foreach (var alien in aliens)
             {
                 // handle aliens in base
@@ -306,9 +305,9 @@ public class GameManager : MonoBehaviour
                 // TODO(sftl): optimise, don't do this every frame, just when unit spawns or changes lane
                 // TODO(sftl): when spawning, rendering position may not be accurate the first frame
                 // TODO(sftl): handle infinite units
-                var diffFromRefPos = refPos - alien.transform.position.y;
-                int diffFromRefOrder = (int)(diffFromRefPos / precision);
-                alien.GetComponent<SpriteRenderer>().sortingOrder = refOrder + diffFromRefOrder;
+                var diffFromRefPos = DrawOrderRefPos.y - alien.transform.position.y;
+                int diffFromRefOrder = (int)(diffFromRefPos / DrawOrderPrecision);
+                alien.GetComponent<SpriteRenderer>().sortingOrder = DrawOrderRefNum + diffFromRefOrder;
             }
         }
         
@@ -320,19 +319,6 @@ public class GameManager : MonoBehaviour
 #else
         if (aliensInBase.Count > 0) PlayerLost();
 #endif
-        
-        //-tech loop
-        if (techs.Count > 0)
-        {
-            float refPos = techs.First().transform.position.y;
-            
-            foreach (var tech in techs)
-            {
-                var diffFromRefPos = refPos - tech.transform.position.y;
-                int diffFromRefOrder = (int)(diffFromRefPos / precision);
-                tech.GetComponent<SpriteRenderer>().sortingOrder = refOrder + diffFromRefOrder;
-            }
-        }
     }
     
     public void PauseGame()
@@ -461,11 +447,11 @@ public class GameManager : MonoBehaviour
         }
         
         //check if unit is of certain type
-        foreach (TechPrototype unit in techs)
+        foreach (TechUnit unit in techs)
         {
-            if (unit.GetType() == typeof(TechResourceUnit))
+            if (unit.GetType() == typeof(ResourceUnit))
             {
-                TechResourceUnit resourceUnit = (TechResourceUnit) unit;
+                ResourceUnit resourceUnit = (ResourceUnit) unit;
                 resourceUnit.IncreaseRescources();
             }
         }
@@ -506,7 +492,7 @@ public class GameManager : MonoBehaviour
         if(oldPreview != null && newPreview == null) gridManager.PreviewCleared(oldPreview);
     }
     
-    public void OnTechDeath(TechPrototype unit)
+    public void OnTechDeath(TechUnit unit)
     {
         techs.Remove(unit);
         temp_techs.Remove(unit);

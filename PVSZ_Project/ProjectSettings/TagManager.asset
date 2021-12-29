@@ -6,7 +6,6 @@ TagManager:
   tags:
   - Bullet
   - TechUnit
-  - PowerScanBullet
   layers:
   - Default
   - TransparentFX

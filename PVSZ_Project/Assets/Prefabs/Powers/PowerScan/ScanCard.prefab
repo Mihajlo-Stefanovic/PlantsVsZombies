@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4096972291379418275}
   - component: {fileID: 4096972291379418333}
   m_Layer: 5
-  m_Name: Scan Card
+  m_Name: ScanCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

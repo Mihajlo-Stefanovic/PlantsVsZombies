@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8510939537338192271}
   - component: {fileID: -5551941720353553352}
   m_Layer: 0
-  m_Name: PowerScanPreview
+  m_Name: ScanPreview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
