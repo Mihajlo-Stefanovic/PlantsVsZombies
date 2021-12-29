@@ -66,12 +66,26 @@ public class GridManager : MonoBehaviour
     }
     
     public void TileHover(Tile tile) {
+        var preview = GameManager.Instance.CurrentPreview;
+
         //-select
-        SelectedTile = tile;
+        if (
+            !tile.IsBlocked ||
+            (
+                tile.IsBlocked &&
+                (
+                    //-not unit
+                    preview?.Type == PreviewType.PowerBlock ||
+                    preview?.Type == PreviewType.PowerSlow  ||
+                    preview?.Type == PreviewType.PowerShield
+                )
+            )
+        )
+        {
+            SelectedTile = tile;
+        }
         
         //-highlight
-        var preview = GameManager.Instance.CurrentPreview;
-        
         if (preview == null) 
         {
             if (!tile.IsBlocked) tile.SetHighlight(true);
