@@ -88,9 +88,9 @@ public class GameManager : MonoBehaviour
     public readonly Vector3 DrawOrderRefPos = Vector3.zero;
     public readonly int     DrawOrderRefNum = 15000;    // SpriteRenderer.sortingOrder max is 32767
     public readonly float   DrawOrderPrecision = 0.2f;  // Real world width for which units are considered to be on the same rendering layer and rendering order is not defined
-
+    
     public Preview          CurrentPreview;
-
+    
     List<Alien>             aliens = new();
     List<List<Alien>>       nextWaveAliens = new();
     
@@ -111,6 +111,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         GenWaveAndShow();
+        gridManager.SetTilesIsBlocked();
     }
     
     void Update()

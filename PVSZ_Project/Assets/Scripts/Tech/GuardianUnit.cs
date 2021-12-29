@@ -5,12 +5,13 @@ using UnityEngine;
 public class GuardianUnit : ShootTechUnit
 {
     [SerializeField] private ParticleSystem shootParticles;
-
+    
     private void Awake()
     {
         base.Awake();
         _shootComponent.OnFire = OnFire;
     }
+    
     public void OnFire(Bullet bulletPrefab, Transform rayTransform)
     {
         Instantiate(bulletPrefab, rayTransform.position, Quaternion.identity).Fire(target: null);

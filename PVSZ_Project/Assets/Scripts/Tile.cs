@@ -9,9 +9,20 @@ public class Tile : MonoBehaviour
     [SerializeField] private SpriteRenderer _renderer;
     
     [SerializeField] private GameObject _highlight;
+    [SerializeField] private GameObject _blockedIndicator;
     
     public int Column;
     public int Row;
+    
+    private bool   _isBlocked;
+    public bool     IsBlocked 
+    {
+        get { return _isBlocked; }
+        set { 
+            _isBlocked = value;
+            _blockedIndicator.SetActive(value);
+        }
+    }
     
     public TechUnit Unit;
     

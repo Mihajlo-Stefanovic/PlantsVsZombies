@@ -74,7 +74,7 @@ public class GridManager : MonoBehaviour
         
         if (preview == null) 
         {
-            tile.SetHighlight(true);
+            if (!tile.IsBlocked) tile.SetHighlight(true);
         }
         else if (preview.Type == PreviewType.PowerBlock) // NOTE(sftl): highlight lane 
         {
@@ -99,7 +99,7 @@ public class GridManager : MonoBehaviour
         }
         else
         {
-            tile.SetHighlight(true);
+            if (!tile.IsBlocked) tile.SetHighlight(true);
         }
     }
     
@@ -216,8 +216,8 @@ public class GridManager : MonoBehaviour
         var offset = new Vector3(_tilePrefab.transform.localScale.x * 2f, 0f, 0f);
         
         // NOTE(sftl): get first row y positions
-        var lastRow = tiles.Last();
-        foreach (var tile in lastRow)
+        var lastColumn = tiles.Last();
+        foreach (var tile in lastColumn)
         {
             r.Add(tile.transform.position + offset);
         }
@@ -264,5 +264,31 @@ public class GridManager : MonoBehaviour
             var laneDifficuly = nextWave[i].Count;
             indicators[i].SetDifficulty(laneDifficuly);
         }
+    }
+    
+    public void SetTilesIsBlocked()
+    {
+        var percentage      = 10;
+        
+        var maxNumOfBlocked = (_width * _height) / 100f * percentage;
+        var numOfBlocked    = 0;
+        
+        foreach (var column in tiles)
+        {
+            foreach (var tile in column)
+            {
+                if (numOfBlocked < maxNumOfBlocked && UnityEngine.Random.Range(1, 101) < percentage)
+                {
+                    tile.IsBlocked = true;
+                    numOfBlocked++;
+                }
+                else 
+                {
+                    tile.IsBlocked = false;
+                }
+            }
+        }
+        
+        return;
     }
 }
