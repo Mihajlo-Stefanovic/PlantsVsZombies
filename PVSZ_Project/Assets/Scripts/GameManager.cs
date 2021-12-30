@@ -618,6 +618,7 @@ public class GameManager : MonoBehaviour
         if (res < guardianCost)             guardianCard.Disable();
         if (res < machineGunCost)           machineGunCard.Disable();
         if (res < resourceCollectorCost)    resourceCollectorCard.Disable();
+        if (res < wallCost)                 wallCard.Disable();
         
         if (res >= guardianCost)            guardianCard.Enable();
         if (res >= machineGunCost)          machineGunCard.Enable();
