@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6683265554592140892}
   - component: {fileID: 5439322812540631791}
   m_Layer: 3
-  m_Name: ShooterPreview
+  m_Name: GuardianPreview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

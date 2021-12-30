@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 262250380920942071}
   - component: {fileID: 262250380920942070}
   m_Layer: 5
-  m_Name: Shooter Card
+  m_Name: GuardianCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

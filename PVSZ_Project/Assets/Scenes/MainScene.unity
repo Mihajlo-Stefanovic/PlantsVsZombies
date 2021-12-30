@@ -631,6 +631,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &428386792 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1931369632271929692, guid: f326600aa3764594589bb16bf8115d1e, type: 3}
+  m_PrefabInstance: {fileID: 5561491589305186554}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca056864a2ef5be498e9f2979da94d66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &487573336 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5675386890015169733, guid: 0e28c17ec99105846a36234860eb26bc, type: 3}
@@ -2584,8 +2595,8 @@ MonoBehaviour:
   raycaster: {fileID: 1599134758}
   waveGen: {fileID: 1832894317}
   endScreen: {fileID: 1525292763}
-  shooterPrevPrefab: {fileID: 5439322812540631791, guid: 2f97183b0bf11454eb16230641487641, type: 3}
-  shooterPrefab: {fileID: 5072785689260309729, guid: 5b0a5b9ba621e55458d0aa2aa0c8d998, type: 3}
+  guardianPrevPrefab: {fileID: 5439322812540631791, guid: 2f97183b0bf11454eb16230641487641, type: 3}
+  guardianPrefab: {fileID: 5072785689260309729, guid: 5b0a5b9ba621e55458d0aa2aa0c8d998, type: 3}
   resourceCollectorPrevPrefab: {fileID: -2175353314929148685, guid: aedb63c244afad441be613812e91cc7c, type: 3}
   resourceCollectorPrefab: {fileID: -109858222217300961, guid: 2c3d77ae2c2a0804aa9907dc4eac7ef9, type: 3}
   machineGunPrevPrefab: {fileID: -2175353314929148685, guid: 5b624ddc4c55f604398151ecfa6f8136, type: 3}
@@ -2598,17 +2609,18 @@ MonoBehaviour:
   powerBlockPrevPrefab: {fileID: 4233994713568794410, guid: 5b3a9c69d05ae464f8216f7151695912, type: 3}
   powerSlowPrevPrefab: {fileID: 3426955370821003256, guid: 1d3147ffb15c6e041b800f0994e39b57, type: 3}
   powerShieldPrevPrefab: {fileID: 8285139878875237079, guid: 6359072064fc9c24dac9b678e65c9de9, type: 3}
-  shooterCost: 30
+  guardianCost: 30
   machineGunCost: 100
   resourceCollectorCost: 50
-  wallCost: 30
+  wallCost: 100
   powerScanCost: 150
   powerBlockCost: 100
   powerSlowCost: 100
   powerShieldCost: 100
-  shooterCard: {fileID: 1549642303}
+  guardianCard: {fileID: 1549642303}
   machineGunCard: {fileID: 2100672007}
   resourceCollectorCard: {fileID: 494741665}
+  wallCard: {fileID: 428386792}
   scanCard: {fileID: 2068130476}
   blockCard: {fileID: 2020770029}
   slowCard: {fileID: 119352569}

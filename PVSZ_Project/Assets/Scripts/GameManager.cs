@@ -37,8 +37,8 @@ public class GameManager : MonoBehaviour
     public EndScreen        endScreen;
     
     //- tech unit prefabs
-    public Preview  shooterPrevPrefab;
-    public GuardianUnit shooterPrefab;
+    public Preview  guardianPrevPrefab;
+    public GuardianUnit guardianPrefab;
     public Preview resourceCollectorPrevPrefab;
     public ResourceUnit resourceCollectorPrefab;
     public Preview machineGunPrevPrefab;
@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
     public Preview      powerShieldPrevPrefab; 
     
     //- unit costs
-    public int shooterCost;
+    public int guardianCost;
     public int machineGunCost;
     public int resourceCollectorCost;
     public int wallCost;
@@ -68,9 +68,10 @@ public class GameManager : MonoBehaviour
     public int powerShieldCost;
     
     //- unit cards
-    public TechCard shooterCard;
+    public TechCard guardianCard;
     public TechCard machineGunCard;
     public TechCard resourceCollectorCard;
+    public TechCard wallCard;
     
     public PowerCard scanCard;
     public PowerCard blockCard;
@@ -133,21 +134,21 @@ public class GameManager : MonoBehaviour
         {
             if (CurrentPreview != null)
             {
-                if (CurrentPreview.Type == PreviewType.Tech)
+                if (CurrentPreview.Type == PreviewType.Guardian)
                 {
                     Tile tile = gridManager.GetSelectedTileIfAvailable();
                     
                     if (tile != null)
                     {
-                        if (ResourceManager.getResources() >= shooterCost)
+                        if (ResourceManager.getResources() >= guardianCost)
                         { // =checking if u have enough reosources to pay for the unit
                             //-decreasing resources
                             
-                            resourceManager.payForUnit(shooterCost);
+                            resourceManager.payForUnit(guardianCost);
                             
                             //-instantiate TechUnit
                             var pos = tile.transform.position;
-                            var techUnit = Instantiate(shooterPrefab, pos, Quaternion.identity);
+                            var techUnit = Instantiate(guardianPrefab, pos, Quaternion.identity);
                             techs.Add(techUnit);
                             tile.Unit = techUnit;
                         }
@@ -217,7 +218,7 @@ public class GameManager : MonoBehaviour
                 else if (CurrentPreview.Type == PreviewType.Wall)
                 {
                     Tile tile = gridManager.GetSelectedTileIfAvailable();
-
+                    
                     if (tile != null)
                     {
                         if (ResourceManager.getResources() >= wallCost)
@@ -385,8 +386,8 @@ public class GameManager : MonoBehaviour
         DestroyPreviewIfNotNull();
         
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        if (card.type == CardType.Shooter)
-            SetPreview(Instantiate(shooterPrevPrefab, pos, Quaternion.identity)); // TODO(sftl): use card type
+        if (card.type == CardType.Guardian)
+            SetPreview(Instantiate(guardianPrevPrefab, pos, Quaternion.identity)); // TODO(sftl): use card type
         
         if (card.type == CardType.Collector)
             SetPreview(Instantiate(resourceCollectorPrevPrefab, pos, Quaternion.identity));
@@ -614,13 +615,14 @@ public class GameManager : MonoBehaviour
         var turnType = GameManager.Instance.TurnType;
         
         //-tech cards 
-        if (res < shooterCost)              shooterCard.Disable();
+        if (res < guardianCost)             guardianCard.Disable();
         if (res < machineGunCost)           machineGunCard.Disable();
         if (res < resourceCollectorCost)    resourceCollectorCard.Disable();
         
-        if (res >= shooterCost)              shooterCard.Enable();
-        if (res >= machineGunCost)           machineGunCard.Enable();
-        if (res >= resourceCollectorCost)    resourceCollectorCard.Enable();
+        if (res >= guardianCost)            guardianCard.Enable();
+        if (res >= machineGunCost)          machineGunCard.Enable();
+        if (res >= resourceCollectorCost)   resourceCollectorCard.Enable();
+        if (res >= wallCost)                wallCard.Enable();
         
         //-power cards
         if (res < powerScanCost)    scanCard.Disable();

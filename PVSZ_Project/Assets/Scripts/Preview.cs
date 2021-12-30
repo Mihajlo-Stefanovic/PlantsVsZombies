@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum PreviewType
 {
-    Tech,       // TODO(sftl): rename to shooter
+    Guardian,
     PowerScan,
     Remove,
     ResourceUnit,

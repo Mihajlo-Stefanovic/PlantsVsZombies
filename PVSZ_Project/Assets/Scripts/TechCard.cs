@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public enum CardType
 {
-    Shooter,
+    Guardian,
     Collector,
     MachineGun,
     Wall
