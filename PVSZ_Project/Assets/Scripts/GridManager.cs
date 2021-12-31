@@ -66,45 +66,44 @@ public class GridManager : MonoBehaviour
     }
     
     public void TileHover(Tile tile) {
-        var preview = GameManager.Instance.CurrentPreview;
-
+        var preview     = GameManager.Instance.CurrentPreview;
+        var cardType    = preview?.CardType;
+        
         //-select
         if (
             !tile.IsBlocked ||
             (
-                tile.IsBlocked &&
-                (
-                    //-not unit
-                    preview?.Type == PreviewType.PowerBlock ||
-                    preview?.Type == PreviewType.PowerSlow  ||
-                    preview?.Type == PreviewType.PowerShield
-                )
+             // NOTE(sftl): enable selecting blocked tiles when user is casting Power, not unit
+             tile.IsBlocked && preview != null &&
+             (
+              cardType == CardType.Block ||
+              cardType == CardType.Slow  ||
+              cardType == CardType.Shield
+              )
+             )
             )
-        )
         {
             SelectedTile = tile;
         }
         
+        // TODO(sftl): make highlighting more generic
+        
         //-highlight
-        if (preview == null) 
-        {
-            if (!tile.IsBlocked) tile.SetHighlight(true);
-        }
-        else if (preview.Type == PreviewType.PowerBlock) // NOTE(sftl): highlight lane 
+        if (cardType == CardType.Block) // NOTE(sftl): highlight lane 
         {
             foreach (var column in tiles)
             {
                 column[tile.Row].SetHighlight(true);
             }
         }
-        else if (preview.Type == PreviewType.PowerSlow) // NOTE(sftl): highligh whole grid
+        else if (cardType == CardType.Slow) // NOTE(sftl): highligh whole grid
         {
             foreach (var column in tiles)
             {
                 column.ForEach(action: (Tile t) => { t.SetHighlight(true); });
             }
         }
-        else if (preview.Type == PreviewType.PowerShield) // NOTE(sftl): highligh whole grid
+        else if (cardType == CardType.Shield) // NOTE(sftl): highligh whole grid
         {
             foreach (var column in tiles)
             {
@@ -118,31 +117,25 @@ public class GridManager : MonoBehaviour
     }
     
     public void TileHoverExit(Tile tile) {
-        // NOTE(sftl): when moving cursor from one tile to the other, it is not defined wheter TileHoverExit or TileHover will be called first?
-        if (tile != SelectedTile) return;
+        var preview     = GameManager.Instance.CurrentPreview;
+        var cardType    = preview?.CardType;
         
         //-remove highlight
-        var preview = GameManager.Instance.CurrentPreview;
-        
-        if (preview == null) 
-        {
-            tile.SetHighlight(false);
-        }
-        else if (preview.Type == PreviewType.PowerBlock)
+        if (cardType == CardType.Block) 
         {
             foreach (var column in tiles)
             {
                 column[tile.Row].SetHighlight(false);
             }
         }
-        else if (preview.Type == PreviewType.PowerSlow)
+        else if (cardType == CardType.Slow) 
         {
             foreach (var column in tiles)
             {
                 column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
             }
         }
-        else if (preview.Type == PreviewType.PowerShield)
+        else if (cardType == CardType.Shield)
         {
             foreach (var column in tiles)
             {
@@ -151,7 +144,7 @@ public class GridManager : MonoBehaviour
         }
         else
         {
-            tile.SetHighlight(false);
+            if (!tile.IsBlocked) tile.SetHighlight(false);
         }
         
         //-deselect
@@ -163,27 +156,36 @@ public class GridManager : MonoBehaviour
     {
         if (SelectedTile == null) return; // NOTE(sftl): change doesn't concern grid
         
-        if (oldPreview?.Type == PreviewType.PowerBlock)
+        var tile = SelectedTile;
+        var cardType = oldPreview?.CardType;
+        
+        if (tile == null) return;
+        
+        //-remove highlight
+        if (cardType == CardType.Block) 
         {
-            //-remove highligh from lane
             foreach (var column in tiles)
             {
-                column[SelectedTile.Row].SetHighlight(false);
+                column[tile.Row].SetHighlight(false);
             }
         }
-        else if (oldPreview?.Type == PreviewType.PowerSlow)
+        else if (cardType == CardType.Slow) 
         {
             foreach (var column in tiles)
             {
                 column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
             }
         }
-        else if (oldPreview?.Type == PreviewType.PowerShield)
+        else if (cardType == CardType.Shield)
         {
             foreach (var column in tiles)
             {
                 column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
             }
+        }
+        else
+        {
+            tile.SetHighlight(false);
         }
     }
     

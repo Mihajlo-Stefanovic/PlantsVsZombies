@@ -22,7 +22,7 @@ public class ResourceManager : MonoBehaviour
         //Debug.Log("total " + totalResources);
         updateUI(totalResources);
         
-        GameManager.Instance.UpdateCardsForResources(totalResources);
+        CardManager.Instance.UpdateCardsForResources(totalResources);
     }
     
     private void updateUI(int r)
@@ -35,7 +35,7 @@ public class ResourceManager : MonoBehaviour
         totalResources -= unitCost;
         updateUI(totalResources);
         
-        GameManager.Instance.UpdateCardsForResources(totalResources);
+        CardManager.Instance.UpdateCardsForResources(totalResources);
     }
     
     public static int getResources()
@@ -48,7 +48,7 @@ public class ResourceManager : MonoBehaviour
         totalResources = newResources;
         updateUI(totalResources);
         
-        GameManager.Instance.UpdateCardsForResources(totalResources);
+        CardManager.Instance.UpdateCardsForResources(totalResources);
     }
     
     

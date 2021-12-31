@@ -4,29 +4,19 @@ using UnityEngine;
 
 public enum PreviewType
 {
-    Guardian,
-    PowerScan,
-    Remove,
-    ResourceUnit,
-    MachineGun,
-    PowerBlock,
-    PowerSlow,
-    PowerShield,
-    Wall
+    Card,
+    Remove
 }
 
 public class Preview : MonoBehaviour
 {
-    float moveSpeed = 50f;
     public PreviewType Type;
-    
-    Vector3 mousePosition;
+    public CardType CardType;
     
     void Update()
     {
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0; // NOTE(sftl): in front of camera
-        
-        transform.position = Vector2.Lerp(transform.position, mousePosition, moveSpeed * Time.deltaTime);
+        transform.position = mousePosition;
     }
 }

@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     
     //- scene objects
+    public CardManager      cardManager;
     public ResourceManager  resourceManager;
     public GridManager      gridManager;
     public PlayUI           playUI;
@@ -36,15 +37,11 @@ public class GameManager : MonoBehaviour
     
     public EndScreen        endScreen;
     
-    //- tech unit prefabs
-    public Preview  guardianPrevPrefab;
-    public GuardianUnit guardianPrefab;
+    //- preview prefabs, // TODO(sftl): it should probably be just one generic prefab with changable image
+    public Preview guardianPrevPrefab;
     public Preview resourceCollectorPrevPrefab;
-    public ResourceUnit resourceCollectorPrefab;
     public Preview machineGunPrevPrefab;
-    public MachineGunUnit machineGunPrefab;
     public Preview wallPrevPrefab;
-    public WallUnit wallPrefab;
     
     public Preview  removePrevPrefab;
     
@@ -55,28 +52,6 @@ public class GameManager : MonoBehaviour
     public Preview      powerBlockPrevPrefab;
     public Preview      powerSlowPrevPrefab;
     public Preview      powerShieldPrevPrefab; 
-    
-    //- unit costs
-    public int guardianCost;
-    public int machineGunCost;
-    public int resourceCollectorCost;
-    public int wallCost;
-    
-    public int powerScanCost;
-    public int powerBlockCost;
-    public int powerSlowCost;
-    public int powerShieldCost;
-    
-    //- unit cards
-    public TechCard guardianCard;
-    public TechCard machineGunCard;
-    public TechCard resourceCollectorCard;
-    public TechCard wallCard;
-    
-    public PowerCard scanCard;
-    public PowerCard blockCard;
-    public PowerCard slowCard;
-    public PowerCard shieldCard;
     
     //- turns
     public const int    EndTurnNum = 5;
@@ -130,187 +105,10 @@ public class GameManager : MonoBehaviour
                 SetPreview(null);
             }
         }
-        else if (Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButtonUp(0)) // TODO(sftl): Mouse Down and Mouse Up should both happen on the tile
         {
-            if (CurrentPreview != null)
-            {
-                if (CurrentPreview.Type == PreviewType.Guardian)
-                {
-                    Tile tile = gridManager.GetSelectedTileIfAvailable();
-                    
-                    if (tile != null)
-                    {
-                        if (ResourceManager.getResources() >= guardianCost)
-                        { // =checking if u have enough reosources to pay for the unit
-                            //-decreasing resources
-                            
-                            resourceManager.payForUnit(guardianCost);
-                            
-                            //-instantiate TechUnit
-                            var pos = tile.transform.position;
-                            var techUnit = Instantiate(guardianPrefab, pos, Quaternion.identity);
-                            techs.Add(techUnit);
-                            tile.Unit = techUnit;
-                        }
-                    }
-                }
-                else if (CurrentPreview.Type == PreviewType.PowerScan) // NOTE(sftl): method?
-                {
-                    Tile tile = gridManager.GetSelectedTileIfAvailable();
-                    
-                    if (tile != null)
-                    {
-                        if (ResourceManager.getResources() >= powerScanCost)
-                        { // =checking if u have enough reosources to pay for the unit
-                            //-decreasing resources
-                            
-                            resourceManager.payForUnit(powerScanCost);
-                            
-                            //-instantiate TechUnit
-                            var pos = tile.transform.position;
-                            var techUnit = Instantiate(powerScanPrefab, pos, Quaternion.identity);
-                            techs.Add(techUnit);
-                            temp_techs.Add(techUnit);
-                            tile.Unit = techUnit;
-                        }
-                    }
-                }
-                else if (CurrentPreview.Type == PreviewType.ResourceUnit) // NOTE(sftl): method?
-                {
-                    Tile tile = gridManager.GetSelectedTileIfAvailable();
-                    
-                    if (tile != null)
-                    {
-                        if (ResourceManager.getResources() >= resourceCollectorCost)
-                        { // =checking if u have enough reosources to pay for the unit
-                            //-decreasing resources
-                            
-                            resourceManager.payForUnit(resourceCollectorCost);
-                            
-                            //-instantiate TechUnit
-                            var pos = tile.transform.position;
-                            var techUnit = Instantiate(resourceCollectorPrefab, pos, Quaternion.identity);
-                            techs.Add(techUnit);
-                            tile.Unit = techUnit;
-                        }
-                    }
-                }
-                else if (CurrentPreview.Type == PreviewType.MachineGun) // NOTE(sftl): method?
-                {
-                    Tile tile = gridManager.GetSelectedTileIfAvailable();
-                    
-                    if (tile != null)
-                    {
-                        if (ResourceManager.getResources() >= machineGunCost)
-                        { // =checking if u have enough reosources to pay for the unit
-                            //-decreasing resources
-                            
-                            resourceManager.payForUnit(machineGunCost);
-                            
-                            //-instantiate TechUnit
-                            var pos = tile.transform.position;
-                            var techUnit = Instantiate(machineGunPrefab, pos, Quaternion.identity);
-                            techs.Add(techUnit);
-                            tile.Unit = techUnit;
-                        }
-                    }
-                }
-                else if (CurrentPreview.Type == PreviewType.Wall)
-                {
-                    Tile tile = gridManager.GetSelectedTileIfAvailable();
-                    
-                    if (tile != null)
-                    {
-                        if (ResourceManager.getResources() >= wallCost)
-                        { // =checking if u have enough reosources to pay for the unit
-                            //-decreasing resources
-                            
-                            resourceManager.payForUnit(wallCost);
-                            
-                            //-instantiate TechUnit
-                            var pos = tile.transform.position;
-                            var techUnit = Instantiate(wallPrefab, pos, Quaternion.identity);
-                            techs.Add(techUnit);
-                            tile.Unit = techUnit;
-                        }
-                    }
-                }
-                else if (CurrentPreview.Type == PreviewType.PowerBlock) // NOTE(sftl): method?
-                {
-                    var laneData = gridManager.GetSelectedLaneStartEndPos();
-                    
-                    if (laneData != null)
-                    {
-                        if (ResourceManager.getResources() >= powerBlockCost)
-                        { // =checking if u have enough reosources to pay for the unit
-                            //-decreasing resources
-                            
-                            resourceManager.payForUnit(powerBlockCost);
-                            
-                            var (laneStartPos, laneEndPos) = laneData.Value;
-                            var dir = Vector3.Normalize(laneEndPos - laneStartPos);
-                            var hits = Physics2D.RaycastAll(laneStartPos, dir, Mathf.Infinity, LayerMask.GetMask("Alien"));
-                            
-                            foreach (var hit in hits)
-                            {
-                                var alien = hit.collider.gameObject.GetComponent<Alien>();
-                                //if(!alien.IsChangingLanes) 
-                                alien.MoveToNeightourLane();
-                            }
-                            
-                            DestroyPreviewIfNotNull();
-                            SetPreview(null);
-                        }
-                    }
-                }
-                else if (CurrentPreview.Type == PreviewType.PowerSlow)
-                {
-                    if (gridManager.SelectedTile != null)
-                    {
-                        if (ResourceManager.getResources() >= powerSlowCost)
-                        { // =checking if u have enough reosources to pay for the unit
-                            //-decreasing resources
-                            
-                            resourceManager.payForUnit(powerSlowCost);
-                            
-                            aliens.ForEach(action: (Alien a) => { a.SlowForSec(5); });
-                            
-                            DestroyPreviewIfNotNull();
-                            SetPreview(null);
-                        }
-                    }
-                }
-                else if (CurrentPreview.Type == PreviewType.PowerShield)
-                {
-                    if (gridManager.SelectedTile != null)
-                    {
-                        if (ResourceManager.getResources() >= powerShieldCost)
-                        { // =checking if u have enough reosources to pay for the unit
-                            //-decreasing resources
-                            
-                            resourceManager.payForUnit(powerShieldCost);
-                            
-                            techs.ForEach(action: (TechUnit a) => { a.AddShieldForSec(5); });
-                            
-                            DestroyPreviewIfNotNull();
-                            SetPreview(null);
-                        }
-                    }
-                }
-                else // NOTE(sftl): RemovePreview
-                {
-                    Tile tile = gridManager.GetSelectedTileIfOccupied();
-                    
-                    if (tile != null)
-                    {
-                        // TODO(sftl): give reseources back for units that are placed this turn or maybe even previous turns
-                        //-remove TechUnit
-                        Destroy(tile.Unit.gameObject);
-                        techs.Remove(tile.Unit as TechUnit); // NOTE(sftl): player is not able to try to remove alien unit
-                        tile.Unit = null;
-                    }
-                }
-            }
+            var tile = gridManager.SelectedTile;
+            if (tile != null) TileClicked(tile);
         }
         
         //-alien loop
@@ -378,7 +176,77 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public void TechCardClicked(TechCard card)
+    private void TileClicked(Tile tile)
+    {
+        if (CurrentPreview == null) return;
+        
+        if (CurrentPreview.Type == PreviewType.Remove)
+        {
+            // TODO(sftl): give reseources back for units that are placed this turn or maybe even previous turns
+            Destroy(tile.Unit.gameObject);
+            techs.Remove(tile.Unit as TechUnit); // NOTE(sftl): player is not able to try to remove alien unit
+            tile.Unit = null;
+            return;
+        }
+        
+        var res = ResourceManager.getResources();
+        var (_, cost, unitPrefab) = cardManager.CardsInfo[CurrentPreview.CardType];
+        
+        if (res >= cost)
+        {
+            resourceManager.payForUnit(cost);
+            
+            var cardType = CurrentPreview.CardType;
+            
+            if (unitPrefab != null)
+            {
+                var pos = tile.transform.position;
+                var techUnit = Instantiate(unitPrefab, pos, Quaternion.identity);
+                techs.Add(techUnit);
+                tile.Unit = techUnit;
+                
+                if (techUnit is ScanUnit) temp_techs.Add(techUnit); 
+            }
+            //-powers
+            else if (cardType == CardType.Slow)
+            {
+                aliens.ForEach(action: (Alien a) => { a.SlowForSec(5); });
+                
+                DestroyPreviewIfNotNull();
+                SetPreview(null);
+            }
+            else if (cardType == CardType.Shield)
+            {
+                techs.ForEach(action: (TechUnit a) => { a.AddShieldForSec(5); });
+                
+                DestroyPreviewIfNotNull();
+                SetPreview(null);
+            }
+            else if (cardType == CardType.Block)
+            {
+                var laneData = gridManager.GetSelectedLaneStartEndPos();
+                
+                if (laneData != null)
+                {
+                    var (laneStartPos, laneEndPos) = laneData.Value;
+                    var dir = Vector3.Normalize(laneEndPos - laneStartPos);
+                    var hits = Physics2D.RaycastAll(laneStartPos, dir, Mathf.Infinity, LayerMask.GetMask("Alien"));
+                    
+                    foreach (var hit in hits)
+                    {
+                        var alien = hit.collider.gameObject.GetComponent<Alien>();
+                        // if(!alien.IsChangingLanes) 
+                        alien.MoveToNeightourLane();
+                    }
+                    
+                    DestroyPreviewIfNotNull();
+                    SetPreview(null);
+                }
+            }
+        }
+    }
+    
+    public void CardClicked(Card card)
     {
 #if DEBUG_GAMEMANAGER
         Debug.Log("Preview destroyed since new one is initialized.");
@@ -386,17 +254,32 @@ public class GameManager : MonoBehaviour
         DestroyPreviewIfNotNull();
         
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        if (card.type == CardType.Guardian)
-            SetPreview(Instantiate(guardianPrevPrefab, pos, Quaternion.identity)); // TODO(sftl): use card type
         
-        if (card.type == CardType.Collector)
+        //-units
+        if (card.Type == CardType.Guardian)
+            SetPreview(Instantiate(guardianPrevPrefab, pos, Quaternion.identity));
+        
+        if (card.Type == CardType.Collector)
             SetPreview(Instantiate(resourceCollectorPrevPrefab, pos, Quaternion.identity));
         
-        if (card.type == CardType.MachineGun)
+        if (card.Type == CardType.MachineGun)
             SetPreview(Instantiate(machineGunPrevPrefab, pos, Quaternion.identity));
         
-        if (card.type == CardType.Wall)
+        if (card.Type == CardType.Wall)
             SetPreview(Instantiate(wallPrevPrefab, pos, Quaternion.identity));
+        
+        if(card.Type == CardType.Scan) 
+            SetPreview(Instantiate(powerScanPrevPrefab, pos, Quaternion.identity));
+        
+        //-powers
+        else if(card.Type == CardType.Block)
+            SetPreview(Instantiate(powerBlockPrevPrefab, pos, Quaternion.identity));
+        
+        else if(card.Type == CardType.Slow)
+            SetPreview(Instantiate(powerSlowPrevPrefab, pos, Quaternion.identity));
+        
+        else if(card.Type == CardType.Shield)
+            SetPreview(Instantiate(powerShieldPrevPrefab, pos, Quaternion.identity));
     }
     
     public void RemoveCardClicked()
@@ -408,33 +291,6 @@ public class GameManager : MonoBehaviour
         
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         SetPreview(Instantiate(removePrevPrefab, pos, Quaternion.identity));
-    }
-    
-    public void PowerCardClicked(PowerCard card)
-    {
-#if DEBUG_GAMEMANAGER
-        Debug.Log("Preview destroyed since new one is initialized.");
-#endif
-        DestroyPreviewIfNotNull();
-        
-        var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        
-        if(card.Type == PowerCardType.Scan) 
-        {
-            SetPreview(Instantiate(powerScanPrevPrefab, pos, Quaternion.identity));
-        }
-        else if(card.Type == PowerCardType.Block)
-        {
-            SetPreview(Instantiate(powerBlockPrevPrefab, pos, Quaternion.identity));
-        }
-        else if(card.Type == PowerCardType.Slow)
-        {
-            SetPreview(Instantiate(powerSlowPrevPrefab, pos, Quaternion.identity));
-        }
-        else if(card.Type == PowerCardType.Shield)
-        {
-            SetPreview(Instantiate(powerShieldPrevPrefab, pos, Quaternion.identity));
-        }
     }
     
     public void GenWaveAndShow()
@@ -608,33 +464,6 @@ public class GameManager : MonoBehaviour
         
         endScreen.gameObject.SetActive(true);
         endScreen.SetWinState(won: true);
-    }
-    
-    public void UpdateCardsForResources(int res)
-    {
-        var turnType = GameManager.Instance.TurnType;
-        
-        //-tech cards 
-        if (res < guardianCost)             guardianCard.Disable();
-        if (res < machineGunCost)           machineGunCard.Disable();
-        if (res < resourceCollectorCost)    resourceCollectorCard.Disable();
-        if (res < wallCost)                 wallCard.Disable();
-        
-        if (res >= guardianCost)            guardianCard.Enable();
-        if (res >= machineGunCost)          machineGunCard.Enable();
-        if (res >= resourceCollectorCost)   resourceCollectorCard.Enable();
-        if (res >= wallCost)                wallCard.Enable();
-        
-        //-power cards
-        if (res < powerScanCost)    scanCard.Disable();
-        if (res < powerBlockCost)   blockCard.Disable();
-        if (res < powerSlowCost)    slowCard.Disable();
-        if (res < powerShieldCost)  shieldCard.Disable();
-        
-        if (res >= powerScanCost)    scanCard.Enable();
-        if (res >= powerBlockCost)   blockCard.Enable();
-        if (res >= powerSlowCost)    slowCard.Enable();
-        if (res >= powerShieldCost)  shieldCard.Enable();
     }
     
     IEnumerator DoAfterSec(float sec, Action action)

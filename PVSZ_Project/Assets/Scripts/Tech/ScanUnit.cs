@@ -7,8 +7,8 @@ public class ScanUnit : ShootTechUnit
     
     private bool    _isRotatingRight;
     private float   _angle;
-
-    private void Update()
+    
+    override protected void Update()
     {
         base.Update();
         

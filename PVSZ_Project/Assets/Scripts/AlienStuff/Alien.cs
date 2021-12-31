@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 
 public class Alien : MonoBehaviour
 {
-    public Collider2D collider;
     public Animator animator;
     
     public int Difficulty;
@@ -76,7 +75,7 @@ public class Alien : MonoBehaviour
         if (!_isDead && health <= 0)
         {
             _isDead = true;
-            collider.enabled = false;
+            GetComponent<Collider2D>().enabled = false;
             PlayDeathAnim();
             StartCoroutine(KillAfterSec(1f));
         }

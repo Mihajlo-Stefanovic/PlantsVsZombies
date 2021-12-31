@@ -6,7 +6,7 @@ public class GuardianUnit : ShootTechUnit
 {
     [SerializeField] private ParticleSystem shootParticles;
     
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
         _shootComponent.OnFire = OnFire;
