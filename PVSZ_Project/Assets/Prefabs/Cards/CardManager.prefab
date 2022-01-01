@@ -69,7 +69,11 @@ MonoBehaviour:
   - Type: 1001
     Cost: 100
     UnitPrefab: {fileID: 0}
+  - Type: 5
+    Cost: 100
+    UnitPrefab: {fileID: 5757316788215459436, guid: e18b873a7aeec8248bfea0b68f0079f8, type: 3}
   _cards:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ShootComponent : MonoBehaviour
 {
+    [HideInInspector] public TechUnit Unit;                     // TODO(sftl): make universal
+    
     [SerializeField] private Transform _rayTransform;
     [SerializeField] private Bullet    _bulletPrefab;
     
@@ -11,13 +13,13 @@ public class ShootComponent : MonoBehaviour
     [SerializeField] private float     _minDistance;
     
     [SerializeField] private int       _shootCooldown;         // NOTE(sftl): seconds
-
+    
     private Action<Bullet, Transform> _onFire;
     [HideInInspector] public Action<Bullet, Transform> OnFire
     {
         set { _onFire = value; }
     }
-
+    
     private float       _nextScan;
     private Vector3?    _target;
     
@@ -41,21 +43,21 @@ public class ShootComponent : MonoBehaviour
     
     void Update()
     {
-        if (_target != null)
+        if (_target != null && Unit.Tile.HasPower)
         {
             if (_onFire == null) onFire();
             else _onFire(_bulletPrefab, _rayTransform);
-
+            
             _target     = null;
             _nextScan   = Time.time + _shootCooldown;
         }
     }
-
+    
     private void onTarget(Vector3 target)
     {
         _target = target;
     }
-
+    
     private void onFire()
     {
         var bullet = Instantiate(_bulletPrefab, _rayTransform.transform.position, Quaternion.identity);

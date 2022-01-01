@@ -37,11 +37,12 @@ public class GameManager : MonoBehaviour
     
     public EndScreen        endScreen;
     
-    //- preview prefabs, // TODO(sftl): it should probably be just one generic prefab with changable image
+    //- preview prefabs, // TODO(sftl): it should probably be just one generic prefab with changable image, could be a part of CardInfo
     public Preview guardianPrevPrefab;
     public Preview resourceCollectorPrevPrefab;
     public Preview machineGunPrevPrefab;
     public Preview wallPrevPrefab;
+    public Preview towerPrevPrefab;
     
     public Preview  removePrevPrefab;
     
@@ -182,12 +183,10 @@ public class GameManager : MonoBehaviour
         
         if (CurrentPreview.Type == PreviewType.Remove)
         {
-            // TODO(sftl): give reseources back for units that are placed this turn or maybe even previous turns
-            Destroy(tile.Unit.gameObject);
-            techs.Remove(tile.Unit as TechUnit); // NOTE(sftl): player is not able to try to remove alien unit
-            tile.Unit = null;
+            RemoveTech(tile);
             return;
         }
+        
         
         var res = ResourceManager.getResources();
         var (_, cost, unitPrefab) = cardManager.CardsInfo[CurrentPreview.CardType];
@@ -200,12 +199,18 @@ public class GameManager : MonoBehaviour
             
             if (unitPrefab != null)
             {
+                if (tile.Unit != null) return;
+                
                 var pos = tile.transform.position;
                 var techUnit = Instantiate(unitPrefab, pos, Quaternion.identity);
-                techs.Add(techUnit);
+                
+                techUnit.Tile = tile;
                 tile.Unit = techUnit;
                 
-                if (techUnit is ScanUnit) temp_techs.Add(techUnit); 
+                techs.Add(techUnit);
+                
+                if (techUnit is ScanUnit)   temp_techs.Add(techUnit); 
+                if (techUnit is TowerUnit)  gridManager.ChangePower(tile, addPower: true);
             }
             //-powers
             else if (cardType == CardType.Slow)
@@ -270,6 +275,9 @@ public class GameManager : MonoBehaviour
         
         if(card.Type == CardType.Scan) 
             SetPreview(Instantiate(powerScanPrevPrefab, pos, Quaternion.identity));
+        
+        if(card.Type == CardType.Tower) 
+            SetPreview(Instantiate(towerPrevPrefab, pos, Quaternion.identity));
         
         //-powers
         else if(card.Type == CardType.Block)
@@ -376,10 +384,28 @@ public class GameManager : MonoBehaviour
         if(oldPreview != null && newPreview == null) gridManager.PreviewCleared(oldPreview);
     }
     
-    public void OnTechDeath(TechUnit unit)
+    // NOTE(sftl): also removes all effects that Tech Unit had
+    private void RemoveTech(Tile tile)
     {
+        // NOTE(sftl): player is not able to try to remove alien unit
+        var unit = tile.Unit as TechUnit;
+        
+        //-remove effects
+        if (unit is TowerUnit) gridManager.ChangePower(tile, addPower: false);
+        
+        //-remove unit
+        // TODO(sftl): give reseources back for units that are placed this turn or maybe even previous turns
+        Destroy(unit.gameObject);
+        
         techs.Remove(unit);
         temp_techs.Remove(unit);
+        
+        tile.Unit = null;
+    }
+    
+    public void OnTechDeath(TechUnit unit)
+    {
+        RemoveTech(unit.Tile);
     }
     
     void SpawnAliens()

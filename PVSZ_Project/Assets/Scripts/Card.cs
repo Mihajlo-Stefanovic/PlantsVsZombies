@@ -11,6 +11,7 @@ public enum CardType
     MachineGun,
     Wall,
     Scan,
+    Tower,
     
     //powers
     Block = 1000,

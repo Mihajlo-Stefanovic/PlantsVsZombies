@@ -5,17 +5,18 @@ public abstract class TechUnit : MonoBehaviour, Damageable
 {
     [SerializeField] protected HealthComponent  _healthComponent;
     [SerializeField] protected StatusComponent  _statusComponent;
-
+    
     [SerializeField] protected SpriteRenderer   _spriteRenderer;
     [SerializeField] protected Animator         _animator;
-
+    
+    public Tile Tile;
     private float _removeShieldTime;
     
     protected virtual void Awake()
     {
         _healthComponent.OnDeath = OnDeath;
     }
-
+    
     protected virtual void Start()
     {
         //-rendering order
@@ -23,7 +24,7 @@ public abstract class TechUnit : MonoBehaviour, Damageable
         int diffFromRefOrder = (int)(diffFromRefPos / GameManager.Instance.DrawOrderPrecision);
         _spriteRenderer.sortingOrder = GameManager.Instance.DrawOrderRefNum + diffFromRefOrder;
     }
-
+    
     protected virtual void Update()
     {
         CheckShield();
@@ -37,7 +38,6 @@ public abstract class TechUnit : MonoBehaviour, Damageable
     protected virtual void OnDeath()
     {
         GameManager.Instance.OnTechDeath(this);
-        Destroy(gameObject);
     }
     
     public void AddShieldForSec(float sec)

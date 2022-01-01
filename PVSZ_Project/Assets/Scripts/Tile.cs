@@ -10,6 +10,7 @@ public class Tile : MonoBehaviour
     
     [SerializeField] private GameObject _highlight;
     [SerializeField] private GameObject _blockedIndicator;
+    [SerializeField] private GameObject _powerIndicator;
     
     public int Column;
     public int Row;
@@ -23,6 +24,9 @@ public class Tile : MonoBehaviour
             _blockedIndicator.SetActive(value);
         }
     }
+    
+    private int _power;
+    public bool HasPower { get => _power > 0; }
     
     public TechUnit Unit;
     
@@ -44,5 +48,13 @@ public class Tile : MonoBehaviour
     public void SetHighlight(bool isHighlighted)
     {
         _highlight.SetActive(isHighlighted);
+    }
+    
+    public void ChangePower(bool addPower)
+    {
+        if (addPower) _power++;
+        else _power--;
+        
+        _powerIndicator.SetActive(HasPower);
     }
 }

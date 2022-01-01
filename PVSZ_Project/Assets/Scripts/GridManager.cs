@@ -220,12 +220,6 @@ public class GridManager : MonoBehaviour
         return SelectedTile;
     }
     
-    // NOTE(sftl): returns null if none is selected or tile is not occupied
-    public Tile GetSelectedTileIfOccupied()
-    {
-        return (SelectedTile?.Unit is TechUnit) ? SelectedTile : null;
-    }
-    
     public List<Vector3> GetAvailableSpawnPos()
     {
         var r = new List<Vector3>();
@@ -306,5 +300,26 @@ public class GridManager : MonoBehaviour
         }
         
         return;
+    }
+    
+    public void ChangePower(Tile tile, bool addPower)
+    {
+        bool isInGridW(int x) => x < _width && x >= 0;
+        bool isInGridH(int x) => x < _height && x >= 0;
+        
+        for (int i = tile.Column - 1; i < tile.Column + 2; i++)
+        {
+            for (int j = tile.Row - 1; j < tile.Row + 2; j++)
+            {
+                if (
+                    isInGridH(j) && isInGridW(i) &&
+                    (i != tile.Column || j != tile.Row) // isn't that exact tile
+                    )
+                {
+                    var currTile = tiles[i][j];
+                    if (!currTile.IsBlocked) currTile.ChangePower(addPower);
+                }
+            }
+        }
     }
 }
