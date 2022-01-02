@@ -52,7 +52,7 @@ MonoBehaviour:
   IsSlowed: 0
   SlowStopTime: 0
   SlowFactor: 0.3
-  speed: 1
+  speed: 0.6
   damage: 40
   _tile: {fileID: 4101567033614528602, guid: 1c23370466408f444a46311601e4d79d, type: 3}
   health: 400

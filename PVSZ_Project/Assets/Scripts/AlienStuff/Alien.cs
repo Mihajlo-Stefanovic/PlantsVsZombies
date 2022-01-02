@@ -14,7 +14,7 @@ public class Alien : MonoBehaviour
     public float SlowStopTime;
     public float SlowFactor = 0.3f;
     
-    public int speed;
+    public float speed;
     public int damage;
     private bool _lockDirection = false;
     public Tile _tile;

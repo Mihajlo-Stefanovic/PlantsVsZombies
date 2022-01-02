@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     public      GameEvent turnIncrementedEvent;
     
     //- game state
-    GameState   gameState = GameState.Playing;
+    public GameState   GameState = GameState.Playing;
     
     //- utils
     public readonly Vector3 DrawOrderRefPos = Vector3.zero;
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        if(gameState == GameState.Paused || gameState == GameState.End) return;
+        if(GameState == GameState.Paused || GameState == GameState.End) return;
         
         if (Input.GetMouseButtonUp(1)) // NOTE(sftl): right click
         {
@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         Time.timeScale  = 0f;
-        gameState       = GameState.Paused;
+        GameState       = GameState.Paused;
         
         raycaster.Deactivate();
         
@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour
     public void ResumeGame()
     {
         Time.timeScale  = 1f;
-        gameState       = GameState.Playing;
+        GameState       = GameState.Playing;
         
         raycaster.Activate();
         
@@ -466,7 +466,7 @@ public class GameManager : MonoBehaviour
     public void PlayerLost()
     {
         Time.timeScale  = 0f;
-        gameState       = GameState.End;
+        GameState       = GameState.End;
         
         raycaster.Deactivate();
         
@@ -485,7 +485,7 @@ public class GameManager : MonoBehaviour
     public void PlayerWon()
     {
         Time.timeScale  = 0f;
-        gameState       = GameState.End;
+        GameState       = GameState.End;
         
         raycaster.Deactivate();
         
