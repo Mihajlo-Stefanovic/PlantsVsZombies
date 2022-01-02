@@ -9,7 +9,9 @@ public abstract class TechUnit : MonoBehaviour, Damageable
     [SerializeField] protected SpriteRenderer   _spriteRenderer;
     [SerializeField] protected Animator         _animator;
     
-    public Tile Tile;
+    public Tile     Tile;
+    public TurnInfo TurnSpawned;
+    
     private float _removeShieldTime;
     
     protected virtual void Awake()

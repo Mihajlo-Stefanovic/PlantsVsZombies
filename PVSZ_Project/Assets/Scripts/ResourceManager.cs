@@ -16,9 +16,14 @@ public class ResourceManager : MonoBehaviour
         updateUI(startingResources);
     }
     
+    public void Start()
+    {
+        CardManager.Instance.UpdateCardsForResources(totalResources);
+    }
+    
     public void OnTurnIncremented()
     {
-        totalResources += gainPerTurn + GameManager.Instance.TurnNum * gainPerTurnMultiplier;
+        totalResources += gainPerTurn + GameManager.Instance.Turn.Num * gainPerTurnMultiplier;
         //Debug.Log("total " + totalResources);
         updateUI(totalResources);
         

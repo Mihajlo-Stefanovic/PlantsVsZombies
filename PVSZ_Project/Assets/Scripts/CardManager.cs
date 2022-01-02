@@ -43,6 +43,20 @@ public class CardManager : MonoBehaviour
         foreach (var card in _cards) card.Cost = CardsInfo[card.Type].Cost;
     }
     
+    public int GetUnitCost(TechUnit unit)
+    {
+        // TODO(sftl): optimize
+        foreach (var (_, cardInfo) in CardsInfo)
+        {
+            var prefab = cardInfo.UnitPrefab;
+            if (prefab == null) continue; // NOTE(sftl): power
+            if (prefab.GetType().Equals(unit.GetType())) return cardInfo.Cost;
+        }
+        
+        Debug.Assert(false);
+        return 0;
+    }
+    
     public void UpdateCardsForResources(int res)
     {
         foreach (var card in _cards)

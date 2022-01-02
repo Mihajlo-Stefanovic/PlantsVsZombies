@@ -13,8 +13,7 @@ public class TurnCounter :  MonoBehaviour
     
     public void OnTurnIncremented()
     {
-        textPro.text = GameManager.Instance.TurnNum.ToString();
-       
+        textPro.text = GameManager.Instance.Turn.Num.ToString();
     }
-
+    
 }

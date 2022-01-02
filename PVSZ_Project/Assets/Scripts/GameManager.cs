@@ -9,12 +9,6 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Random = System.Random;
 
-public enum TurnType
-{
-    Tech,
-    Alien
-}
-
 public enum GameState
 {
     Playing,
@@ -55,10 +49,9 @@ public class GameManager : MonoBehaviour
     public Preview      powerShieldPrevPrefab; 
     
     //- turns
-    public const int    EndTurnNum = 5;
-    public int          TurnNum = 1;
+    public const int    EndTurnNum  = 5;
+    public TurnInfo     Turn        = new TurnInfo(1, TurnType.Tech);
     
-    public      TurnType  TurnType = TurnType.Tech;
     public      GameEvent turnIncrementedEvent;
     
     //- game state
@@ -183,7 +176,14 @@ public class GameManager : MonoBehaviour
         
         if (CurrentPreview.Type == PreviewType.Remove)
         {
-            RemoveTech(tile);
+            var unit = tile.Unit;
+            
+            if (unit != null)
+            {
+                RemoveTech(unit);
+                Refund(unit); 
+            }
+            
             return;
         }
         
@@ -203,6 +203,7 @@ public class GameManager : MonoBehaviour
                 var pos = tile.transform.position;
                 var techUnit = Instantiate(unitPrefab, pos, Quaternion.identity);
                 
+                techUnit.TurnSpawned = Turn;
                 techUnit.Tile = tile;
                 tile.Unit = techUnit;
                 
@@ -302,13 +303,13 @@ public class GameManager : MonoBehaviour
     
     public void GenWaveAndShow()
     {
-        nextWaveAliens = waveGen.GetWave(TurnNum);
+        nextWaveAliens = waveGen.GetWave(Turn.Num);
         gridManager.SetAlienLaneIndicators(nextWaveAliens);
     }
     
     public void EndTechTurn()
     {
-        TurnType = TurnType.Alien;
+        Turn.Type = TurnType.Alien;
         playUI.OnAlienTurn();
         
         if (CurrentPreview != null)
@@ -354,8 +355,8 @@ public class GameManager : MonoBehaviour
             unit.RemoveStatusEffects();
         }
         
-        TurnType = TurnType.Tech;
-        TurnNum++;
+        Turn.Type = TurnType.Tech;
+        Turn.Num++;
         playUI.OnTechTurn();
         GenWaveAndShow();
         
@@ -384,13 +385,10 @@ public class GameManager : MonoBehaviour
     }
     
     // NOTE(sftl): also removes all effects that Tech Unit had
-    private void RemoveTech(Tile tile)
+    private void RemoveTech(TechUnit unit)
     {
-        // NOTE(sftl): player is not able to try to remove alien unit
-        var unit = tile.Unit as TechUnit;
-        
         //-remove effects
-        if (unit is TowerUnit) gridManager.ChangePower(tile, addPower: false);
+        if (unit is TowerUnit) gridManager.ChangePower(unit.Tile, addPower: false);
         
         //-remove unit
         // TODO(sftl): give reseources back for units that are placed this turn or maybe even previous turns
@@ -399,12 +397,24 @@ public class GameManager : MonoBehaviour
         techs.Remove(unit);
         temp_techs.Remove(unit);
         
-        tile.Unit = null;
+        unit.Tile.Unit = null;
+    }
+    
+    private void Refund(TechUnit unit)
+    {
+        int refund;
+        int cost = cardManager.GetUnitCost(unit);
+        
+        if (unit.TurnSpawned == Turn && Turn.Type == TurnType.Tech) refund = cost; // NOTE(sftl): basically undo
+        else refund = (int) (cost / 3f);
+        
+        var res = ResourceManager.getResources() + refund;
+        resourceManager.setResources(res);
     }
     
     public void OnTechDeath(TechUnit unit)
     {
-        RemoveTech(unit.Tile);
+        RemoveTech(unit);
     }
     
     void SpawnAliens()
@@ -442,7 +452,7 @@ public class GameManager : MonoBehaviour
         {
             //-handle win
 #if !NO_END_GAME
-            if (TurnNum >= EndTurnNum){
+            if (Turn.Num >= EndTurnNum){
                 PlayerWon();
                 return;
             }
