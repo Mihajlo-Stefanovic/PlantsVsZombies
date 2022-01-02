@@ -147,14 +147,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b23652e236fc6641b293aa84c497a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 7185919559371297422}
   animator: {fileID: 9091613580338674171}
   Difficulty: 5
   IsSlowed: 0
   SlowStopTime: 0
   SlowFactor: 0.3
   speed: 2
-  damage: 0
+  damage: 9999
   _tile: {fileID: 4101567033614528602, guid: 1c23370466408f444a46311601e4d79d, type: 3}
   health: 70
 --- !u!95 &9091613580338674171

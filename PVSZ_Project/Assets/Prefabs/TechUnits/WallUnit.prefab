@@ -68,7 +68,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.005781971, y: -0.0066911727}
@@ -100,6 +100,7 @@ MonoBehaviour:
   _statusComponent: {fileID: 8643559944672341223}
   _spriteRenderer: {fileID: 72883761177711844}
   _animator: {fileID: 6483587303451045165}
+  Tile: {fileID: 0}
 --- !u!1 &1980792323678353366
 GameObject:
   m_ObjectHideFlags: 0

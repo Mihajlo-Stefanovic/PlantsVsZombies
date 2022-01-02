@@ -2675,8 +2675,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourcesUI: {fileID: 1792037108}
-  startingResources: 150
-  gainPerTurn: 150
+  startingResources: 100
+  gainPerTurn: 100
   gainPerTurnMultiplier: 50
 --- !u!4 &1618404873
 Transform:
@@ -3111,7 +3111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d8fe4c66d6121540a2b5dd6e306f120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 9
+  _width: 10
   _height: 5
   _tilePrefab: {fileID: 4101567033614528602, guid: 1c23370466408f444a46311601e4d79d, type: 3}
   _parent: {fileID: 142559974}
@@ -4045,21 +4045,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4293275951686761074, guid: a797c3a6021efbe4d855e021e3da5dd9, type: 3}
-      propertyPath: randomSeed
-      value: 1158762338
-      objectReference: {fileID: 0}
-    - target: {fileID: 4293275951686761074, guid: a797c3a6021efbe4d855e021e3da5dd9, type: 3}
-      propertyPath: autoRandomSeed
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6647554742185266909, guid: a797c3a6021efbe4d855e021e3da5dd9, type: 3}
       propertyPath: m_Name
       value: GainParticles
-      objectReference: {fileID: 0}
-    - target: {fileID: 6647554742185266909, guid: a797c3a6021efbe4d855e021e3da5dd9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6682606277527344643, guid: a797c3a6021efbe4d855e021e3da5dd9, type: 3}
       propertyPath: m_RootOrder

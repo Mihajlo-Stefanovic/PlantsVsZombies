@@ -5029,6 +5029,7 @@ MonoBehaviour:
   _statusComponent: {fileID: 207117558494960367}
   _spriteRenderer: {fileID: 8370270646035260140}
   _animator: {fileID: 3229529422306827045}
+  Tile: {fileID: 0}
   _resourcesToGet: 50
   _gainParticles: {fileID: 269236133039382631}
 --- !u!50 &6165799576860214573
@@ -5062,7 +5063,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.005781971, y: -0.0066911727}

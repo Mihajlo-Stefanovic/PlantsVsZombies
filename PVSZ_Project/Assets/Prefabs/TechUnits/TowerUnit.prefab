@@ -4923,6 +4923,7 @@ MonoBehaviour:
   _statusComponent: {fileID: 7048308782941107068}
   _spriteRenderer: {fileID: 4248363466674610601}
   _animator: {fileID: 3140032912622203182}
+  Tile: {fileID: 0}
 --- !u!50 &1578555637040865850
 Rigidbody2D:
   serializedVersion: 4
@@ -4954,7 +4955,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.0007274635, y: 0.02}

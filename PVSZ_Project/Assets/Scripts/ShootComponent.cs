@@ -6,13 +6,14 @@ public class ShootComponent : MonoBehaviour
 {
     [HideInInspector] public TechUnit Unit;                     // TODO(sftl): make universal
     
-    [SerializeField] private Transform _rayTransform;
-    [SerializeField] private Bullet    _bulletPrefab;
+    [SerializeField] private Transform  _rayTransform;
+    [SerializeField] private Bullet     _bulletPrefab;
     
-    [SerializeField] private float     _maxDistance;
-    [SerializeField] private float     _minDistance;
+    [SerializeField] private float      _maxDistance;
+    [SerializeField] private float      _minDistance;
     
-    [SerializeField] private int       _shootCooldown;         // NOTE(sftl): seconds
+    [SerializeField] private int        _shootCooldown;         // NOTE(sftl): seconds
+    [SerializeField] private bool       _needsPower;
     
     private Action<Bullet, Transform> _onFire;
     [HideInInspector] public Action<Bullet, Transform> OnFire
@@ -43,13 +44,19 @@ public class ShootComponent : MonoBehaviour
     
     void Update()
     {
-        if (_target != null && Unit.Tile.HasPower)
+        if (_target != null)
         {
-            if (_onFire == null) onFire();
-            else _onFire(_bulletPrefab, _rayTransform);
-            
-            _target     = null;
-            _nextScan   = Time.time + _shootCooldown;
+            if (
+                !_needsPower ||
+                (_needsPower && Unit.Tile.HasPower)
+                ) 
+            {
+                if (_onFire == null) onFire();
+                else _onFire(_bulletPrefab, _rayTransform);
+                
+                _target     = null;
+                _nextScan   = Time.time + _shootCooldown;
+            }
         }
     }
     

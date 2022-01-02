@@ -112,7 +112,7 @@ public class Alien : MonoBehaviour
             {
                 AudioManager.Instance.Play_AlienMelee();
                 nextAttack = Time.time + 0.5f;
-                col.gameObject.GetComponent<TechUnit>().TakeDamage(20);
+                col.gameObject.GetComponent<TechUnit>().TakeDamage(damage);
             }
         }
     }

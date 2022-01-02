@@ -33,8 +33,8 @@ Transform:
   m_Children:
   - {fileID: 296206592945617048}
   - {fileID: 8715085605834676540}
-  - {fileID: 1976240913548664830}
   - {fileID: 2029084415068643853}
+  - {fileID: 1976240913548664830}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -54,6 +54,7 @@ MonoBehaviour:
   _statusComponent: {fileID: 1976240913548664708}
   _spriteRenderer: {fileID: 5285940654969745782}
   _animator: {fileID: 2578416656614915391}
+  Tile: {fileID: 0}
   _shootComponent: {fileID: 107229829023632234}
   _rotationSpeed: 100
   _maxSideAngle: 45
@@ -88,7 +89,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.012716398, y: -0.052114666}
@@ -102,7 +103,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.15796706, y: 0.49993467}
+  m_Size: {x: 0.5, y: 0.49993467}
   m_EdgeRadius: 0
 --- !u!1 &8766352327471592009
 GameObject:
@@ -291,7 +292,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6237341471965170193, guid: f6acbfe80b913214f8337d34b328b0cd, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6237341471965170193, guid: f6acbfe80b913214f8337d34b328b0cd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -372,11 +373,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2429648928221174858, guid: fcfae1dcfcfbc914d89f5916e4bb662b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.272
+      value: 0.172
       objectReference: {fileID: 0}
     - target: {fileID: 2429648928221174858, guid: fcfae1dcfcfbc914d89f5916e4bb662b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.173
+      value: 0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 7368414825998536007, guid: fcfae1dcfcfbc914d89f5916e4bb662b, type: 3}
+      propertyPath: _maxDistance
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7368414825998536007, guid: fcfae1dcfcfbc914d89f5916e4bb662b, type: 3}
       propertyPath: _bulletPrefab
@@ -384,7 +389,7 @@ PrefabInstance:
       objectReference: {fileID: 5888168334205941792, guid: 13916a40b48b91a42ac8a420d1f0132b, type: 3}
     - target: {fileID: 8869253765080310816, guid: fcfae1dcfcfbc914d89f5916e4bb662b, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8869253765080310816, guid: fcfae1dcfcfbc914d89f5916e4bb662b, type: 3}
       propertyPath: m_LocalPosition.x

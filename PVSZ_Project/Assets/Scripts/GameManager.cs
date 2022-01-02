@@ -187,9 +187,10 @@ public class GameManager : MonoBehaviour
             return;
         }
         
-        
         var res = ResourceManager.getResources();
         var (_, cost, unitPrefab) = cardManager.CardsInfo[CurrentPreview.CardType];
+        
+        if (unitPrefab != null && tile.Unit != null) return; // NOTE(sftl): tile is occupied
         
         if (res >= cost)
         {
@@ -199,8 +200,6 @@ public class GameManager : MonoBehaviour
             
             if (unitPrefab != null)
             {
-                if (tile.Unit != null) return;
-                
                 var pos = tile.transform.position;
                 var techUnit = Instantiate(unitPrefab, pos, Quaternion.identity);
                 
