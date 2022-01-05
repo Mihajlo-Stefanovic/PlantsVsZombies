@@ -20,4 +20,9 @@ public class ShootTechUnit : TechUnit
         base.Awake();
         _shootComponent.Unit = this;
     }
+    
+    void OnDestroy()
+    {
+        Tile.PowerChanged -= _statusComponent.OnPowerChaged;
+    }
 }
