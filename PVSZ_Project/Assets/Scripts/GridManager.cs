@@ -166,26 +166,16 @@ public class GridManager : MonoBehaviour
         {
             foreach (var column in tiles)
             {
-                column[tile.Row].SetHighlight(false);
+                var currTile = column[tile.Row];
+                if(currTile != tile) currTile.SetHighlight(false);
             }
         }
-        else if (cardType == CardType.Slow) 
+        else if (cardType == CardType.Slow || cardType == CardType.Shield) 
         {
             foreach (var column in tiles)
             {
-                column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
+                column.ForEach(action: (Tile currTile) => { if(currTile != tile) currTile.SetHighlight(false); });
             }
-        }
-        else if (cardType == CardType.Shield)
-        {
-            foreach (var column in tiles)
-            {
-                column.ForEach(action: (Tile t) => { t.SetHighlight(false); });
-            }
-        }
-        else
-        {
-            tile.SetHighlight(false);
         }
     }
     
