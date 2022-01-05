@@ -259,9 +259,20 @@ public class GridManager : MonoBehaviour
     
     public void SetAlienLaneIndicators(List<List<Alien>> nextWave)
     {
+        indicators.ForEach (it => it.Clear());  // NOTE(sftl): clearing from last turn
+        
         for (int i = 0; i < indicators.Count; i++)
         {
-            var laneDifficuly = nextWave[i].Count;
+            var laneDifficuly = 0;
+            
+            nextWave[i].ForEach(
+                                alien => 
+                                {
+                                    laneDifficuly ++;      // = alien.Difficulty;
+                                    indicators[i].AddAlien(alien);
+                                }
+                                );
+            
             indicators[i].SetDifficulty(laneDifficuly);
         }
     }
