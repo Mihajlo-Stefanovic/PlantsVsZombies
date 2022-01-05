@@ -2570,9 +2570,8 @@ MonoBehaviour:
   powerBlockPrevPrefab: {fileID: 4233994713568794410, guid: 5b3a9c69d05ae464f8216f7151695912, type: 3}
   powerSlowPrevPrefab: {fileID: 3426955370821003256, guid: 1d3147ffb15c6e041b800f0994e39b57, type: 3}
   powerShieldPrevPrefab: {fileID: 8285139878875237079, guid: 6359072064fc9c24dac9b678e65c9de9, type: 3}
-  TurnNum: 1
-  TurnType: 0
   turnIncrementedEvent: {fileID: 11400000, guid: f72934727b362b9488f3bacd30bd1e22, type: 2}
+  GameState: 0
   CurrentPreview: {fileID: 0}
 --- !u!1 &1479407805 stripped
 GameObject:

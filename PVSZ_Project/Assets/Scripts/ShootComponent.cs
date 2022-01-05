@@ -15,11 +15,13 @@ public class ShootComponent : MonoBehaviour
     [SerializeField] private int        _shootCooldown;         // NOTE(sftl): seconds
     [SerializeField] private bool       _needsPower;
     
-    private Action<Bullet, Transform> _onFire;
+    private Action<Bullet, Transform>   _onFire;
     [HideInInspector] public Action<Bullet, Transform> OnFire
     {
         set { _onFire = value; }
     }
+    
+    [HideInInspector] public bool       NeedsPower => _needsPower;
     
     private float       _nextScan;
     private Vector3?    _target;

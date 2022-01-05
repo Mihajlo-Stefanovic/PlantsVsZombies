@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Tile : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class Tile : MonoBehaviour
     
     private int _power;
     public bool HasPower { get => _power > 0; }
+    public event Action<bool> PowerChanged;
     
     public TechUnit Unit;
     
@@ -52,9 +54,17 @@ public class Tile : MonoBehaviour
     
     public void ChangePower(bool addPower)
     {
+        var hadPower = HasPower;
+        
         if (addPower) _power++;
         else _power--;
         
-        _powerIndicator.SetActive(HasPower);
+        var hasPower = HasPower;
+        
+        if (hasPower != hadPower)
+        {
+            PowerChanged?.Invoke(HasPower);
+            _powerIndicator.SetActive(HasPower);
+        }
     }
 }
