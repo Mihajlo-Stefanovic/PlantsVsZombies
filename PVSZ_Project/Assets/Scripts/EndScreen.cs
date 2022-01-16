@@ -28,7 +28,8 @@ public class EndScreen : MonoBehaviour
     
     public void SetWinState(bool won)
     {
-        if (won){
+        if (won)
+        {
             winLoseText.text    = "You WON";
             reloadText.text     = "Again!";
         }

@@ -42,4 +42,10 @@ public class PauseManu : MonoBehaviour
     {
         Application.Quit();
     }
+    
+    public void Reload()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
